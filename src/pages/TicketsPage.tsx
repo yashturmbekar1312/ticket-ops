@@ -117,3 +117,5 @@ export const TicketsPage: React.FC = () => {
     </Box>
   );
 };
+
+export default TicketsPage;

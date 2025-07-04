@@ -231,3 +231,5 @@ export const CreateTicketPage: React.FC = () => {
     </Box>
   );
 };
+
+export default CreateTicketPage;

@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "analyze": "npm run build && npx vite-bundle-analyzer dist"
+  }
+}

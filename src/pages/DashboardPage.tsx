@@ -45,7 +45,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, subtitle
   </Card>
 );
 
-export const DashboardPage: React.FC = () => {
+const DashboardPage: React.FC = () => {
   const { user } = useAuth();
 
   // Mock data - in a real app, this would come from API
@@ -237,3 +237,5 @@ export const DashboardPage: React.FC = () => {
     </Box>
   );
 };
+
+export default DashboardPage;
