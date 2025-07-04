@@ -9,7 +9,7 @@ import { useAuth } from './hooks/auth';
 
 function AppContent() {
   const { user } = useAuth();
-  
+
   return (
     <NotificationProvider userId={user?.id || 'guest'}>
       <AppRoutes />

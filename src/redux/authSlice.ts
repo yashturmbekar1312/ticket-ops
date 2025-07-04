@@ -2,9 +2,39 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { User, AuthState, LoginFormData } from "../types";
 import { authService } from "../services/auth";
 
+// Safe localStorage access
+const getStoredToken = (): string | null => {
+  try {
+    return typeof window !== 'undefined' ? localStorage.getItem("token") : null;
+  } catch (error) {
+    console.warn('Failed to access localStorage:', error);
+    return null;
+  }
+};
+
+const setStoredToken = (token: string): void => {
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("token", token);
+    }
+  } catch (error) {
+    console.warn('Failed to set token in localStorage:', error);
+  }
+};
+
+const removeStoredToken = (): void => {
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem("token");
+    }
+  } catch (error) {
+    console.warn('Failed to remove token from localStorage:', error);
+  }
+};
+
 const initialState: AuthState = {
   user: null,
-  token: localStorage.getItem("token"),
+  token: getStoredToken(),
   isLoading: false,
   error: null,
 };
@@ -15,7 +45,7 @@ export const login = createAsyncThunk(
   async (credentials: LoginFormData, { rejectWithValue }) => {
     try {
       const response = await authService.login(credentials);
-      localStorage.setItem("token", response.token);
+      setStoredToken(response.token);
       return response;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Login failed");
@@ -28,7 +58,7 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await authService.logout();
-      localStorage.removeItem("token");
+      removeStoredToken();
       return null;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Logout failed");
@@ -94,7 +124,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
         state.token = null;
-        localStorage.removeItem("token");
+        removeStoredToken();
       });
   },
 });

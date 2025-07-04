@@ -3,6 +3,26 @@ import { LoginFormData, User } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
+// Safe localStorage access
+const getStoredToken = (): string | null => {
+  try {
+    return typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  } catch (error) {
+    console.warn('Failed to access localStorage:', error);
+    return null;
+  }
+};
+
+const removeStoredToken = (): void => {
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
+  } catch (error) {
+    console.warn('Failed to remove token from localStorage:', error);
+  }
+};
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -13,7 +33,7 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = getStoredToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,8 +47,10 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+      removeStoredToken();
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
@@ -97,7 +119,7 @@ export const authService = {
   },
 
   getCurrentUser: async (): Promise<User> => {
-    const token = localStorage.getItem('token');
+    const token = getStoredToken();
     if (!token) {
       throw new Error('No token found');
     }

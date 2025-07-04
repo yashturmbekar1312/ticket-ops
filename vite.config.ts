@@ -35,8 +35,8 @@ export default defineConfig({
             if (id.includes('@mui/icons-material')) {
               return 'mui-icons';
             }
-            // React ecosystem
-            if (id.includes('react') || id.includes('react-dom')) {
+            // React ecosystem - bundle React, ReactDOM, and use-sync-external-store together
+            if (id.includes('react') || id.includes('react-dom') || id.includes('use-sync-external-store')) {
               return 'react-vendor';
             }
             // Redux ecosystem
@@ -96,7 +96,18 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000, // Increase warning limit to 1MB
   },
   optimizeDeps: {
-    include: ['@emotion/react', '@emotion/styled', '@mui/material', '@mui/icons-material'],
+    include: [
+      '@emotion/react', 
+      '@emotion/styled', 
+      '@mui/material', 
+      '@mui/icons-material',
+      'react-redux',
+      'use-sync-external-store'
+    ],
     force: true,
+  },
+  // Add define to ensure proper React mode
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
   },
 });
