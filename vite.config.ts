@@ -3,7 +3,14 @@ import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxImportSource: '@emotion/react',
+      babel: {
+        plugins: ['@emotion/babel-plugin'],
+      },
+    }),
+  ],
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
@@ -21,15 +28,12 @@ export default defineConfig({
         manualChunks: (id) => {
           // Node modules chunking
           if (id.includes('node_modules')) {
-            // Large libraries that should be separate
-            if (id.includes('@mui/material')) {
+            // Bundle emotion with Material-UI to avoid initialization issues
+            if (id.includes('@mui/material') || id.includes('@emotion')) {
               return 'mui-core';
             }
             if (id.includes('@mui/icons-material')) {
               return 'mui-icons';
-            }
-            if (id.includes('@emotion')) {
-              return 'emotion';
             }
             // React ecosystem
             if (id.includes('react') || id.includes('react-dom')) {
@@ -90,5 +94,9 @@ export default defineConfig({
       },
     },
     chunkSizeWarningLimit: 1000, // Increase warning limit to 1MB
+  },
+  optimizeDeps: {
+    include: ['@emotion/react', '@emotion/styled', '@mui/material', '@mui/icons-material'],
+    force: true,
   },
 });
