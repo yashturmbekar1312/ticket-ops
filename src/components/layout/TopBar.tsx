@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   AppBar,
   Toolbar,
@@ -9,19 +9,13 @@ import {
   MenuItem,
   IconButton,
   Chip,
-  Badge,
 } from '@mui/material';
-import {
-  AccountCircle,
-  Notifications,
-  ExitToApp,
-  Settings,
-  Menu as MenuIcon,
-} from '@mui/icons-material';
+import { AccountCircle, ExitToApp, Settings, Menu as MenuIcon } from '@mui/icons-material';
 import { useAuth } from '../../hooks/auth';
 import { useAppDispatch } from '../../hooks/redux';
 import { logout } from '../../redux/authSlice';
 import { getRoleColor } from '../../utils/permissions';
+import { NotificationBell } from '../common/NotificationProvider';
 
 interface TopBarProps {
   onToggleSidebar: () => void;
@@ -74,11 +68,7 @@ export const TopBar: React.FC<TopBarProps> = ({ onToggleSidebar }) => {
             />
           )}
 
-          <IconButton color="inherit">
-            <Badge badgeContent={3} color="error">
-              <Notifications />
-            </Badge>
-          </IconButton>
+          <NotificationBell />
 
           <IconButton
             size="large"

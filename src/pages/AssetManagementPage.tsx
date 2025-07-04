@@ -1,20 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
-  Typography,
-  Button,
   Card,
   CardContent,
+  Typography,
   Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   Chip,
-  IconButton,
+  Button,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -24,317 +16,367 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Alert,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  Tooltip,
   Tabs,
   Tab,
+  LinearProgress,
+  Alert,
+  Menu,
+  MenuItem as MenuItemComponent,
+  Checkbox,
+  Fab,
+  Avatar,
+  Divider,
   InputAdornment,
-  Tooltip,
-  CircularProgress,
-  TablePagination,
 } from '@mui/material';
 import {
   Add,
   Edit,
   Delete,
   Search,
-  Computer,
-  PhoneIphone,
-  Print,
-  Monitor,
-  Laptop,
-  Settings,
-  Assignment,
-  History,
   FilterList,
   Download,
+  Upload,
+  LocationOn,
+  Business,
+  Computer,
+  PhoneAndroid,
+  Storage,
+  Router,
+  Warning,
+  Schedule,
+  TrendingUp,
+  Inventory,
+  Visibility,
+  MoreVert,
+  CloudDownload,
+  Assignment,
 } from '@mui/icons-material';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { useAuth } from '../hooks/auth';
-import { Asset, AssetFormData } from '../types';
+import { assetService } from '../services/asset';
+import { Asset, AssetCategory, AssetMetrics } from '../types/asset';
 
-// Mock data for assets
-const mockAssets: Asset[] = [
-  {
-    id: '1',
-    name: 'Dell Laptop - Marketing',
-    type: 'laptop',
-    serialNumber: 'DL12345',
-    assetTag: 'ASSET-001',
-    assignedTo: 'user1',
-    assignedToName: 'John Doe',
-    department: 'Marketing',
-    status: 'active',
-    purchaseDate: '2023-01-15',
-    warrantyExpiry: '2026-01-15',
-    cost: 1200,
-    location: 'Building A, Floor 2',
-    notes: 'Standard laptop configuration',
-    createdAt: '2023-01-15T10:00:00Z',
-    updatedAt: '2023-01-15T10:00:00Z',
-  },
-  {
-    id: '2',
-    name: 'HP Monitor 24"',
-    type: 'monitor',
-    serialNumber: 'HP98765',
-    assetTag: 'ASSET-002',
-    assignedTo: 'user2',
-    assignedToName: 'Jane Smith',
-    department: 'IT',
-    status: 'active',
-    purchaseDate: '2023-02-20',
-    warrantyExpiry: '2026-02-20',
-    cost: 300,
-    location: 'Building B, Floor 1',
-    createdAt: '2023-02-20T14:30:00Z',
-    updatedAt: '2023-02-20T14:30:00Z',
-  },
-  {
-    id: '3',
-    name: 'Network Printer',
-    type: 'printer',
-    serialNumber: 'NP11111',
-    assetTag: 'ASSET-003',
-    department: 'General',
-    status: 'maintenance',
-    purchaseDate: '2022-06-10',
-    warrantyExpiry: '2025-06-10',
-    cost: 800,
-    location: 'Building A, Floor 1',
-    notes: 'Scheduled maintenance on 2024-02-01',
-    createdAt: '2022-06-10T09:00:00Z',
-    updatedAt: '2024-01-15T11:00:00Z',
-  },
-];
+interface AssetManagementPageProps {}
 
-const assetTypeIcons = {
-  laptop: <Laptop />,
-  desktop: <Computer />,
-  monitor: <Monitor />,
-  printer: <Print />,
-  phone: <PhoneIphone />,
-  tablet: <PhoneIphone />,
-  software: <Settings />,
-  license: <Assignment />,
-  other: <Settings />,
-};
-
-const statusColors = {
-  active: 'success',
-  maintenance: 'warning',
-  retired: 'secondary',
-  lost: 'error',
-  disposed: 'default',
-} as const;
-
-const AssetManagementPage: React.FC = () => {
-  const { user } = useAuth();
-  const [assets, setAssets] = useState<Asset[]>(mockAssets);
-  const [filteredAssets, setFilteredAssets] = useState<Asset[]>(mockAssets);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [typeFilter, setTypeFilter] = useState('all');
-  const [departmentFilter, setDepartmentFilter] = useState('all');
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+const AssetManagementPage: React.FC<AssetManagementPageProps> = () => {
   const [tabValue, setTabValue] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const canManageAssets = user?.role === 'IT Admin' || user?.role === 'Admin';
-
-  const assetSchema = Yup.object({
-    name: Yup.string().required('Name is required'),
-    type: Yup.string().required('Type is required'),
-    department: Yup.string().required('Department is required'),
-    status: Yup.string().required('Status is required'),
-  });
-
-  const formik = useFormik<AssetFormData>({
-    initialValues: {
-      name: '',
-      type: 'laptop',
-      serialNumber: '',
-      assetTag: '',
-      assignedTo: '',
-      department: '',
-      status: 'active',
-      purchaseDate: '',
-      warrantyExpiry: '',
-      cost: 0,
-      location: '',
-      notes: '',
-    },
-    validationSchema: assetSchema,
-    onSubmit: async (values) => {
-      setIsLoading(true);
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        const newAsset: Asset = {
-          id: Date.now().toString(),
-          ...values,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-
-        setAssets([...assets, newAsset]);
-        setIsCreateDialogOpen(false);
-        formik.resetForm();
-      } catch (error) {
-        console.error('Error creating asset:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-  });
+  const [assets, setAssets] = useState<Asset[]>([]);
+  const [categories, setCategories] = useState<AssetCategory[]>([]);
+  const [metrics, setMetrics] = useState<AssetMetrics | null>(null);
+  const [selectedAssets, setSelectedAssets] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterMenuAnchor, setFilterMenuAnchor] = useState<null | HTMLElement>(null);
+  const [assetDialogOpen, setAssetDialogOpen] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
+  const [bulkActionMenuAnchor, setBulkActionMenuAnchor] = useState<null | HTMLElement>(null);
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
+  const [discoveryDialogOpen, setDiscoveryDialogOpen] = useState(false);
 
   useEffect(() => {
-    let filtered = assets;
+    loadAssetData();
+  }, []);
 
-    if (searchQuery) {
-      filtered = filtered.filter(
-        (asset) =>
-          asset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          asset.serialNumber?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          asset.assetTag?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          asset.assignedToName?.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+  const loadAssetData = () => {
+    const allAssets = assetService.getAllAssets();
+    setAssets(allAssets);
+    setCategories(assetService.getAllCategories());
+    setMetrics(assetService.getAssetMetrics());
+  };
+
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query.trim() === '') {
+      setAssets(assetService.getAllAssets());
+    } else {
+      setAssets(assetService.searchAssets(query));
     }
+  };
 
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter((asset) => asset.status === statusFilter);
+  const handleAssetSelect = (assetId: string) => {
+    setSelectedAssets((prev) =>
+      prev.includes(assetId) ? prev.filter((id) => id !== assetId) : [...prev, assetId]
+    );
+  };
+
+  const handleSelectAllAssets = () => {
+    if (selectedAssets.length === assets.length) {
+      setSelectedAssets([]);
+    } else {
+      setSelectedAssets(assets.map((a) => a.id));
     }
+  };
 
-    if (typeFilter !== 'all') {
-      filtered = filtered.filter((asset) => asset.type === typeFilter);
-    }
-
-    if (departmentFilter !== 'all') {
-      filtered = filtered.filter((asset) => asset.department === departmentFilter);
-    }
-
-    setFilteredAssets(filtered);
-  }, [assets, searchQuery, statusFilter, typeFilter, departmentFilter]);
+  const handleAddAsset = () => {
+    setSelectedAsset(null);
+    setAssetDialogOpen(true);
+  };
 
   const handleEditAsset = (asset: Asset) => {
     setSelectedAsset(asset);
-    formik.setValues({
-      name: asset.name,
-      type: asset.type,
-      serialNumber: asset.serialNumber || '',
-      assetTag: asset.assetTag || '',
-      assignedTo: asset.assignedTo || '',
-      department: asset.department,
-      status: asset.status,
-      purchaseDate: asset.purchaseDate || '',
-      warrantyExpiry: asset.warrantyExpiry || '',
-      cost: asset.cost || 0,
-      location: asset.location || '',
-      notes: asset.notes || '',
-    });
-    setIsEditDialogOpen(true);
+    setAssetDialogOpen(true);
   };
 
   const handleDeleteAsset = (assetId: string) => {
-    setAssets(assets.filter((asset) => asset.id !== assetId));
+    if (window.confirm('Are you sure you want to delete this asset?')) {
+      assetService.deleteAsset(assetId);
+      loadAssetData();
+    }
   };
 
-  const assetStats = {
-    total: assets.length,
-    active: assets.filter((a) => a.status === 'active').length,
-    maintenance: assets.filter((a) => a.status === 'maintenance').length,
-    retired: assets.filter((a) => a.status === 'retired').length,
-    totalValue: assets.reduce((sum, asset) => sum + (asset.cost || 0), 0),
+  const handleBulkAction = (action: string) => {
+    if (selectedAssets.length === 0) {
+      alert('Please select assets first');
+      return;
+    }
+
+    switch (action) {
+      case 'retire':
+        assetService.createBulkOperation('retire', selectedAssets, {});
+        break;
+      case 'move':
+        // Open location selector dialog
+        break;
+      case 'assign':
+        // Open user selector dialog
+        break;
+      case 'export':
+        // Export selected assets
+        break;
+    }
+
+    setBulkActionMenuAnchor(null);
+    setSelectedAssets([]);
+    loadAssetData();
   };
 
-  const departments = Array.from(new Set(assets.map((a) => a.department)));
-  const assetTypes = Array.from(new Set(assets.map((a) => a.type)));
+  const getAssetIcon = (category: string) => {
+    switch (category.toLowerCase()) {
+      case 'hardware':
+        return <Computer />;
+      case 'software':
+        return <Storage />;
+      case 'mobile devices':
+        return <PhoneAndroid />;
+      case 'network equipment':
+        return <Router />;
+      default:
+        return <Business />;
+    }
+  };
 
-  return (
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active':
+        return 'success';
+      case 'inactive':
+        return 'default';
+      case 'maintenance':
+        return 'warning';
+      case 'retired':
+        return 'error';
+      default:
+        return 'default';
+    }
+  };
+
+  const AssetOverviewTab = () => (
     <Box sx={{ p: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
-          Asset Management
-        </Typography>
-        {canManageAssets && (
-          <Button
-            variant="contained"
-            startIcon={<Add />}
-            onClick={() => setIsCreateDialogOpen(true)}
-            sx={{ borderRadius: 2 }}
-          >
-            Add Asset
-          </Button>
-        )}
-      </Box>
+      <Grid container spacing={3}>
+        {/* Key Metrics */}
+        <Grid item xs={12} md={3}>
+          <Card>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Inventory color="primary" sx={{ mr: 1 }} />
+                <Typography variant="h6">Total Assets</Typography>
+              </Box>
+              <Typography variant="h3" color="primary.main">
+                {metrics?.totalAssets || 0}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Active inventory
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-      {/* Asset Statistics */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} md={3}>
           <Card>
             <CardContent>
-              <Typography variant="h6" color="primary">
-                {assetStats.total}
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Warning color="warning" sx={{ mr: 1 }} />
+                <Typography variant="h6">Warranty Expiring</Typography>
+              </Box>
+              <Typography variant="h3" color="warning.main">
+                {metrics?.warrantyExpiring || 0}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Total Assets
+                Next 90 days
               </Typography>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+
+        <Grid item xs={12} md={3}>
           <Card>
             <CardContent>
-              <Typography variant="h6" color="success.main">
-                {assetStats.active}
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Schedule color="error" sx={{ mr: 1 }} />
+                <Typography variant="h6">Maintenance Due</Typography>
+              </Box>
+              <Typography variant="h3" color="error.main">
+                {metrics?.maintenanceDue || 0}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Active
+                Overdue tasks
               </Typography>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+
+        <Grid item xs={12} md={3}>
           <Card>
             <CardContent>
-              <Typography variant="h6" color="warning.main">
-                {assetStats.maintenance}
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <TrendingUp color="success" sx={{ mr: 1 }} />
+                <Typography variant="h6">Utilization</Typography>
+              </Box>
+              <Typography variant="h3" color="success.main">
+                {metrics?.utilizationRate || 0}%
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                In Maintenance
-              </Typography>
+              <LinearProgress
+                variant="determinate"
+                value={metrics?.utilizationRate || 0}
+                color="success"
+                sx={{ mt: 1 }}
+              />
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+
+        {/* Assets by Category */}
+        <Grid item xs={12} md={6}>
           <Card>
             <CardContent>
-              <Typography variant="h6" color="text.primary">
-                ${assetStats.totalValue.toLocaleString()}
+              <Typography variant="h6" gutterBottom>
+                Assets by Category
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Total Value
+              {metrics?.assetsByCategory &&
+                Object.entries(metrics.assetsByCategory).map(([category, count]) => (
+                  <Box key={category} sx={{ mb: 2 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        {getAssetIcon(category)}
+                        <Typography variant="body2" sx={{ ml: 1 }}>
+                          {category}
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" fontWeight="bold">
+                        {count}
+                      </Typography>
+                    </Box>
+                    <LinearProgress
+                      variant="determinate"
+                      value={(count / (metrics?.totalAssets || 1)) * 100}
+                      sx={{ height: 6, borderRadius: 3 }}
+                    />
+                  </Box>
+                ))}
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Assets by Location */}
+        <Grid item xs={12} md={6}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Assets by Location
               </Typography>
+              {metrics?.assetsByLocation &&
+                Object.entries(metrics.assetsByLocation).map(([location, count]) => (
+                  <Box key={location} sx={{ mb: 2 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <LocationOn color="primary" sx={{ mr: 1 }} />
+                        <Typography variant="body2">{location}</Typography>
+                      </Box>
+                      <Typography variant="body2" fontWeight="bold">
+                        {count}
+                      </Typography>
+                    </Box>
+                    <LinearProgress
+                      variant="determinate"
+                      value={(count / (metrics?.totalAssets || 1)) * 100}
+                      sx={{ height: 6, borderRadius: 3 }}
+                    />
+                  </Box>
+                ))}
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Recent Activity */}
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Recent Asset Activity
+              </Typography>
+              <Alert severity="info">Asset activity tracking features coming soon!</Alert>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
+    </Box>
+  );
 
-      {/* Filters */}
+  const AssetInventoryTab = () => (
+    <Box sx={{ p: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+        <Typography variant="h5">Asset Inventory</Typography>
+        <Box>
+          <Button
+            variant="outlined"
+            startIcon={<Upload />}
+            onClick={() => setImportDialogOpen(true)}
+            sx={{ mr: 1 }}
+          >
+            Import
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<CloudDownload />}
+            onClick={() => setDiscoveryDialogOpen(true)}
+            sx={{ mr: 1 }}
+          >
+            Discovery
+          </Button>
+          <Button variant="contained" startIcon={<Add />} onClick={handleAddAsset}>
+            Add Asset
+          </Button>
+        </Box>
+      </Box>
+
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={3}>
+            <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                size="small"
                 placeholder="Search assets..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -344,302 +386,368 @@ const AssetManagementPage: React.FC = () => {
                 }}
               />
             </Grid>
-            <Grid item xs={12} md={3}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  label="Status"
+            <Grid item xs={12} md={6}>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                <Button
+                  variant="outlined"
+                  startIcon={<FilterList />}
+                  onClick={(e) => setFilterMenuAnchor(e.currentTarget)}
                 >
-                  <MenuItem value="all">All Status</MenuItem>
-                  <MenuItem value="active">Active</MenuItem>
-                  <MenuItem value="maintenance">Maintenance</MenuItem>
-                  <MenuItem value="retired">Retired</MenuItem>
-                  <MenuItem value="lost">Lost</MenuItem>
-                  <MenuItem value="disposed">Disposed</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Type</InputLabel>
-                <Select
-                  value={typeFilter}
-                  onChange={(e) => setTypeFilter(e.target.value)}
-                  label="Type"
+                  Filter
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<Download />}
+                  disabled={selectedAssets.length === 0}
                 >
-                  <MenuItem value="all">All Types</MenuItem>
-                  {assetTypes.map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Department</InputLabel>
-                <Select
-                  value={departmentFilter}
-                  onChange={(e) => setDepartmentFilter(e.target.value)}
-                  label="Department"
+                  Export
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<Assignment />}
+                  disabled={selectedAssets.length === 0}
+                  onClick={(e) => setBulkActionMenuAnchor(e.currentTarget)}
                 >
-                  <MenuItem value="all">All Departments</MenuItem>
-                  {departments.map((dept) => (
-                    <MenuItem key={dept} value={dept}>
-                      {dept}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                  Bulk Actions
+                </Button>
+              </Box>
             </Grid>
           </Grid>
         </CardContent>
       </Card>
 
-      {/* Assets Table */}
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Asset</TableCell>
-              <TableCell>Type</TableCell>
-              <TableCell>Serial Number</TableCell>
-              <TableCell>Assigned To</TableCell>
-              <TableCell>Department</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Location</TableCell>
-              {canManageAssets && <TableCell>Actions</TableCell>}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredAssets
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((asset) => (
-                <TableRow key={asset.id} hover>
-                  <TableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      {assetTypeIcons[asset.type]}
-                      <Box>
-                        <Typography variant="subtitle2">{asset.name}</Typography>
-                        {asset.assetTag && (
-                          <Typography variant="caption" color="text.secondary">
-                            {asset.assetTag}
-                          </Typography>
-                        )}
-                      </Box>
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={asset.type.charAt(0).toUpperCase() + asset.type.slice(1)}
-                      size="small"
-                      variant="outlined"
+      <Card>
+        <CardContent>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={selectedAssets.length === assets.length && assets.length > 0}
+                      indeterminate={
+                        selectedAssets.length > 0 && selectedAssets.length < assets.length
+                      }
+                      onChange={handleSelectAllAssets}
                     />
                   </TableCell>
-                  <TableCell>{asset.serialNumber || '-'}</TableCell>
-                  <TableCell>{asset.assignedToName || 'Unassigned'}</TableCell>
-                  <TableCell>{asset.department}</TableCell>
-                  <TableCell>
-                    <Chip
-                      label={asset.status.charAt(0).toUpperCase() + asset.status.slice(1)}
-                      size="small"
-                      color={statusColors[asset.status] as any}
-                    />
-                  </TableCell>
-                  <TableCell>{asset.location || '-'}</TableCell>
-                  {canManageAssets && (
-                    <TableCell>
-                      <Tooltip title="Edit">
-                        <IconButton size="small" onClick={() => handleEditAsset(asset)}>
-                          <Edit />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Delete">
-                        <IconButton size="small" onClick={() => handleDeleteAsset(asset.id)}>
-                          <Delete />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="History">
-                        <IconButton size="small">
-                          <History />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
-                  )}
+                  <TableCell>Asset</TableCell>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Location</TableCell>
+                  <TableCell>Assigned To</TableCell>
+                  <TableCell>Warranty</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={filteredAssets.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={(_, newPage) => setPage(newPage)}
-          onRowsPerPageChange={(e) => {
-            setRowsPerPage(parseInt(e.target.value, 10));
-            setPage(0);
-          }}
-        />
-      </TableContainer>
+              </TableHead>
+              <TableBody>
+                {assets.map((asset) => (
+                  <TableRow key={asset.id}>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={selectedAssets.includes(asset.id)}
+                        onChange={() => handleAssetSelect(asset.id)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
+                          {getAssetIcon(asset.category.name)}
+                        </Avatar>
+                        <Box>
+                          <Typography variant="body2" fontWeight="bold">
+                            {asset.name}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {asset.assetTag} • {asset.assetNumber}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Chip label={asset.category.name} size="small" variant="outlined" />
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={asset.status}
+                        size="small"
+                        color={getStatusColor(asset.status)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <LocationOn sx={{ mr: 1, fontSize: 16 }} />
+                        <Typography variant="body2">{asset.location.name}</Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      {asset.assignedTo ? (
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Avatar sx={{ width: 24, height: 24, mr: 1 }}>
+                            {asset.assignedTo.name.charAt(0)}
+                          </Avatar>
+                          <Typography variant="body2">{asset.assignedTo.name}</Typography>
+                        </Box>
+                      ) : (
+                        <Typography variant="body2" color="text.secondary">
+                          Unassigned
+                        </Typography>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {asset.warrantyExpiration ? (
+                        <Box>
+                          <Typography variant="body2">
+                            {asset.warrantyExpiration.toLocaleDateString()}
+                          </Typography>
+                          {(() => {
+                            const daysUntilExpiry = Math.ceil(
+                              (asset.warrantyExpiration!.getTime() - Date.now()) /
+                                (1000 * 60 * 60 * 24)
+                            );
+                            return (
+                              <Typography
+                                variant="caption"
+                                color={daysUntilExpiry < 90 ? 'warning.main' : 'text.secondary'}
+                              >
+                                {daysUntilExpiry < 0 ? 'Expired' : `${daysUntilExpiry} days left`}
+                              </Typography>
+                            );
+                          })()}
+                        </Box>
+                      ) : (
+                        <Typography variant="body2" color="text.secondary">
+                          No warranty
+                        </Typography>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Box>
+                        <Tooltip title="View Details">
+                          <IconButton size="small" onClick={() => handleEditAsset(asset)}>
+                            <Visibility />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Edit">
+                          <IconButton size="small" onClick={() => handleEditAsset(asset)}>
+                            <Edit />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                          <IconButton size="small" onClick={() => handleDeleteAsset(asset.id)}>
+                            <Delete />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="More">
+                          <IconButton size="small">
+                            <MoreVert />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </CardContent>
+      </Card>
 
-      {/* Create Asset Dialog */}
+      {/* Floating Action Button */}
+      <Fab
+        color="primary"
+        aria-label="add"
+        sx={{ position: 'fixed', bottom: 16, right: 16 }}
+        onClick={handleAddAsset}
+      >
+        <Add />
+      </Fab>
+
+      {/* Bulk Actions Menu */}
+      <Menu
+        anchorEl={bulkActionMenuAnchor}
+        open={Boolean(bulkActionMenuAnchor)}
+        onClose={() => setBulkActionMenuAnchor(null)}
+      >
+        <MenuItemComponent onClick={() => handleBulkAction('assign')}>
+          <Assignment sx={{ mr: 1 }} />
+          Assign to User
+        </MenuItemComponent>
+        <MenuItemComponent onClick={() => handleBulkAction('move')}>
+          <LocationOn sx={{ mr: 1 }} />
+          Move to Location
+        </MenuItemComponent>
+        <MenuItemComponent onClick={() => handleBulkAction('retire')}>
+          <Warning sx={{ mr: 1 }} />
+          Retire Assets
+        </MenuItemComponent>
+        <Divider />
+        <MenuItemComponent onClick={() => handleBulkAction('export')}>
+          <Download sx={{ mr: 1 }} />
+          Export Selected
+        </MenuItemComponent>
+      </Menu>
+    </Box>
+  );
+
+  return (
+    <Box>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={tabValue} onChange={handleTabChange}>
+          <Tab label="Overview" />
+          <Tab label="Inventory" />
+          <Tab label="Categories" />
+          <Tab label="Locations" />
+          <Tab label="Discovery" />
+          <Tab label="Reports" />
+        </Tabs>
+      </Box>
+
+      {tabValue === 0 && <AssetOverviewTab />}
+      {tabValue === 1 && <AssetInventoryTab />}
+      {tabValue === 2 && (
+        <Box sx={{ p: 3 }}>
+          <Typography variant="h5">Asset Categories</Typography>
+          <Alert severity="info" sx={{ mt: 2 }}>
+            Asset category management features coming soon!
+          </Alert>
+        </Box>
+      )}
+      {tabValue === 3 && (
+        <Box sx={{ p: 3 }}>
+          <Typography variant="h5">Asset Locations</Typography>
+          <Alert severity="info" sx={{ mt: 2 }}>
+            Asset location management features coming soon!
+          </Alert>
+        </Box>
+      )}
+      {tabValue === 4 && (
+        <Box sx={{ p: 3 }}>
+          <Typography variant="h5">Asset Discovery</Typography>
+          <Alert severity="info" sx={{ mt: 2 }}>
+            Automated asset discovery features coming soon!
+          </Alert>
+        </Box>
+      )}
+      {tabValue === 5 && (
+        <Box sx={{ p: 3 }}>
+          <Typography variant="h5">Asset Reports</Typography>
+          <Alert severity="info" sx={{ mt: 2 }}>
+            Asset reporting features coming soon!
+          </Alert>
+        </Box>
+      )}
+
+      {/* Asset Dialog */}
       <Dialog
-        open={isCreateDialogOpen}
-        onClose={() => setIsCreateDialogOpen(false)}
+        open={assetDialogOpen}
+        onClose={() => setAssetDialogOpen(false)}
         maxWidth="md"
         fullWidth
       >
-        <DialogTitle>Add New Asset</DialogTitle>
-        <form onSubmit={formik.handleSubmit}>
-          <DialogContent>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  name="name"
-                  label="Asset Name"
-                  value={formik.values.name}
-                  onChange={formik.handleChange}
-                  error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <FormControl fullWidth margin="normal">
-                  <InputLabel>Type</InputLabel>
-                  <Select
-                    name="type"
-                    value={formik.values.type}
-                    onChange={formik.handleChange}
-                    error={formik.touched.type && Boolean(formik.errors.type)}
-                  >
-                    <MenuItem value="laptop">Laptop</MenuItem>
-                    <MenuItem value="desktop">Desktop</MenuItem>
-                    <MenuItem value="monitor">Monitor</MenuItem>
-                    <MenuItem value="printer">Printer</MenuItem>
-                    <MenuItem value="phone">Phone</MenuItem>
-                    <MenuItem value="tablet">Tablet</MenuItem>
-                    <MenuItem value="software">Software</MenuItem>
-                    <MenuItem value="license">License</MenuItem>
-                    <MenuItem value="other">Other</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  name="serialNumber"
-                  label="Serial Number"
-                  value={formik.values.serialNumber}
-                  onChange={formik.handleChange}
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  name="assetTag"
-                  label="Asset Tag"
-                  value={formik.values.assetTag}
-                  onChange={formik.handleChange}
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  name="department"
-                  label="Department"
-                  value={formik.values.department}
-                  onChange={formik.handleChange}
-                  error={formik.touched.department && Boolean(formik.errors.department)}
-                  helperText={formik.touched.department && formik.errors.department}
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <FormControl fullWidth margin="normal">
-                  <InputLabel>Status</InputLabel>
-                  <Select
-                    name="status"
-                    value={formik.values.status}
-                    onChange={formik.handleChange}
-                    error={formik.touched.status && Boolean(formik.errors.status)}
-                  >
-                    <MenuItem value="active">Active</MenuItem>
-                    <MenuItem value="maintenance">Maintenance</MenuItem>
-                    <MenuItem value="retired">Retired</MenuItem>
-                    <MenuItem value="lost">Lost</MenuItem>
-                    <MenuItem value="disposed">Disposed</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  name="purchaseDate"
-                  label="Purchase Date"
-                  type="date"
-                  value={formik.values.purchaseDate}
-                  onChange={formik.handleChange}
-                  margin="normal"
-                  InputLabelProps={{ shrink: true }}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  name="cost"
-                  label="Cost"
-                  type="number"
-                  value={formik.values.cost}
-                  onChange={formik.handleChange}
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="location"
-                  label="Location"
-                  value={formik.values.location}
-                  onChange={formik.handleChange}
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="notes"
-                  label="Notes"
-                  multiline
-                  rows={3}
-                  value={formik.values.notes}
-                  onChange={formik.handleChange}
-                  margin="normal"
-                />
-              </Grid>
+        <DialogTitle>{selectedAsset ? 'Edit Asset' : 'Add New Asset'}</DialogTitle>
+        <DialogContent>
+          <Alert severity="info" sx={{ mb: 2 }}>
+            Asset form implementation in progress...
+          </Alert>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Asset Name"
+                variant="outlined"
+                margin="dense"
+                defaultValue={selectedAsset?.name || ''}
+              />
             </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setIsCreateDialogOpen(false)}>Cancel</Button>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={isLoading}
-              startIcon={isLoading ? <CircularProgress size={20} /> : undefined}
-            >
-              {isLoading ? 'Adding...' : 'Add Asset'}
-            </Button>
-          </DialogActions>
-        </form>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Asset Tag"
+                variant="outlined"
+                margin="dense"
+                defaultValue={selectedAsset?.assetTag || ''}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth margin="dense">
+                <InputLabel>Category</InputLabel>
+                <Select value={selectedAsset?.category.id || ''} label="Category">
+                  {categories.map((category) => (
+                    <MenuItem key={category.id} value={category.id}>
+                      {category.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth margin="dense">
+                <InputLabel>Status</InputLabel>
+                <Select value={selectedAsset?.status || ''} label="Status">
+                  <MenuItem value="active">Active</MenuItem>
+                  <MenuItem value="inactive">Inactive</MenuItem>
+                  <MenuItem value="maintenance">Maintenance</MenuItem>
+                  <MenuItem value="retired">Retired</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setAssetDialogOpen(false)}>Cancel</Button>
+          <Button variant="contained">{selectedAsset ? 'Update' : 'Create'}</Button>
+        </DialogActions>
       </Dialog>
+
+      {/* Import Dialog */}
+      <Dialog
+        open={importDialogOpen}
+        onClose={() => setImportDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Import Assets</DialogTitle>
+        <DialogContent>
+          <Alert severity="info" sx={{ mb: 2 }}>
+            Asset import features coming soon!
+          </Alert>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setImportDialogOpen(false)}>Cancel</Button>
+          <Button variant="contained">Import</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Discovery Dialog */}
+      <Dialog
+        open={discoveryDialogOpen}
+        onClose={() => setDiscoveryDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Asset Discovery</DialogTitle>
+        <DialogContent>
+          <Alert severity="info" sx={{ mb: 2 }}>
+            Asset discovery features coming soon!
+          </Alert>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDiscoveryDialogOpen(false)}>Cancel</Button>
+          <Button variant="contained">Start Discovery</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Filter Menu */}
+      <Menu
+        anchorEl={filterMenuAnchor}
+        open={Boolean(filterMenuAnchor)}
+        onClose={() => setFilterMenuAnchor(null)}
+      >
+        <MenuItem onClick={() => setFilterMenuAnchor(null)}>Filter by Category</MenuItem>
+        <MenuItem onClick={() => setFilterMenuAnchor(null)}>Filter by Status</MenuItem>
+        <MenuItem onClick={() => setFilterMenuAnchor(null)}>Filter by Location</MenuItem>
+      </Menu>
     </Box>
   );
 };

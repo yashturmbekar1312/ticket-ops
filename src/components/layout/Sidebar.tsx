@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   Drawer,
   List,
@@ -21,6 +21,9 @@ import {
   MenuBook,
   Inventory,
   Settings,
+  Warning as IncidentIcon,
+  Timer as SLAIcon,
+  ChangeCircle,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth';
@@ -42,6 +45,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
     { text: 'Tickets', icon: <ConfirmationNumber />, path: '/tickets', roles: ['all'] },
     { text: 'Create Ticket', icon: <Add />, path: '/tickets/create', roles: ['all'] },
     {
+      text: 'Incidents',
+      icon: <IncidentIcon />,
+      path: '/incidents',
+      roles: ['IT Agent', 'Team Lead', 'IT Admin', 'Admin'],
+    },
+    {
+      text: 'SLA Management',
+      icon: <SLAIcon />,
+      path: '/sla',
+      roles: ['IT Admin', 'Admin'],
+    },
+    {
       text: 'Reports',
       icon: <Assessment />,
       path: '/reports',
@@ -49,10 +64,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
     },
     { text: 'Knowledge Base', icon: <MenuBook />, path: '/knowledge-base', roles: ['all'] },
     {
+      text: 'Change Management',
+      icon: <ChangeCircle />,
+      path: '/change-management',
+      roles: ['IT Admin', 'Admin', 'Team Lead'],
+    },
+    {
       text: 'Asset Management',
       icon: <Inventory />,
       path: '/asset-management',
       roles: ['IT Admin', 'Admin', 'IT Agent'],
+    },
+    {
+      text: 'Workflow Management',
+      icon: <Settings />,
+      path: '/workflow-management',
+      roles: ['IT Admin', 'Admin'],
     },
     {
       text: 'User Management',

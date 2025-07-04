@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Box, Typography, Button, Grid, CircularProgress, Alert, Fab } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';

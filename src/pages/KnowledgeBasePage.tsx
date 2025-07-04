@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -25,18 +25,7 @@ import {
   InputAdornment,
   CircularProgress,
 } from '@mui/material';
-import {
-  Search,
-  Add,
-  Edit,
-  Delete,
-  Visibility,
-  ThumbUp,
-  BookmarkBorder,
-  Share,
-  Category,
-  TrendingUp,
-} from '@mui/icons-material';
+import { Search, Add, Edit, Visibility, ThumbUp, BookmarkBorder, Share } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../hooks/auth';

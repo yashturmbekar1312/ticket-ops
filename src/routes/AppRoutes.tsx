@@ -1,19 +1,24 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box, Typography, CircularProgress } from '@mui/material';
 import { LazyLayout } from '../components/layout/LazyLayout';
+import { ProtectedRoute } from '../components/auth/ProtectedRoute';
 import { useAuth } from '../hooks/auth';
+import * as React from 'react';
 
 // Lazy load components
-const ProtectedRoute = React.lazy(() => import('../components/auth/ProtectedRoute'));
 const LoginPage = React.lazy(() => import('../pages/LoginPage'));
 const DashboardPage = React.lazy(() => import('../pages/DashboardPage'));
 const TicketsPage = React.lazy(() => import('../pages/TicketsPage'));
 const CreateTicketPage = React.lazy(() => import('../pages/CreateTicketPage'));
 const KnowledgeBasePage = React.lazy(() => import('../pages/KnowledgeBasePage'));
 const AssetManagementPage = React.lazy(() => import('../pages/AssetManagementPage'));
+const WorkflowManagementPage = React.lazy(() => import('../pages/WorkflowManagementPage'));
 const ReportsPage = React.lazy(() => import('../pages/ReportsPage'));
 const UserManagementPage = React.lazy(() => import('../pages/UserManagementPage'));
+const ChangeManagementPage = React.lazy(() => import('../pages/ChangeManagementPage'));
+const IncidentManagementPage = React.lazy(() => import('../pages/IncidentManagementPage'));
+const SLAManagementPage = React.lazy(() => import('../pages/SLAManagementPage'));
 
 // Loading component for lazy-loaded pages
 const PageLoader: React.FC = () => (
@@ -186,6 +191,34 @@ export const AppRoutes: React.FC = () => {
         }
       />
       <Route
+        path="/asset-management"
+        element={
+          <Suspense fallback={<PageLoader />}>
+            <ProtectedRoute requiredRoles={['IT Agent', 'Team Lead', 'IT Admin', 'Admin']}>
+              <LazyLayout>
+                <Suspense fallback={<PageLoader />}>
+                  <AssetManagementPage />
+                </Suspense>
+              </LazyLayout>
+            </ProtectedRoute>
+          </Suspense>
+        }
+      />
+      <Route
+        path="/workflow-management"
+        element={
+          <Suspense fallback={<PageLoader />}>
+            <ProtectedRoute requiredRoles={['IT Admin', 'Admin']}>
+              <LazyLayout>
+                <Suspense fallback={<PageLoader />}>
+                  <WorkflowManagementPage />
+                </Suspense>
+              </LazyLayout>
+            </ProtectedRoute>
+          </Suspense>
+        }
+      />
+      <Route
         path="/users"
         element={
           <Suspense fallback={<PageLoader />}>
@@ -207,6 +240,48 @@ export const AppRoutes: React.FC = () => {
               <LazyLayout>
                 <Suspense fallback={<PageLoader />}>
                   <DashboardPage />
+                </Suspense>
+              </LazyLayout>
+            </ProtectedRoute>
+          </Suspense>
+        }
+      />
+      <Route
+        path="/incidents"
+        element={
+          <Suspense fallback={<PageLoader />}>
+            <ProtectedRoute requiredRoles={['IT Agent', 'Team Lead', 'IT Admin', 'Admin']}>
+              <LazyLayout>
+                <Suspense fallback={<PageLoader />}>
+                  <IncidentManagementPage />
+                </Suspense>
+              </LazyLayout>
+            </ProtectedRoute>
+          </Suspense>
+        }
+      />
+      <Route
+        path="/sla"
+        element={
+          <Suspense fallback={<PageLoader />}>
+            <ProtectedRoute requiredRoles={['IT Admin', 'Admin']}>
+              <LazyLayout>
+                <Suspense fallback={<PageLoader />}>
+                  <SLAManagementPage />
+                </Suspense>
+              </LazyLayout>
+            </ProtectedRoute>
+          </Suspense>
+        }
+      />
+      <Route
+        path="/change-management"
+        element={
+          <Suspense fallback={<PageLoader />}>
+            <ProtectedRoute requiredRoles={['IT Admin', 'Admin', 'Team Lead']}>
+              <LazyLayout>
+                <Suspense fallback={<PageLoader />}>
+                  <ChangeManagementPage />
                 </Suspense>
               </LazyLayout>
             </ProtectedRoute>

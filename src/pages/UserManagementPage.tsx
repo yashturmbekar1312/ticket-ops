@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -30,8 +30,6 @@ import {
   Switch,
   FormControlLabel,
   Grid,
-  Tabs,
-  Tab,
   TablePagination,
   CircularProgress,
 } from '@mui/material';
@@ -46,7 +44,6 @@ import {
   Block,
   CheckCircle,
   Email,
-  Phone,
   Business,
   Security,
   Settings,
@@ -56,7 +53,7 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../hooks/auth';
-import { User, UserFormData, UserRole } from '../types';
+import { User, UserFormData } from '../types';
 
 // Mock data for users
 const mockUsers: User[] = [
@@ -157,7 +154,6 @@ const UserManagementPage: React.FC = () => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [selectedTab, setSelectedTab] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
