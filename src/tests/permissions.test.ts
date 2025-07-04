@@ -1,5 +1,5 @@
 import { canViewTicket, canEditTicket, canDeleteTicket } from '../utils/permissions';
-import { Ticket, UserRole } from '../types';
+import { Ticket } from '../types';
 
 describe('Permissions', () => {
   const mockTicket: Ticket = {

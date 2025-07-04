@@ -3,7 +3,6 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Button,
   Box,
   Avatar,
   Menu,
@@ -12,7 +11,13 @@ import {
   Chip,
   Badge,
 } from '@mui/material';
-import { AccountCircle, Notifications, ExitToApp, Settings } from '@mui/icons-material';
+import {
+  AccountCircle,
+  Notifications,
+  ExitToApp,
+  Settings,
+  Menu as MenuIcon,
+} from '@mui/icons-material';
 import { useAuth } from '../../hooks/auth';
 import { useAppDispatch } from '../../hooks/redux';
 import { logout } from '../../redux/authSlice';
@@ -43,6 +48,15 @@ export const TopBar: React.FC<TopBarProps> = ({ onToggleSidebar }) => {
   return (
     <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={onToggleSidebar}
+          edge="start"
+          sx={{ mr: 2 }}
+        >
+          <MenuIcon />
+        </IconButton>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           TicketOps
         </Typography>

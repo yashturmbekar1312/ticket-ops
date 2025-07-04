@@ -22,7 +22,7 @@ import {
   Group,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth, useRole } from '../../hooks/auth';
+import { useAuth } from '../../hooks/auth';
 
 const drawerWidth = 240;
 
@@ -31,11 +31,10 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
-  const { isAdmin, isManager, isHR } = useRole();
 
   const menuItems = [
     {

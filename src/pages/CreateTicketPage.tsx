@@ -68,7 +68,7 @@ export const CreateTicketPage: React.FC = () => {
     },
   });
 
-  const handleTagsChange = (event: any, newValue: string[]) => {
+  const handleTagsChange = (_event: any, newValue: string[]) => {
     formik.setFieldValue('tags', newValue);
   };
 

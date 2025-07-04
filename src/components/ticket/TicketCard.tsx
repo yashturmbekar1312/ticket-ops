@@ -8,7 +8,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Avatar,
 } from '@mui/material';
 import { MoreVert, Person, Schedule } from '@mui/icons-material';
 import { Ticket } from '../../types';

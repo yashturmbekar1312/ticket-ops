@@ -1,11 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import {
-  Ticket,
-  TicketFormData,
-  TicketFilters,
-  PaginatedResponse,
-} from "../types";
-import { ticketService } from "../services/ticket";
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { Ticket, TicketFormData, TicketFilters } from '../types';
+import { ticketService } from '../services/ticket';
 
 interface TicketState {
   tickets: Ticket[];
@@ -37,70 +32,67 @@ const initialState: TicketState = {
 
 // Async thunks
 export const fetchTickets = createAsyncThunk(
-  "tickets/fetchTickets",
+  'tickets/fetchTickets',
   async (filters: TicketFilters | undefined, { rejectWithValue }) => {
     try {
       const response = await ticketService.getTickets(filters);
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.message || "Failed to fetch tickets");
+      return rejectWithValue(error.message || 'Failed to fetch tickets');
     }
   }
 );
 
 export const fetchTicket = createAsyncThunk(
-  "tickets/fetchTicket",
+  'tickets/fetchTicket',
   async (id: string, { rejectWithValue }) => {
     try {
       const response = await ticketService.getTicket(id);
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.message || "Failed to fetch ticket");
+      return rejectWithValue(error.message || 'Failed to fetch ticket');
     }
   }
 );
 
 export const createTicket = createAsyncThunk(
-  "tickets/createTicket",
+  'tickets/createTicket',
   async (ticketData: TicketFormData, { rejectWithValue }) => {
     try {
       const response = await ticketService.createTicket(ticketData);
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.message || "Failed to create ticket");
+      return rejectWithValue(error.message || 'Failed to create ticket');
     }
   }
 );
 
 export const updateTicket = createAsyncThunk(
-  "tickets/updateTicket",
-  async (
-    { id, updates }: { id: string; updates: Partial<Ticket> },
-    { rejectWithValue }
-  ) => {
+  'tickets/updateTicket',
+  async ({ id, updates }: { id: string; updates: Partial<Ticket> }, { rejectWithValue }) => {
     try {
       const response = await ticketService.updateTicket(id, updates);
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.message || "Failed to update ticket");
+      return rejectWithValue(error.message || 'Failed to update ticket');
     }
   }
 );
 
 export const deleteTicket = createAsyncThunk(
-  "tickets/deleteTicket",
+  'tickets/deleteTicket',
   async (id: string, { rejectWithValue }) => {
     try {
       await ticketService.deleteTicket(id);
       return id;
     } catch (error: any) {
-      return rejectWithValue(error.message || "Failed to delete ticket");
+      return rejectWithValue(error.message || 'Failed to delete ticket');
     }
   }
 );
 
 const ticketSlice = createSlice({
-  name: "tickets",
+  name: 'tickets',
   initialState,
   reducers: {
     setFilters: (state, action: PayloadAction<TicketFilters>) => {
@@ -165,9 +157,7 @@ const ticketSlice = createSlice({
       })
       // Update ticket
       .addCase(updateTicket.fulfilled, (state, action) => {
-        const index = state.tickets.findIndex(
-          (t) => t.id === action.payload.id
-        );
+        const index = state.tickets.findIndex((t) => t.id === action.payload.id);
         if (index !== -1) {
           state.tickets[index] = action.payload;
         }
@@ -185,6 +175,5 @@ const ticketSlice = createSlice({
   },
 });
 
-export const { setFilters, clearFilters, clearError, clearCurrentTicket } =
-  ticketSlice.actions;
+export const { setFilters, clearFilters, clearError, clearCurrentTicket } = ticketSlice.actions;
 export default ticketSlice.reducer;
