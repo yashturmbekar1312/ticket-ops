@@ -1,4 +1,11 @@
-import { Ticket, TicketFormData, Comment, TicketFilters, PaginatedResponse, TicketAttachment } from '../types';
+import {
+  Ticket,
+  TicketFormData,
+  Comment,
+  TicketFilters,
+  PaginatedResponse,
+  TicketAttachment,
+} from '../types';
 
 // Mock data for development
 const mockTickets: Ticket[] = [
@@ -127,17 +134,19 @@ export const ticketService = {
 
   createTicket: async (ticketData: TicketFormData): Promise<Ticket> => {
     const { attachments, ...ticketProps } = ticketData;
-    
+
     // Convert File[] to TicketAttachment[] if needed
-    const processedAttachments: TicketAttachment[] | undefined = attachments?.map((file, index) => ({
-      id: `${Date.now()}-${index}`,
-      filename: file.name,
-      url: URL.createObjectURL(file), // Mock URL for development
-      size: file.size,
-      mimeType: file.type,
-      uploadedBy: '4',
-      uploadedAt: new Date().toISOString(),
-    }));
+    const processedAttachments: TicketAttachment[] | undefined = attachments?.map(
+      (file, index) => ({
+        id: `${Date.now()}-${index}`,
+        filename: file.name,
+        url: URL.createObjectURL(file), // Mock URL for development
+        size: file.size,
+        mimeType: file.type,
+        uploadedBy: '4',
+        uploadedAt: new Date().toISOString(),
+      })
+    );
 
     const newTicket: Ticket = {
       id: Date.now().toString(),

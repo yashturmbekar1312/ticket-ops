@@ -40,11 +40,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
   const menuItems = [
     { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard', roles: ['all'] },
     { text: 'Tickets', icon: <ConfirmationNumber />, path: '/tickets', roles: ['all'] },
-    { text: 'Create Ticket', icon: <Add />, path: '/create-ticket', roles: ['all'] },
-    { text: 'Reports', icon: <Assessment />, path: '/reports', roles: ['Manager', 'IT Admin', 'Admin'] },
+    { text: 'Create Ticket', icon: <Add />, path: '/tickets/create', roles: ['all'] },
+    {
+      text: 'Reports',
+      icon: <Assessment />,
+      path: '/reports',
+      roles: ['Manager', 'IT Admin', 'Admin'],
+    },
     { text: 'Knowledge Base', icon: <MenuBook />, path: '/knowledge-base', roles: ['all'] },
-    { text: 'Asset Management', icon: <Inventory />, path: '/asset-management', roles: ['IT Admin', 'Admin', 'IT Agent'] },
-    { text: 'User Management', icon: <People />, path: '/user-management', roles: ['IT Admin', 'Admin'] },
+    {
+      text: 'Asset Management',
+      icon: <Inventory />,
+      path: '/asset-management',
+      roles: ['IT Admin', 'Admin', 'IT Agent'],
+    },
+    {
+      text: 'User Management',
+      icon: <People />,
+      path: '/user-management',
+      roles: ['IT Admin', 'Admin'],
+    },
     { text: 'Settings', icon: <Settings />, path: '/settings', roles: ['IT Admin', 'Admin'] },
   ];
 
@@ -71,7 +86,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
       <Divider />
       <List>
         {menuItems
-          .filter(item => canAccessMenuItem(item.roles))
+          .filter((item) => canAccessMenuItem(item.roles))
           .map((item) => (
             <ListItem key={item.text} disablePadding>
               <ListItemButton
@@ -90,9 +105,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
                   },
                 }}
               >
-                <ListItemIcon sx={{ minWidth: 40 }}>
-                  {item.icon}
-                </ListItemIcon>
+                <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItemButton>
             </ListItem>

@@ -172,15 +172,15 @@ const AssetManagementPage: React.FC = () => {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         const newAsset: Asset = {
           id: Date.now().toString(),
           ...values,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
-        
+
         setAssets([...assets, newAsset]);
         setIsCreateDialogOpen(false);
         formik.resetForm();
@@ -196,24 +196,25 @@ const AssetManagementPage: React.FC = () => {
     let filtered = assets;
 
     if (searchQuery) {
-      filtered = filtered.filter(asset =>
-        asset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        asset.serialNumber?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        asset.assetTag?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        asset.assignedToName?.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter(
+        (asset) =>
+          asset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          asset.serialNumber?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          asset.assetTag?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          asset.assignedToName?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     if (statusFilter !== 'all') {
-      filtered = filtered.filter(asset => asset.status === statusFilter);
+      filtered = filtered.filter((asset) => asset.status === statusFilter);
     }
 
     if (typeFilter !== 'all') {
-      filtered = filtered.filter(asset => asset.type === typeFilter);
+      filtered = filtered.filter((asset) => asset.type === typeFilter);
     }
 
     if (departmentFilter !== 'all') {
-      filtered = filtered.filter(asset => asset.department === departmentFilter);
+      filtered = filtered.filter((asset) => asset.department === departmentFilter);
     }
 
     setFilteredAssets(filtered);
@@ -239,19 +240,19 @@ const AssetManagementPage: React.FC = () => {
   };
 
   const handleDeleteAsset = (assetId: string) => {
-    setAssets(assets.filter(asset => asset.id !== assetId));
+    setAssets(assets.filter((asset) => asset.id !== assetId));
   };
 
   const assetStats = {
     total: assets.length,
-    active: assets.filter(a => a.status === 'active').length,
-    maintenance: assets.filter(a => a.status === 'maintenance').length,
-    retired: assets.filter(a => a.status === 'retired').length,
+    active: assets.filter((a) => a.status === 'active').length,
+    maintenance: assets.filter((a) => a.status === 'maintenance').length,
+    retired: assets.filter((a) => a.status === 'retired').length,
     totalValue: assets.reduce((sum, asset) => sum + (asset.cost || 0), 0),
   };
 
-  const departments = Array.from(new Set(assets.map(a => a.department)));
-  const assetTypes = Array.from(new Set(assets.map(a => a.type)));
+  const departments = Array.from(new Set(assets.map((a) => a.department)));
+  const assetTypes = Array.from(new Set(assets.map((a) => a.type)));
 
   return (
     <Box sx={{ p: 3 }}>
@@ -369,7 +370,7 @@ const AssetManagementPage: React.FC = () => {
                   label="Type"
                 >
                   <MenuItem value="all">All Types</MenuItem>
-                  {assetTypes.map(type => (
+                  {assetTypes.map((type) => (
                     <MenuItem key={type} value={type}>
                       {type.charAt(0).toUpperCase() + type.slice(1)}
                     </MenuItem>
@@ -386,7 +387,7 @@ const AssetManagementPage: React.FC = () => {
                   label="Department"
                 >
                   <MenuItem value="all">All Departments</MenuItem>
-                  {departments.map(dept => (
+                  {departments.map((dept) => (
                     <MenuItem key={dept} value={dept}>
                       {dept}
                     </MenuItem>
@@ -432,9 +433,9 @@ const AssetManagementPage: React.FC = () => {
                     </Box>
                   </TableCell>
                   <TableCell>
-                    <Chip 
-                      label={asset.type.charAt(0).toUpperCase() + asset.type.slice(1)} 
-                      size="small" 
+                    <Chip
+                      label={asset.type.charAt(0).toUpperCase() + asset.type.slice(1)}
+                      size="small"
                       variant="outlined"
                     />
                   </TableCell>
@@ -442,9 +443,9 @@ const AssetManagementPage: React.FC = () => {
                   <TableCell>{asset.assignedToName || 'Unassigned'}</TableCell>
                   <TableCell>{asset.department}</TableCell>
                   <TableCell>
-                    <Chip 
-                      label={asset.status.charAt(0).toUpperCase() + asset.status.slice(1)} 
-                      size="small" 
+                    <Chip
+                      label={asset.status.charAt(0).toUpperCase() + asset.status.slice(1)}
+                      size="small"
                       color={statusColors[asset.status] as any}
                     />
                   </TableCell>
@@ -487,8 +488,8 @@ const AssetManagementPage: React.FC = () => {
       </TableContainer>
 
       {/* Create Asset Dialog */}
-      <Dialog 
-        open={isCreateDialogOpen} 
+      <Dialog
+        open={isCreateDialogOpen}
         onClose={() => setIsCreateDialogOpen(false)}
         maxWidth="md"
         fullWidth
@@ -628,9 +629,9 @@ const AssetManagementPage: React.FC = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setIsCreateDialogOpen(false)}>Cancel</Button>
-            <Button 
-              type="submit" 
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               disabled={isLoading}
               startIcon={isLoading ? <CircularProgress size={20} /> : undefined}
             >

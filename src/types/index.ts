@@ -1,5 +1,13 @@
 // User roles - Updated with new roles
-export type UserRole = "User" | "IT Agent" | "Team Lead" | "Admin" | "Employee" | "HR" | "Manager" | "IT Admin";
+export type UserRole =
+  | 'User'
+  | 'IT Agent'
+  | 'Team Lead'
+  | 'Admin'
+  | 'Employee'
+  | 'HR'
+  | 'Manager'
+  | 'IT Admin';
 
 // User interface - Enhanced with more fields
 export interface User {
@@ -34,31 +42,31 @@ export interface UserPreferences {
 
 // Ticket status - Updated with new statuses
 export type TicketStatus =
-  | "New"
-  | "Open" 
-  | "Assigned"
-  | "In Progress"
-  | "Resolved"
-  | "Closed"
-  | "Escalated"
-  | "Pending"
-  | "Cancelled";
+  | 'New'
+  | 'Open'
+  | 'Assigned'
+  | 'In Progress'
+  | 'Resolved'
+  | 'Closed'
+  | 'Escalated'
+  | 'Pending'
+  | 'Cancelled';
 
 // Ticket priority
-export type TicketPriority = "Low" | "Medium" | "High" | "Critical" | "Urgent";
+export type TicketPriority = 'Low' | 'Medium' | 'High' | 'Critical' | 'Urgent';
 
 // Ticket category - Enhanced categories
 export type TicketCategory =
-  | "Hardware"
-  | "Software"
-  | "Network"
-  | "Access"
-  | "HR"
-  | "Security"
-  | "Maintenance"
-  | "Account"
-  | "Training"
-  | "Other";
+  | 'Hardware'
+  | 'Software'
+  | 'Network'
+  | 'Access'
+  | 'HR'
+  | 'Security'
+  | 'Maintenance'
+  | 'Account'
+  | 'Training'
+  | 'Other';
 
 // SLA Configuration
 export interface SLAConfig {
@@ -160,7 +168,16 @@ export interface KnowledgeBaseArticle {
 export interface Asset {
   id: string;
   name: string;
-  type: 'laptop' | 'desktop' | 'monitor' | 'printer' | 'phone' | 'tablet' | 'software' | 'license' | 'other';
+  type:
+    | 'laptop'
+    | 'desktop'
+    | 'monitor'
+    | 'printer'
+    | 'phone'
+    | 'tablet'
+    | 'software'
+    | 'license'
+    | 'other';
   serialNumber?: string;
   assetTag?: string;
   assignedTo?: string;
@@ -235,7 +252,13 @@ export interface AutomationCondition {
 }
 
 export interface AutomationAction {
-  type: 'assign_ticket' | 'update_status' | 'update_priority' | 'send_notification' | 'add_comment' | 'escalate';
+  type:
+    | 'assign_ticket'
+    | 'update_status'
+    | 'update_priority'
+    | 'send_notification'
+    | 'add_comment'
+    | 'escalate';
   parameters: Record<string, any>;
 }
 
@@ -243,7 +266,13 @@ export interface AutomationAction {
 export interface Notification {
   id: string;
   userId: string;
-  type: 'ticket_assigned' | 'ticket_updated' | 'comment_added' | 'sla_warning' | 'escalation' | 'mention';
+  type:
+    | 'ticket_assigned'
+    | 'ticket_updated'
+    | 'comment_added'
+    | 'sla_warning'
+    | 'escalation'
+    | 'mention';
   title: string;
   message: string;
   ticketId?: string;

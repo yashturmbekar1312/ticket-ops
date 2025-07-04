@@ -125,24 +125,24 @@ const mockUsers: User[] = [
 ];
 
 const roleColors = {
-  'User': 'default',
+  User: 'default',
   'IT Agent': 'info',
   'Team Lead': 'warning',
-  'Admin': 'error',
-  'Employee': 'default',
-  'HR': 'secondary',
-  'Manager': 'primary',
+  Admin: 'error',
+  Employee: 'default',
+  HR: 'secondary',
+  Manager: 'primary',
   'IT Admin': 'error',
 } as const;
 
 const roleIcons = {
-  'User': <PersonAdd />,
+  User: <PersonAdd />,
   'IT Agent': <Settings />,
   'Team Lead': <Group />,
-  'Admin': <AdminPanelSettings />,
-  'Employee': <PersonAdd />,
-  'HR': <Business />,
-  'Manager': <Group />,
+  Admin: <AdminPanelSettings />,
+  Employee: <PersonAdd />,
+  HR: <Business />,
+  Manager: <Group />,
   'IT Admin': <Security />,
 };
 
@@ -185,8 +185,8 @@ const UserManagementPage: React.FC = () => {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         if (selectedUser) {
           // Update existing user
           const updatedUser: User = {
@@ -194,7 +194,7 @@ const UserManagementPage: React.FC = () => {
             ...values,
             updatedAt: new Date().toISOString(),
           };
-          setUsers(users.map(u => u.id === selectedUser.id ? updatedUser : u));
+          setUsers(users.map((u) => (u.id === selectedUser.id ? updatedUser : u)));
           setIsEditDialogOpen(false);
         } else {
           // Create new user
@@ -207,7 +207,7 @@ const UserManagementPage: React.FC = () => {
           setUsers([...users, newUser]);
           setIsCreateDialogOpen(false);
         }
-        
+
         formik.resetForm();
         setSelectedUser(null);
       } catch (error) {
@@ -222,23 +222,24 @@ const UserManagementPage: React.FC = () => {
     let filtered = users;
 
     if (searchQuery) {
-      filtered = filtered.filter(user =>
-        user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.department.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter(
+        (user) =>
+          user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.department.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     if (roleFilter !== 'all') {
-      filtered = filtered.filter(user => user.role === roleFilter);
+      filtered = filtered.filter((user) => user.role === roleFilter);
     }
 
     if (departmentFilter !== 'all') {
-      filtered = filtered.filter(user => user.department === departmentFilter);
+      filtered = filtered.filter((user) => user.department === departmentFilter);
     }
 
     if (statusFilter !== 'all') {
-      filtered = filtered.filter(user => 
+      filtered = filtered.filter((user) =>
         statusFilter === 'active' ? user.isActive : !user.isActive
       );
     }
@@ -262,27 +263,27 @@ const UserManagementPage: React.FC = () => {
 
   const handleDeleteUser = (userId: string) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
-      setUsers(users.filter(user => user.id !== userId));
+      setUsers(users.filter((user) => user.id !== userId));
     }
   };
 
   const handleToggleUserStatus = (userId: string) => {
-    setUsers(users.map(user => 
-      user.id === userId ? { ...user, isActive: !user.isActive } : user
-    ));
+    setUsers(
+      users.map((user) => (user.id === userId ? { ...user, isActive: !user.isActive } : user))
+    );
   };
 
   const userStats = {
     total: users.length,
-    active: users.filter(u => u.isActive).length,
-    inactive: users.filter(u => !u.isActive).length,
-    admins: users.filter(u => u.role === 'Admin' || u.role === 'IT Admin').length,
-    agents: users.filter(u => u.role === 'IT Agent').length,
-    users: users.filter(u => u.role === 'User' || u.role === 'Employee').length,
+    active: users.filter((u) => u.isActive).length,
+    inactive: users.filter((u) => !u.isActive).length,
+    admins: users.filter((u) => u.role === 'Admin' || u.role === 'IT Admin').length,
+    agents: users.filter((u) => u.role === 'IT Agent').length,
+    users: users.filter((u) => u.role === 'User' || u.role === 'Employee').length,
   };
 
-  const departments = Array.from(new Set(users.map(u => u.department)));
-  const roles = Array.from(new Set(users.map(u => u.role)));
+  const departments = Array.from(new Set(users.map((u) => u.department)));
+  const roles = Array.from(new Set(users.map((u) => u.role)));
 
   if (!canManageUsers) {
     return (
@@ -423,7 +424,7 @@ const UserManagementPage: React.FC = () => {
                   label="Role"
                 >
                   <MenuItem value="all">All Roles</MenuItem>
-                  {roles.map(role => (
+                  {roles.map((role) => (
                     <MenuItem key={role} value={role}>
                       {role}
                     </MenuItem>
@@ -440,7 +441,7 @@ const UserManagementPage: React.FC = () => {
                   label="Department"
                 >
                   <MenuItem value="all">All Departments</MenuItem>
-                  {departments.map(dept => (
+                  {departments.map((dept) => (
                     <MenuItem key={dept} value={dept}>
                       {dept}
                     </MenuItem>
@@ -486,16 +487,18 @@ const UserManagementPage: React.FC = () => {
                 <TableRow key={user.id} hover>
                   <TableCell>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <Avatar sx={{ width: 40, height: 40 }}>
-                        {user.name.charAt(0)}
-                      </Avatar>
+                      <Avatar sx={{ width: 40, height: 40 }}>{user.name.charAt(0)}</Avatar>
                       <Box>
                         <Typography variant="subtitle2">{user.name}</Typography>
                         <Typography variant="caption" color="text.secondary">
                           {user.email}
                         </Typography>
                         {user.phone && (
-                          <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ display: 'block' }}
+                          >
                             {user.phone}
                           </Typography>
                         )}
@@ -505,19 +508,15 @@ const UserManagementPage: React.FC = () => {
                   <TableCell>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       {roleIcons[user.role]}
-                      <Chip 
-                        label={user.role} 
-                        size="small" 
-                        color={roleColors[user.role] as any}
-                      />
+                      <Chip label={user.role} size="small" color={roleColors[user.role] as any} />
                     </Box>
                   </TableCell>
                   <TableCell>{user.department}</TableCell>
                   <TableCell>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Chip 
-                        label={user.isActive ? 'Active' : 'Inactive'} 
-                        size="small" 
+                      <Chip
+                        label={user.isActive ? 'Active' : 'Inactive'}
+                        size="small"
                         color={user.isActive ? 'success' : 'error'}
                         icon={user.isActive ? <CheckCircle /> : <Block />}
                       />
@@ -575,8 +574,8 @@ const UserManagementPage: React.FC = () => {
       </TableContainer>
 
       {/* Create User Dialog */}
-      <Dialog 
-        open={isCreateDialogOpen} 
+      <Dialog
+        open={isCreateDialogOpen}
         onClose={() => setIsCreateDialogOpen(false)}
         maxWidth="md"
         fullWidth
@@ -657,11 +656,13 @@ const UserManagementPage: React.FC = () => {
                     onChange={formik.handleChange}
                   >
                     <MenuItem value="">None</MenuItem>
-                    {users.filter(u => u.role === 'Team Lead' || u.role === 'Admin').map(manager => (
-                      <MenuItem key={manager.id} value={manager.id}>
-                        {manager.name}
-                      </MenuItem>
-                    ))}
+                    {users
+                      .filter((u) => u.role === 'Team Lead' || u.role === 'Admin')
+                      .map((manager) => (
+                        <MenuItem key={manager.id} value={manager.id}>
+                          {manager.name}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
               </Grid>
@@ -680,9 +681,9 @@ const UserManagementPage: React.FC = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setIsCreateDialogOpen(false)}>Cancel</Button>
-            <Button 
-              type="submit" 
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               disabled={isLoading}
               startIcon={isLoading ? <CircularProgress size={20} /> : undefined}
             >
@@ -693,8 +694,8 @@ const UserManagementPage: React.FC = () => {
       </Dialog>
 
       {/* Edit User Dialog */}
-      <Dialog 
-        open={isEditDialogOpen} 
+      <Dialog
+        open={isEditDialogOpen}
         onClose={() => setIsEditDialogOpen(false)}
         maxWidth="md"
         fullWidth
@@ -775,11 +776,13 @@ const UserManagementPage: React.FC = () => {
                     onChange={formik.handleChange}
                   >
                     <MenuItem value="">None</MenuItem>
-                    {users.filter(u => u.role === 'Team Lead' || u.role === 'Admin').map(manager => (
-                      <MenuItem key={manager.id} value={manager.id}>
-                        {manager.name}
-                      </MenuItem>
-                    ))}
+                    {users
+                      .filter((u) => u.role === 'Team Lead' || u.role === 'Admin')
+                      .map((manager) => (
+                        <MenuItem key={manager.id} value={manager.id}>
+                          {manager.name}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
               </Grid>
@@ -798,9 +801,9 @@ const UserManagementPage: React.FC = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setIsEditDialogOpen(false)}>Cancel</Button>
-            <Button 
-              type="submit" 
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               disabled={isLoading}
               startIcon={isLoading ? <CircularProgress size={20} /> : undefined}
             >

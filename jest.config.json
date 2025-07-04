@@ -6,9 +6,12 @@
     "^@/(.*)$": "<rootDir>/src/$1"
   },
   "transform": {
-    "^.+\\.(ts|tsx)$": ["ts-jest", {
-      "useESM": true
-    }]
+    "^.+\\.(ts|tsx)$": [
+      "ts-jest",
+      {
+        "useESM": true
+      }
+    ]
   },
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
   "collectCoverageFrom": ["src/**/*.{ts,tsx}", "!src/**/*.d.ts"],

@@ -127,8 +127,8 @@ const KnowledgeBasePage: React.FC = () => {
       setIsLoading(true);
       try {
         // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         const newArticle: KnowledgeBaseArticle = {
           id: Date.now().toString(),
           ...values,
@@ -138,7 +138,7 @@ const KnowledgeBasePage: React.FC = () => {
           viewCount: 0,
           helpfulCount: 0,
         };
-        
+
         setArticles([newArticle, ...articles]);
         setIsCreateDialogOpen(false);
         formik.resetForm();
@@ -154,14 +154,15 @@ const KnowledgeBasePage: React.FC = () => {
     let filtered = articles;
 
     if (selectedCategory !== 'All') {
-      filtered = filtered.filter(article => article.category === selectedCategory);
+      filtered = filtered.filter((article) => article.category === selectedCategory);
     }
 
     if (searchQuery) {
-      filtered = filtered.filter(article =>
-        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        article.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        article.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+      filtered = filtered.filter(
+        (article) =>
+          article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          article.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          article.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
 
@@ -172,19 +173,25 @@ const KnowledgeBasePage: React.FC = () => {
     setSelectedArticle(article);
     setIsViewDialogOpen(true);
     // Simulate view count increment
-    setArticles(prev => prev.map(a => 
-      a.id === article.id ? { ...a, viewCount: a.viewCount + 1 } : a
-    ));
+    setArticles((prev) =>
+      prev.map((a) => (a.id === article.id ? { ...a, viewCount: a.viewCount + 1 } : a))
+    );
   };
 
   const handleMarkHelpful = (articleId: string) => {
-    setArticles(prev => prev.map(article => 
-      article.id === articleId ? { ...article, helpfulCount: article.helpfulCount + 1 } : article
-    ));
+    setArticles((prev) =>
+      prev.map((article) =>
+        article.id === articleId ? { ...article, helpfulCount: article.helpfulCount + 1 } : article
+      )
+    );
   };
 
-  const popularArticles = articles.filter(a => a.viewCount > 100).sort((a, b) => b.viewCount - a.viewCount);
-  const recentArticles = articles.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
+  const popularArticles = articles
+    .filter((a) => a.viewCount > 100)
+    .sort((a, b) => b.viewCount - a.viewCount);
+  const recentArticles = articles
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 5);
 
   return (
     <Box sx={{ p: 3 }}>
@@ -231,7 +238,7 @@ const KnowledgeBasePage: React.FC = () => {
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   label="Category"
                 >
-                  {categories.map(category => (
+                  {categories.map((category) => (
                     <MenuItem key={category} value={category}>
                       {category}
                     </MenuItem>
@@ -252,15 +259,20 @@ const KnowledgeBasePage: React.FC = () => {
 
       {/* Articles Grid */}
       <Grid container spacing={3}>
-        {(tabValue === 0 ? filteredArticles : tabValue === 1 ? popularArticles : recentArticles).map((article) => (
+        {(tabValue === 0
+          ? filteredArticles
+          : tabValue === 1
+            ? popularArticles
+            : recentArticles
+        ).map((article) => (
           <Grid item xs={12} md={6} lg={4} key={article.id}>
-            <Card 
-              sx={{ 
-                height: '100%', 
-                display: 'flex', 
+            <Card
+              sx={{
+                height: '100%',
+                display: 'flex',
                 flexDirection: 'column',
                 '&:hover': { boxShadow: 4 },
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
               onClick={() => handleViewArticle(article)}
             >
@@ -287,12 +299,7 @@ const KnowledgeBasePage: React.FC = () => {
                   <ThumbUp fontSize="small" />
                   <Typography variant="caption">{article.helpfulCount}</Typography>
                 </Box>
-                <Chip 
-                  label={article.category} 
-                  size="small" 
-                  color="primary" 
-                  variant="outlined"
-                />
+                <Chip label={article.category} size="small" color="primary" variant="outlined" />
               </CardActions>
             </Card>
           </Grid>
@@ -306,8 +313,8 @@ const KnowledgeBasePage: React.FC = () => {
       )}
 
       {/* Create Article Dialog */}
-      <Dialog 
-        open={isCreateDialogOpen} 
+      <Dialog
+        open={isCreateDialogOpen}
         onClose={() => setIsCreateDialogOpen(false)}
         maxWidth="md"
         fullWidth
@@ -355,11 +362,13 @@ const KnowledgeBasePage: React.FC = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.category && Boolean(formik.errors.category)}
               >
-                {categories.filter(cat => cat !== 'All').map(category => (
-                  <MenuItem key={category} value={category}>
-                    {category}
-                  </MenuItem>
-                ))}
+                {categories
+                  .filter((cat) => cat !== 'All')
+                  .map((category) => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
               </Select>
             </FormControl>
             <TextField
@@ -367,16 +376,24 @@ const KnowledgeBasePage: React.FC = () => {
               name="tags"
               label="Tags (comma-separated)"
               value={formik.values.tags.join(', ')}
-              onChange={(e) => formik.setFieldValue('tags', e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag))}
+              onChange={(e) =>
+                formik.setFieldValue(
+                  'tags',
+                  e.target.value
+                    .split(',')
+                    .map((tag) => tag.trim())
+                    .filter((tag) => tag)
+                )
+              }
               margin="normal"
               helperText="Enter tags separated by commas"
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setIsCreateDialogOpen(false)}>Cancel</Button>
-            <Button 
-              type="submit" 
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               disabled={isLoading}
               startIcon={isLoading ? <CircularProgress size={20} /> : undefined}
             >
@@ -387,8 +404,8 @@ const KnowledgeBasePage: React.FC = () => {
       </Dialog>
 
       {/* View Article Dialog */}
-      <Dialog 
-        open={isViewDialogOpen} 
+      <Dialog
+        open={isViewDialogOpen}
         onClose={() => setIsViewDialogOpen(false)}
         maxWidth="md"
         fullWidth
@@ -396,18 +413,29 @@ const KnowledgeBasePage: React.FC = () => {
         {selectedArticle && (
           <>
             <DialogTitle>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <Box
+                sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
+              >
                 <Typography variant="h5" component="h2">
                   {selectedArticle.title}
                 </Typography>
                 <Box>
-                  <IconButton><BookmarkBorder /></IconButton>
-                  <IconButton><Share /></IconButton>
-                  {canCreateArticle && <IconButton><Edit /></IconButton>}
+                  <IconButton>
+                    <BookmarkBorder />
+                  </IconButton>
+                  <IconButton>
+                    <Share />
+                  </IconButton>
+                  {canCreateArticle && (
+                    <IconButton>
+                      <Edit />
+                    </IconButton>
+                  )}
                 </Box>
               </Box>
               <Typography variant="subtitle2" color="text.secondary">
-                By {selectedArticle.author} • {new Date(selectedArticle.createdAt).toLocaleDateString()}
+                By {selectedArticle.author} •{' '}
+                {new Date(selectedArticle.createdAt).toLocaleDateString()}
               </Typography>
             </DialogTitle>
             <DialogContent>
@@ -425,10 +453,7 @@ const KnowledgeBasePage: React.FC = () => {
               </Box>
             </DialogContent>
             <DialogActions>
-              <Button 
-                startIcon={<ThumbUp />}
-                onClick={() => handleMarkHelpful(selectedArticle.id)}
-              >
+              <Button startIcon={<ThumbUp />} onClick={() => handleMarkHelpful(selectedArticle.id)}>
                 Helpful ({selectedArticle.helpfulCount})
               </Button>
               <Button onClick={() => setIsViewDialogOpen(false)}>Close</Button>

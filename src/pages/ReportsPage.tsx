@@ -53,34 +53,34 @@ const mockReportData: DashboardStats = {
   avgResolutionTime: 4.2,
   customerSatisfactionAvg: 4.1,
   ticketsByCategory: {
-    'Hardware': 234,
-    'Software': 456,
-    'Network': 178,
-    'Access': 123,
-    'HR': 89,
-    'Security': 67,
-    'Maintenance': 45,
-    'Account': 32,
-    'Training': 23,
-    'Other': 78,
+    Hardware: 234,
+    Software: 456,
+    Network: 178,
+    Access: 123,
+    HR: 89,
+    Security: 67,
+    Maintenance: 45,
+    Account: 32,
+    Training: 23,
+    Other: 78,
   },
   ticketsByPriority: {
-    'Low': 456,
-    'Medium': 567,
-    'High': 178,
-    'Critical': 34,
-    'Urgent': 12,
+    Low: 456,
+    Medium: 567,
+    High: 178,
+    Critical: 34,
+    Urgent: 12,
   },
   ticketsByStatus: {
-    'New': 23,
-    'Open': 45,
-    'Assigned': 21,
+    New: 23,
+    Open: 45,
+    Assigned: 21,
     'In Progress': 67,
-    'Resolved': 89,
-    'Closed': 234,
-    'Escalated': 8,
-    'Pending': 12,
-    'Cancelled': 5,
+    Resolved: 89,
+    Closed: 234,
+    Escalated: 8,
+    Pending: 12,
+    Cancelled: 5,
   },
   recentActivity: [],
   topResolvers: [
@@ -103,7 +103,8 @@ const ReportsPage: React.FC = () => {
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
   const [exportFormat, setExportFormat] = useState('pdf');
 
-  const canViewReports = user?.role === 'Manager' || user?.role === 'IT Admin' || user?.role === 'Admin';
+  const canViewReports =
+    user?.role === 'Manager' || user?.role === 'IT Admin' || user?.role === 'Admin';
 
   useEffect(() => {
     if (canViewReports) {
@@ -115,7 +116,7 @@ const ReportsPage: React.FC = () => {
     setIsLoading(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setReportData(mockReportData);
     } catch (error) {
       console.error('Error loading report data:', error);
@@ -236,7 +237,9 @@ const ReportsPage: React.FC = () => {
             <Typography variant="h6" gutterBottom>
               Tickets by Category
             </Typography>
-            <Box sx={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Box
+              sx={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
               <PieChart sx={{ fontSize: 100, color: 'text.secondary' }} />
               <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>
                 Chart visualization would go here
@@ -252,7 +255,9 @@ const ReportsPage: React.FC = () => {
             <Typography variant="h6" gutterBottom>
               Tickets by Priority
             </Typography>
-            <Box sx={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Box
+              sx={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
               <BarChart sx={{ fontSize: 100, color: 'text.secondary' }} />
               <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>
                 Chart visualization would go here
@@ -298,7 +303,9 @@ const ReportsPage: React.FC = () => {
             <Typography variant="h6" gutterBottom>
               Customer Satisfaction
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200 }}>
+            <Box
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200 }}
+            >
               <Box sx={{ textAlign: 'center' }}>
                 <Typography variant="h2" color="success.main">
                   {reportData.customerSatisfactionAvg}
@@ -409,11 +416,7 @@ const ReportsPage: React.FC = () => {
           Reports & Analytics
         </Typography>
         <Box sx={{ display: 'flex', gap: 1 }}>
-          <Button
-            startIcon={<Refresh />}
-            onClick={loadReportData}
-            disabled={isLoading}
-          >
+          <Button startIcon={<Refresh />} onClick={loadReportData} disabled={isLoading}>
             Refresh
           </Button>
           <Button
@@ -493,7 +496,11 @@ const ReportsPage: React.FC = () => {
         </Box>
       ) : (
         <>
-          <Tabs value={selectedTab} onChange={(_, newValue) => setSelectedTab(newValue)} sx={{ mb: 3 }}>
+          <Tabs
+            value={selectedTab}
+            onChange={(_, newValue) => setSelectedTab(newValue)}
+            sx={{ mb: 3 }}
+          >
             <Tab label="Overview" />
             <Tab label="SLA Performance" />
             <Tab label="Trends" />
@@ -504,12 +511,14 @@ const ReportsPage: React.FC = () => {
           {selectedTab === 1 && renderSLAReport()}
           {selectedTab === 2 && (
             <Alert severity="info">
-              Trends analysis coming soon. This will show ticket volume trends, resolution time trends, and seasonal patterns.
+              Trends analysis coming soon. This will show ticket volume trends, resolution time
+              trends, and seasonal patterns.
             </Alert>
           )}
           {selectedTab === 3 && (
             <Alert severity="info">
-              Custom report builder coming soon. This will allow you to create custom reports with specific metrics and visualizations.
+              Custom report builder coming soon. This will allow you to create custom reports with
+              specific metrics and visualizations.
             </Alert>
           )}
         </>
