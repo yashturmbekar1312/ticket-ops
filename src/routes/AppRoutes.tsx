@@ -13,11 +13,25 @@ import CreateTicketPage from '../pages/CreateTicketPage';
 import KnowledgeBasePage from '../pages/KnowledgeBasePage';
 import AssetManagementPage from '../pages/AssetManagementPage';
 import WorkflowManagementPage from '../pages/WorkflowManagementPage';
-import ReportsPage from '../pages/ReportsPage';
+
 import UserManagementPage from '../pages/UserManagementPage';
 import ChangeManagementPage from '../pages/ChangeManagementPage';
 import IncidentManagementPage from '../pages/IncidentManagementPage';
 import SLAManagementPage from '../pages/SLAManagementPage';
+import AdminConfigurationPage from '../pages/AdminConfigurationPage';
+import AdminDashboardPage from '../pages/AdminDashboardPage';
+import BulkOperationManagementPage from '../pages/BulkOperationManagementPage';
+import SystemAuditSecurityPage from '../pages/SystemAuditSecurityPage';
+import ServiceCatalogPage from '../pages/ServiceCatalogPage';
+import CustomerPortalPage from '../pages/CustomerPortalPage';
+import ProblemManagementPage from '../pages/ProblemManagementPage';
+import CommunicationHubPage from '../pages/CommunicationHubPage';
+import AdvancedAnalyticsPage from '../pages/AdvancedAnalyticsPage';
+import IntegrationManagementPage from '../pages/IntegrationManagementPage';
+import AutomationRulesPage from '../pages/AutomationRulesPage';
+import SystemSettingsPage from '../pages/SystemSettingsPage';
+import ApprovalManagementPage from '../pages/ApprovalManagementPage';
+import TimeTrackingPage from '../pages/TimeTrackingPage';
 
 const UnauthorizedPage: React.FC = () => (
   <Box
@@ -42,7 +56,6 @@ export const AppRoutes: React.FC = () => {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/unauthorized" element={<UnauthorizedPage />} />
       <Route
         path="/"
         element={
@@ -114,7 +127,7 @@ export const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute requiredRoles={['Manager', 'IT Admin', 'Admin', 'Team Lead']}>
             <Layout>
-              <ReportsPage />
+              <AdvancedAnalyticsPage />
             </Layout>
           </ProtectedRoute>
         }
@@ -207,6 +220,143 @@ export const AppRoutes: React.FC = () => {
               <ChangeManagementPage />
             </Layout>
           </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute requiredRoles={['IT Admin', 'Admin']}>
+            <Layout>
+              <AdminDashboardPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/configuration"
+        element={
+          <ProtectedRoute requiredRoles={['IT Admin', 'Admin']}>
+            <Layout>
+              <AdminConfigurationPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/bulk-operations"
+        element={
+          <ProtectedRoute requiredRoles={['IT Admin', 'Admin']}>
+            <Layout>
+              <BulkOperationManagementPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/audit-security"
+        element={
+          <ProtectedRoute requiredRoles={['IT Admin', 'Admin']}>
+            <Layout>
+              <SystemAuditSecurityPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/service-catalog"
+        element={
+          <ProtectedRoute requiredRoles={['IT Admin', 'Admin', 'Manager']}>
+            <Layout>
+              <ServiceCatalogPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/customer-portal"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <CustomerPortalPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/problem-management"
+        element={
+          <ProtectedRoute requiredRoles={['IT Agent', 'Team Lead', 'IT Admin', 'Admin']}>
+            <Layout>
+              <ProblemManagementPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/communication-hub"
+        element={
+          <ProtectedRoute requiredRoles={['IT Agent', 'Team Lead', 'IT Admin', 'Admin']}>
+            <Layout>
+              <CommunicationHubPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/integrations"
+        element={
+          <ProtectedRoute requiredRoles={['IT Admin', 'Admin']}>
+            <Layout>
+              <IntegrationManagementPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/automation-rules"
+        element={
+          <ProtectedRoute requiredRoles={['IT Admin', 'Admin']}>
+            <Layout>
+              <AutomationRulesPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/system-settings"
+        element={
+          <ProtectedRoute requiredRoles={['IT Admin', 'Admin']}>
+            <Layout>
+              <SystemSettingsPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/approvals"
+        element={
+          <ProtectedRoute requiredRoles={['Manager', 'Team Lead', 'IT Admin', 'Admin']}>
+            <Layout>
+              <ApprovalManagementPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/time-tracking"
+        element={
+          <ProtectedRoute requiredRoles={['IT Agent', 'Team Lead', 'IT Admin', 'Admin']}>
+            <Layout>
+              <TimeTrackingPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/unauthorized" element={<UnauthorizedPage />} />
+      <Route
+        path="*"
+        element={
+          isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
         }
       />
     </Routes>

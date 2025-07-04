@@ -24,6 +24,19 @@ import {
   Warning as IncidentIcon,
   Timer as SLAIcon,
   ChangeCircle,
+  AdminPanelSettings,
+  Security,
+  BatchPrediction,
+  Business,
+  ShoppingCart as ServiceCatalogIcon,
+  Support as CustomerPortalIcon,
+  Psychology as ProblemIcon,
+  Chat as CommunicationIcon,
+  Link as IntegrationIcon,
+  AutoFixHigh as AutomationIcon,
+  Approval as ApprovalIcon,
+  AccessTime as TimeTrackingIcon,
+  SettingsApplications as SystemSettingsIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth';
@@ -70,6 +83,30 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
       roles: ['IT Admin', 'Admin', 'Team Lead'],
     },
     {
+      text: 'Problem Management',
+      icon: <ProblemIcon />,
+      path: '/problem-management',
+      roles: ['IT Agent', 'Team Lead', 'IT Admin', 'Admin'],
+    },
+    {
+      text: 'Service Catalog',
+      icon: <ServiceCatalogIcon />,
+      path: '/service-catalog',
+      roles: ['IT Admin', 'Admin', 'Manager'],
+    },
+    {
+      text: 'Customer Portal',
+      icon: <CustomerPortalIcon />,
+      path: '/customer-portal',
+      roles: ['all'],
+    },
+    {
+      text: 'Communication Hub',
+      icon: <CommunicationIcon />,
+      path: '/communication-hub',
+      roles: ['IT Agent', 'Team Lead', 'IT Admin', 'Admin'],
+    },
+    {
       text: 'Asset Management',
       icon: <Inventory />,
       path: '/asset-management',
@@ -87,7 +124,64 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
       path: '/user-management',
       roles: ['IT Admin', 'Admin'],
     },
+    {
+      text: 'Integrations',
+      icon: <IntegrationIcon />,
+      path: '/integrations',
+      roles: ['IT Admin', 'Admin'],
+    },
+    {
+      text: 'Automation Rules',
+      icon: <AutomationIcon />,
+      path: '/automation-rules',
+      roles: ['IT Admin', 'Admin'],
+    },
+    {
+      text: 'Approvals',
+      icon: <ApprovalIcon />,
+      path: '/approvals',
+      roles: ['Manager', 'Team Lead', 'IT Admin', 'Admin'],
+    },
+    {
+      text: 'Time Tracking',
+      icon: <TimeTrackingIcon />,
+      path: '/time-tracking',
+      roles: ['IT Agent', 'Team Lead', 'IT Admin', 'Admin'],
+    },
     { text: 'Settings', icon: <Settings />, path: '/settings', roles: ['IT Admin', 'Admin'] },
+  ];
+
+  const adminMenuItems = [
+    {
+      text: 'Admin Dashboard',
+      icon: <Business />,
+      path: '/admin/dashboard',
+      roles: ['IT Admin', 'Admin'],
+    },
+    {
+      text: 'System Configuration',
+      icon: <AdminPanelSettings />,
+      path: '/admin/configuration',
+      roles: ['IT Admin', 'Admin'],
+    },
+    {
+      text: 'System Settings',
+      icon: <SystemSettingsIcon />,
+      path: '/system-settings',
+      roles: ['IT Admin', 'Admin'],
+    },
+    {
+      text: 'Bulk Operations',
+      icon: <BatchPrediction />,
+      path: '/admin/bulk-operations',
+      roles: ['IT Admin', 'Admin'],
+    },
+    {
+      text: 'Audit & Security',
+      icon: <Security />,
+      path: '/admin/audit-security',
+      roles: ['IT Admin', 'Admin'],
+    },
   ];
 
   const canAccessMenuItem = (itemRoles: string[]) => {
@@ -138,6 +232,44 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
             </ListItem>
           ))}
       </List>
+      {/* Admin Section */}
+      {user?.role && ['IT Admin', 'Admin'].includes(user.role) && (
+        <>
+          <Divider />
+          <Box sx={{ p: 2 }}>
+            <Typography variant="subtitle2" color="text.secondary">
+              Administration
+            </Typography>
+          </Box>
+          <List>
+            {adminMenuItems
+              .filter((item) => canAccessMenuItem(item.roles))
+              .map((item) => (
+                <ListItem key={item.text} disablePadding>
+                  <ListItemButton
+                    selected={location.pathname === item.path}
+                    onClick={() => handleNavigation(item.path)}
+                    sx={{
+                      '&.Mui-selected': {
+                        backgroundColor: 'primary.main',
+                        color: 'primary.contrastText',
+                        '&:hover': {
+                          backgroundColor: 'primary.dark',
+                        },
+                        '& .MuiListItemIcon-root': {
+                          color: 'primary.contrastText',
+                        },
+                      },
+                    }}
+                  >
+                    <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+          </List>
+        </>
+      )}
     </Box>
   );
 
