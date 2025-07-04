@@ -1,7 +1,7 @@
 import {
   Ticket,
   TicketFormData,
-  Comment,
+  Comment as TicketComment,
   TicketFilters,
   PaginatedResponse,
   TicketAttachment,
@@ -193,7 +193,7 @@ export const ticketService = {
     mockTickets.splice(ticketIndex, 1);
   },
 
-  getComments: async (ticketId: string): Promise<Comment[]> => {
+  getComments: async (ticketId: string): Promise<TicketComment[]> => {
     // Mock comments
     return [
       {
@@ -223,18 +223,17 @@ export const ticketService = {
 
   addComment: async (
     ticketId: string,
-    content: string,
-    isInternal: boolean = false
-  ): Promise<Comment> => {
-    const newComment: Comment = {
+    commentData: { content: string; isInternal: boolean }
+  ): Promise<TicketComment> => {
+    const newComment: TicketComment = {
       id: Date.now().toString(),
       ticketId,
       userId: '4', // Mock current user
       userName: 'Bob Employee',
       userRole: 'Employee',
-      content,
+      content: commentData.content,
       createdAt: new Date().toISOString(),
-      isInternal,
+      isInternal: commentData.isInternal,
       isEdited: false,
     };
 

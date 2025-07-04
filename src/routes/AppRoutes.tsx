@@ -10,6 +10,7 @@ import LoginPage from '../pages/LoginPage';
 import DashboardPage from '../pages/DashboardPage';
 import TicketsPage from '../pages/TicketsPage';
 import CreateTicketPage from '../pages/CreateTicketPage';
+import ViewTicketPage from '../pages/ViewTicketPage';
 import KnowledgeBasePage from '../pages/KnowledgeBasePage';
 import AssetManagementPage from '../pages/AssetManagementPage';
 import WorkflowManagementPage from '../pages/WorkflowManagementPage';
@@ -88,6 +89,16 @@ export const AppRoutes: React.FC = () => {
           <ProtectedRoute>
             <Layout>
               <CreateTicketPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/tickets/:id"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <ViewTicketPage />
             </Layout>
           </ProtectedRoute>
         }
