@@ -3,7 +3,12 @@ import { Ticket, UserRole } from '../types';
 // Role-based access control utilities
 export const canViewTicket = (userRole: UserRole, ticket: Ticket, userId: string): boolean => {
   switch (userRole) {
+    case 'Admin':
     case 'IT Admin':
+      return true;
+    case 'Team Lead':
+    case 'IT Agent':
+      // IT Agents and Team Leads can view all tickets
       return true;
     case 'Manager':
       // Managers can view tickets from their department or assigned to them
@@ -11,8 +16,9 @@ export const canViewTicket = (userRole: UserRole, ticket: Ticket, userId: string
     case 'HR':
       // HR can view HR-related tickets or tickets they created
       return ticket.category === 'HR' || ticket.createdBy === userId;
+    case 'User':
     case 'Employee':
-      // Employees can only view their own tickets
+      // Users/Employees can only view their own tickets
       return ticket.createdBy === userId;
     default:
       return false;
@@ -21,16 +27,22 @@ export const canViewTicket = (userRole: UserRole, ticket: Ticket, userId: string
 
 export const canEditTicket = (userRole: UserRole, ticket: Ticket, userId: string): boolean => {
   switch (userRole) {
+    case 'Admin':
     case 'IT Admin':
       return true;
+    case 'Team Lead':
+    case 'IT Agent':
+      // IT staff can edit tickets assigned to them or any open ticket
+      return ticket.assignedTo === userId || ticket.status !== 'Closed';
     case 'Manager':
       return ticket.assignedTo === userId || ticket.department === 'Engineering';
     case 'HR':
       return (
         ticket.category === 'HR' && (ticket.createdBy === userId || ticket.assignedTo === userId)
       );
+    case 'User':
     case 'Employee':
-      return ticket.createdBy === userId && ticket.status === 'Open';
+      return ticket.createdBy === userId && !['Closed', 'Resolved'].includes(ticket.status);
     default:
       return false;
   }
@@ -38,14 +50,20 @@ export const canEditTicket = (userRole: UserRole, ticket: Ticket, userId: string
 
 export const canDeleteTicket = (userRole: UserRole, ticket: Ticket, userId: string): boolean => {
   switch (userRole) {
+    case 'Admin':
     case 'IT Admin':
       return true;
+    case 'Team Lead':
+      return ticket.assignedTo === userId || ticket.status === 'New';
+    case 'IT Agent':
+      return ticket.assignedTo === userId;
     case 'Manager':
       return ticket.assignedTo === userId;
     case 'HR':
       return ticket.category === 'HR' && ticket.createdBy === userId;
+    case 'User':
     case 'Employee':
-      return ticket.createdBy === userId && ticket.status === 'Open';
+      return ticket.createdBy === userId && ['New', 'Open'].includes(ticket.status);
     default:
       return false;
   }

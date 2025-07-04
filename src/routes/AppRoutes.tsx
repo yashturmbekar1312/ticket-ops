@@ -10,6 +10,10 @@ const LoginPage = React.lazy(() => import('../pages/LoginPage'));
 const DashboardPage = React.lazy(() => import('../pages/DashboardPage'));
 const TicketsPage = React.lazy(() => import('../pages/TicketsPage'));
 const CreateTicketPage = React.lazy(() => import('../pages/CreateTicketPage'));
+const KnowledgeBasePage = React.lazy(() => import('../pages/KnowledgeBasePage'));
+const AssetManagementPage = React.lazy(() => import('../pages/AssetManagementPage'));
+const ReportsPage = React.lazy(() => import('../pages/ReportsPage'));
+const UserManagementPage = React.lazy(() => import('../pages/UserManagementPage'));
 
 // Loading component for lazy-loaded pages
 const PageLoader: React.FC = () => (
@@ -138,49 +142,76 @@ export const AppRoutes: React.FC = () => {
             </ProtectedRoute>
           </Suspense>
         }
-      />
-      <Route
-        path="/reports"
-        element={
-          <Suspense fallback={<PageLoader />}>
-            <ProtectedRoute requiredRoles={['Manager', 'IT Admin']}>
-              <LazyLayout>
-                <Suspense fallback={<PageLoader />}>
-                  <DashboardPage />
-                </Suspense>
-              </LazyLayout>
-            </ProtectedRoute>
-          </Suspense>
-        }
-      />
-      <Route
-        path="/users"
-        element={
-          <Suspense fallback={<PageLoader />}>
-            <ProtectedRoute requiredRoles={['IT Admin']}>
-              <LazyLayout>
-                <Suspense fallback={<PageLoader />}>
-                  <DashboardPage />
-                </Suspense>
-              </LazyLayout>
-            </ProtectedRoute>
-          </Suspense>
-        }
-      />
-      <Route
-        path="/settings"
-        element={
-          <Suspense fallback={<PageLoader />}>
-            <ProtectedRoute requiredRoles={['IT Admin']}>
-              <LazyLayout>
-                <Suspense fallback={<PageLoader />}>
-                  <DashboardPage />
-                </Suspense>
-              </LazyLayout>
-            </ProtectedRoute>
-          </Suspense>
-        }
-      />
+      />        <Route
+          path="/reports"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute requiredRoles={['Manager', 'IT Admin', 'Admin', 'Team Lead']}>
+                <LazyLayout>
+                  <Suspense fallback={<PageLoader />}>
+                    <ReportsPage />
+                  </Suspense>
+                </LazyLayout>
+              </ProtectedRoute>
+            </Suspense>
+          }
+        />
+        <Route
+          path="/knowledge-base"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute>
+                <LazyLayout>
+                  <Suspense fallback={<PageLoader />}>
+                    <KnowledgeBasePage />
+                  </Suspense>
+                </LazyLayout>
+              </ProtectedRoute>
+            </Suspense>
+          }
+        />
+        <Route
+          path="/assets"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute requiredRoles={['IT Agent', 'Team Lead', 'IT Admin', 'Admin']}>
+                <LazyLayout>
+                  <Suspense fallback={<PageLoader />}>
+                    <AssetManagementPage />
+                  </Suspense>
+                </LazyLayout>
+              </ProtectedRoute>
+            </Suspense>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute requiredRoles={['IT Admin', 'Admin']}>
+                <LazyLayout>
+                  <Suspense fallback={<PageLoader />}>
+                    <UserManagementPage />
+                  </Suspense>
+                </LazyLayout>
+              </ProtectedRoute>
+            </Suspense>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute requiredRoles={['IT Admin', 'Admin']}>
+                <LazyLayout>
+                  <Suspense fallback={<PageLoader />}>
+                    <DashboardPage />
+                  </Suspense>
+                </LazyLayout>
+              </ProtectedRoute>
+            </Suspense>
+          }
+        />
     </Routes>
   );
 };
