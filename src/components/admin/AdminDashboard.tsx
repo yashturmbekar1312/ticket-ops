@@ -20,7 +20,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Badge,
   Select,
   FormControl,
   InputLabel,
@@ -31,7 +30,6 @@ import {
   ConfirmationNumber,
   Warning,
   Schedule,
-  TrendingUp,
   CheckCircle,
   Assignment,
   People,
@@ -42,6 +40,8 @@ import {
   Edit,
   AutoAwesome,
   NotificationImportant,
+  ArrowUpward,
+  ArrowDownward,
 } from '@mui/icons-material';
 import { DashboardMetrics, Ticket, SLAAlert, ApprovalRequest } from '../../types';
 
@@ -53,7 +53,7 @@ interface TabPanelProps {
 
 const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) => (
   <div role="tabpanel" hidden={value !== index}>
-    {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    {value === index && <Box sx={{ py: 3 }}>{children}</Box>}
   </div>
 );
 
@@ -62,6 +62,7 @@ interface StatCardProps {
   value: number;
   icon: React.ReactNode;
   color: string;
+  bgColor: string;
   subtitle?: string;
   trend?: {
     value: number;
@@ -75,56 +76,99 @@ const StatCard: React.FC<StatCardProps> = ({
   value,
   icon,
   color,
+  bgColor,
   subtitle,
   trend,
   onClick,
 }) => (
   <Card
     sx={{
-      height: '100%',
+      borderRadius: 4,
+      border: '1px solid #f1f5f9',
+      boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+      transition: 'all 0.3s ease-in-out',
       cursor: onClick ? 'pointer' : 'default',
-      '&:hover': onClick ? { elevation: 4 } : {},
+      '&:hover': {
+        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        transform: onClick ? 'translateY(-2px)' : 'none',
+      },
     }}
     onClick={onClick}
   >
-    <CardContent>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-        <Box
-          sx={{
-            p: 1.5,
-            borderRadius: 2,
-            backgroundColor: `${color}20`,
-            color: color,
-            mr: 2,
-          }}
-        >
-          {icon}
-        </Box>
-        <Box sx={{ flexGrow: 1 }}>
-          <Typography variant="h4" component="div" sx={{ fontWeight: 'bold' }}>
+    <CardContent sx={{ p: 3 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Box>
+          <Typography
+            variant="h3"
+            sx={{
+              fontWeight: 800,
+              color: '#1f2937',
+              fontSize: '2rem',
+              lineHeight: 1.2,
+              mb: 0.5,
+            }}
+          >
             {value.toLocaleString()}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            sx={{
+              color: '#6b7280',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              mb: 0.5,
+            }}
+          >
             {title}
           </Typography>
           {subtitle && (
-            <Typography variant="caption" color="text.secondary">
+            <Typography
+              variant="caption"
+              sx={{
+                color: '#9ca3af',
+                fontSize: '0.75rem',
+              }}
+            >
               {subtitle}
             </Typography>
           )}
         </Box>
-        {trend && (
-          <Box sx={{ textAlign: 'right' }}>
-            <Typography
-              variant="body2"
-              color={trend.isPositive ? 'success.main' : 'error.main'}
-              sx={{ fontWeight: 'bold' }}
-            >
-              {trend.isPositive ? '+' : ''}
-              {trend.value}%
-            </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Box
+            sx={{
+              width: 60,
+              height: 60,
+              borderRadius: '16px',
+              backgroundColor: bgColor,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mb: 1,
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            <Box sx={{ color: color, fontSize: '1.5rem' }}>{icon}</Box>
           </Box>
-        )}
+          {trend && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              {trend.isPositive ? (
+                <ArrowUpward sx={{ color: '#10b981', fontSize: '1rem' }} />
+              ) : (
+                <ArrowDownward sx={{ color: '#ef4444', fontSize: '1rem' }} />
+              )}
+              <Typography
+                variant="caption"
+                sx={{
+                  color: trend.isPositive ? '#10b981' : '#ef4444',
+                  fontWeight: 600,
+                  fontSize: '0.75rem',
+                }}
+              >
+                {Math.abs(trend.value)}%
+              </Typography>
+            </Box>
+          )}
+        </Box>
       </Box>
     </CardContent>
   </Card>
@@ -303,14 +347,15 @@ const AdminDashboard: React.FC = () => {
   };
 
   const DashboardOverview = () => (
-    <Grid container spacing={3}>
+    <Grid container spacing={4}>
       {/* Main Stats */}
       <Grid item xs={12} md={3}>
         <StatCard
           title="Total Tickets"
           value={dashboardData.totalTickets}
           icon={<ConfirmationNumber />}
-          color="#2196f3"
+          color="#6366f1"
+          bgColor="#ede9fe"
           trend={{ value: 12.5, isPositive: true }}
         />
       </Grid>
@@ -319,7 +364,8 @@ const AdminDashboard: React.FC = () => {
           title="Open Tickets"
           value={dashboardData.openTickets}
           icon={<Schedule />}
-          color="#ff9800"
+          color="#f59e0b"
+          bgColor="#fef3c7"
           trend={{ value: -5.2, isPositive: false }}
         />
       </Grid>
@@ -328,7 +374,8 @@ const AdminDashboard: React.FC = () => {
           title="SLA Breaches"
           value={dashboardData.slaBreachedTickets}
           icon={<Warning />}
-          color="#f44336"
+          color="#ef4444"
+          bgColor="#fee2e2"
           trend={{ value: -15.8, isPositive: true }}
         />
       </Grid>
@@ -337,56 +384,111 @@ const AdminDashboard: React.FC = () => {
           title="Resolved Today"
           value={32}
           icon={<CheckCircle />}
-          color="#4caf50"
+          color="#10b981"
+          bgColor="#d1fae5"
           trend={{ value: 8.3, isPositive: true }}
         />
       </Grid>
 
       {/* Performance Metrics */}
-      <Grid item xs={12} md={6}>
-        <Card sx={{ height: '100%' }}>
-          <CardContent>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Analytics sx={{ mr: 1 }} />
-              <Typography variant="h6">Performance Analytics</Typography>
+      <Grid item xs={12} md={8}>
+        <Card
+          sx={{
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+            height: '100%',
+          }}
+        >
+          <CardContent sx={{ p: 4 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+              <Box
+                sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: '12px',
+                  backgroundColor: '#ede9fe',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mr: 2,
+                }}
+              >
+                <Analytics sx={{ color: '#6366f1', fontSize: '1.2rem' }} />
+              </Box>
+              <Typography variant="h5" sx={{ fontWeight: 700, color: '#1f2937' }}>
+                Performance Analytics
+              </Typography>
             </Box>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Box sx={{ mb: 2 }}>
-                  <Typography variant="body2" color="text.secondary">
+            <Grid container spacing={3}>
+              <Grid item xs={6} md={3}>
+                <Box
+                  sx={{
+                    p: 3,
+                    borderRadius: 3,
+                    backgroundColor: '#f0f9ff',
+                    border: '1px solid #e0f2fe',
+                    textAlign: 'center',
+                  }}
+                >
+                  <Typography variant="body2" sx={{ color: '#0369a1', fontWeight: 600, mb: 1 }}>
                     Avg Resolution Time
                   </Typography>
-                  <Typography variant="h4">
+                  <Typography variant="h4" sx={{ fontWeight: 800, color: '#0c4a6e' }}>
                     {dashboardData.performanceMetrics.averageResolutionTime}h
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={6}>
-                <Box sx={{ mb: 2 }}>
-                  <Typography variant="body2" color="text.secondary">
+              <Grid item xs={6} md={3}>
+                <Box
+                  sx={{
+                    p: 3,
+                    borderRadius: 3,
+                    backgroundColor: '#f0fdf4',
+                    border: '1px solid #dcfce7',
+                    textAlign: 'center',
+                  }}
+                >
+                  <Typography variant="body2" sx={{ color: '#059669', fontWeight: 600, mb: 1 }}>
                     First Response Time
                   </Typography>
-                  <Typography variant="h4">
+                  <Typography variant="h4" sx={{ fontWeight: 800, color: '#047857' }}>
                     {dashboardData.performanceMetrics.firstResponseTime}h
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={6}>
-                <Box sx={{ mb: 2 }}>
-                  <Typography variant="body2" color="text.secondary">
+              <Grid item xs={6} md={3}>
+                <Box
+                  sx={{
+                    p: 3,
+                    borderRadius: 3,
+                    backgroundColor: '#fffbeb',
+                    border: '1px solid #fef3c7',
+                    textAlign: 'center',
+                  }}
+                >
+                  <Typography variant="body2" sx={{ color: '#d97706', fontWeight: 600, mb: 1 }}>
                     Customer Satisfaction
                   </Typography>
-                  <Typography variant="h4">
+                  <Typography variant="h4" sx={{ fontWeight: 800, color: '#92400e' }}>
                     {dashboardData.performanceMetrics.customerSatisfactionScore}/5
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={6}>
-                <Box sx={{ mb: 2 }}>
-                  <Typography variant="body2" color="text.secondary">
+              <Grid item xs={6} md={3}>
+                <Box
+                  sx={{
+                    p: 3,
+                    borderRadius: 3,
+                    backgroundColor: '#fef2f2',
+                    border: '1px solid #fecaca',
+                    textAlign: 'center',
+                  }}
+                >
+                  <Typography variant="body2" sx={{ color: '#dc2626', fontWeight: 600, mb: 1 }}>
                     Agent Productivity
                   </Typography>
-                  <Typography variant="h4">
+                  <Typography variant="h4" sx={{ fontWeight: 800, color: '#991b1b' }}>
                     {dashboardData.performanceMetrics.agentProductivity}%
                   </Typography>
                 </Box>
@@ -397,42 +499,49 @@ const AdminDashboard: React.FC = () => {
       </Grid>
 
       {/* SLA Alerts */}
-      <Grid item xs={12} md={6}>
-        <Card sx={{ height: '100%' }}>
-          <CardContent>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Warning sx={{ mr: 1 }} />
-              <Typography variant="h6">SLA Alerts</Typography>
-              <Badge badgeContent={slaAlerts.length} color="error" sx={{ ml: 1 }} />
+      <Grid item xs={12} md={4}>
+        <Card
+          sx={{
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+            height: '100%',
+          }}
+        >
+          <CardContent sx={{ p: 4 }}>
+            <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
+              <Typography variant="h6" fontWeight="600" color="#111827">
+                SLA Alerts
+              </Typography>
+              <Chip
+                label={slaAlerts.length}
+                size="small"
+                sx={{
+                  backgroundColor: '#fee2e2',
+                  color: '#dc2626',
+                  fontWeight: 600,
+                }}
+              />
             </Box>
-            <List>
+
+            <List dense>
               {slaAlerts.map((alert) => (
-                <ListItem key={alert.ticketId} divider>
+                <ListItem key={alert.ticketId} sx={{ px: 0 }}>
                   <ListItemIcon>
                     <NotificationImportant
-                      color={alert.alertType === 'breached' ? 'error' : 'warning'}
+                      sx={{
+                        color: alert.alertType === 'breached' ? '#dc2626' : '#f59e0b',
+                        fontSize: 20,
+                      }}
                     />
                   </ListItemIcon>
                   <ListItemText
                     primary={alert.ticketTitle}
                     secondary={
-                      <Box>
-                        <Typography variant="body2" color="text.secondary">
-                          {alert.ticketId} • {alert.priority}
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          color={alert.remainingTime < 0 ? 'error' : 'warning'}
-                        >
-                          {formatTimeRemaining(alert.remainingTime)}
-                        </Typography>
-                      </Box>
+                      <Typography variant="body2" color="#6b7280">
+                        {alert.ticketId} • {formatTimeRemaining(alert.remainingTime)}
+                      </Typography>
                     }
-                  />
-                  <Chip
-                    label={alert.alertType}
-                    size="small"
-                    color={alert.alertType === 'breached' ? 'error' : 'warning'}
                   />
                 </ListItem>
               ))}
@@ -443,53 +552,87 @@ const AdminDashboard: React.FC = () => {
 
       {/* Recent Activity */}
       <Grid item xs={12}>
-        <Card>
-          <CardContent>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <TrendingUp sx={{ mr: 1 }} />
-              <Typography variant="h6">Recent Tickets</Typography>
+        <Card
+          sx={{
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+          }}
+        >
+          <CardContent sx={{ p: 4 }}>
+            <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
+              <Typography variant="h6" fontWeight="600" color="#111827">
+                Recent Tickets
+              </Typography>
+              <Button
+                variant="outlined"
+                size="small"
+                sx={{
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  borderColor: '#d1d5db',
+                  color: '#6b7280',
+                  '&:hover': {
+                    borderColor: '#9ca3af',
+                    backgroundColor: '#f9fafb',
+                  },
+                }}
+              >
+                View All
+              </Button>
             </Box>
+
             <TableContainer>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Ticket ID</TableCell>
-                    <TableCell>Title</TableCell>
-                    <TableCell>Priority</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>Assigned To</TableCell>
-                    <TableCell>Created</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Ticket ID</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Title</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Priority</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Assigned To</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Created</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {recentTickets.map((ticket) => (
-                    <TableRow key={ticket.id}>
+                    <TableRow key={ticket.id} hover>
                       <TableCell>{ticket.ticketNumber}</TableCell>
                       <TableCell>{ticket.title}</TableCell>
                       <TableCell>
                         <Chip
                           label={ticket.priority}
                           size="small"
-                          sx={{ backgroundColor: getPriorityColor(ticket.priority) + '20' }}
+                          sx={{
+                            backgroundColor: getPriorityColor(ticket.priority),
+                            color: 'white',
+                            fontWeight: 600,
+                          }}
                         />
                       </TableCell>
                       <TableCell>
                         <Chip
                           label={ticket.status}
                           size="small"
-                          sx={{ backgroundColor: getStatusColor(ticket.status) + '20' }}
+                          sx={{
+                            backgroundColor: getStatusColor(ticket.status),
+                            color: 'white',
+                            fontWeight: 600,
+                          }}
                         />
                       </TableCell>
                       <TableCell>{ticket.assignedToName || 'Unassigned'}</TableCell>
                       <TableCell>{new Date(ticket.createdAt).toLocaleDateString()}</TableCell>
                       <TableCell>
-                        <IconButton size="small">
-                          <Visibility />
-                        </IconButton>
-                        <IconButton size="small">
-                          <Edit />
-                        </IconButton>
+                        <Box display="flex" gap={1}>
+                          <IconButton size="small" sx={{ color: '#6b7280' }}>
+                            <Visibility sx={{ fontSize: 16 }} />
+                          </IconButton>
+                          <IconButton size="small" sx={{ color: '#6b7280' }}>
+                            <Edit sx={{ fontSize: 16 }} />
+                          </IconButton>
+                        </Box>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -503,15 +646,23 @@ const AdminDashboard: React.FC = () => {
   );
 
   const TicketManagement = () => (
-    <Grid container spacing={3}>
+    <Grid container spacing={4}>
       <Grid item xs={12}>
-        <Card>
-          <CardContent>
+        <Card
+          sx={{
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+          }}
+        >
+          <CardContent sx={{ p: 4 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Assignment sx={{ mr: 1 }} />
-              <Typography variant="h6">Ticket Management</Typography>
+              <Assignment sx={{ mr: 2, color: '#6366f1' }} />
+              <Typography variant="h5" sx={{ fontWeight: 700, color: '#1f2937' }}>
+                Ticket Management
+              </Typography>
             </Box>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body1" sx={{ color: '#6b7280' }}>
               Comprehensive ticket management functionality will be implemented here.
             </Typography>
           </CardContent>
@@ -521,56 +672,122 @@ const AdminDashboard: React.FC = () => {
   );
 
   const ApprovalManagement = () => (
-    <Grid container spacing={3}>
+    <Grid container spacing={4}>
       <Grid item xs={12}>
-        <Card>
-          <CardContent>
+        <Card
+          sx={{
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+          }}
+        >
+          <CardContent sx={{ p: 4 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Assignment sx={{ mr: 1 }} />
-              <Typography variant="h6">Pending Approvals</Typography>
-              <Badge badgeContent={pendingApprovals.length} color="primary" sx={{ ml: 1 }} />
+              <CheckCircle sx={{ mr: 2, color: '#10b981' }} />
+              <Typography variant="h5" sx={{ fontWeight: 700, color: '#1f2937' }}>
+                Pending Approvals
+              </Typography>
+              <Chip
+                label={pendingApprovals.length}
+                size="small"
+                sx={{
+                  ml: 2,
+                  backgroundColor: '#ef4444',
+                  color: 'white',
+                  fontWeight: 600,
+                }}
+              />
             </Box>
+            <Typography variant="body1" sx={{ color: '#6b7280', mb: 3 }}>
+              Review and approve pending requests from team members.
+            </Typography>
             <TableContainer>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Request ID</TableCell>
-                    <TableCell>Type</TableCell>
-                    <TableCell>Requester</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Cost</TableCell>
-                    <TableCell>Urgency</TableCell>
-                    <TableCell>Created</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Request ID</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Type</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Requester</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Description</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Cost</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Urgency</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Created</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151' }}>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {pendingApprovals.map((approval) => (
-                    <TableRow key={approval.id}>
+                    <TableRow key={approval.id} hover>
                       <TableCell>{approval.id}</TableCell>
                       <TableCell>
-                        <Chip label={approval.type} size="small" variant="outlined" />
+                        <Chip
+                          label={approval.type}
+                          size="small"
+                          sx={{
+                            backgroundColor: approval.type === 'hardware' ? '#dbeafe' : '#f3e8ff',
+                            color: approval.type === 'hardware' ? '#1d4ed8' : '#7c3aed',
+                            fontWeight: 600,
+                          }}
+                        />
                       </TableCell>
                       <TableCell>{approval.requestedByName}</TableCell>
                       <TableCell>{approval.description}</TableCell>
                       <TableCell>
-                        {approval.estimatedCost && formatCurrency(approval.estimatedCost)}
+                        <Typography variant="body2" color="#374151" fontWeight="600">
+                          {approval.estimatedCost && formatCurrency(approval.estimatedCost)}
+                        </Typography>
                       </TableCell>
                       <TableCell>
                         <Chip
                           label={approval.urgency}
                           size="small"
-                          sx={{ backgroundColor: getUrgencyColor(approval.urgency) + '20' }}
+                          sx={{
+                            backgroundColor: getUrgencyColor(approval.urgency) + '20',
+                            color: getUrgencyColor(approval.urgency),
+                            fontWeight: 600,
+                          }}
                         />
                       </TableCell>
                       <TableCell>{new Date(approval.createdAt).toLocaleDateString()}</TableCell>
                       <TableCell>
-                        <Button size="small" color="success" sx={{ mr: 1 }}>
-                          Approve
-                        </Button>
-                        <Button size="small" color="error">
-                          Reject
-                        </Button>
+                        <Box display="flex" gap={1}>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            sx={{
+                              minWidth: 'auto',
+                              px: 2,
+                              py: 0.5,
+                              fontSize: '0.75rem',
+                              borderRadius: 1.5,
+                              background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                              '&:hover': {
+                                background: 'linear-gradient(135deg, #047857 0%, #059669 100%)',
+                              },
+                            }}
+                          >
+                            Approve
+                          </Button>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            sx={{
+                              minWidth: 'auto',
+                              px: 2,
+                              py: 0.5,
+                              fontSize: '0.75rem',
+                              borderRadius: 1.5,
+                              borderColor: '#ef4444',
+                              color: '#ef4444',
+                              '&:hover': {
+                                borderColor: '#dc2626',
+                                backgroundColor: '#fef2f2',
+                              },
+                            }}
+                          >
+                            Reject
+                          </Button>
+                        </Box>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -584,16 +801,24 @@ const AdminDashboard: React.FC = () => {
   );
 
   const UserTeamManagement = () => (
-    <Grid container spacing={3}>
+    <Grid container spacing={4}>
       <Grid item xs={12}>
-        <Card>
-          <CardContent>
+        <Card
+          sx={{
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+          }}
+        >
+          <CardContent sx={{ p: 4 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <People sx={{ mr: 1 }} />
-              <Typography variant="h6">User & Team Management</Typography>
+              <People sx={{ mr: 2, color: '#8b5cf6' }} />
+              <Typography variant="h5" sx={{ fontWeight: 700, color: '#1f2937' }}>
+                Users & Teams
+              </Typography>
             </Box>
-            <Typography variant="body2" color="text.secondary">
-              User and team management functionality will be implemented here.
+            <Typography variant="body1" sx={{ color: '#6b7280' }}>
+              Manage user accounts, roles, and team assignments.
             </Typography>
           </CardContent>
         </Card>
@@ -602,16 +827,24 @@ const AdminDashboard: React.FC = () => {
   );
 
   const AutomationSettings = () => (
-    <Grid container spacing={3}>
+    <Grid container spacing={4}>
       <Grid item xs={12}>
-        <Card>
-          <CardContent>
+        <Card
+          sx={{
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+          }}
+        >
+          <CardContent sx={{ p: 4 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <AutoAwesome sx={{ mr: 1 }} />
-              <Typography variant="h6">Automation & Rules</Typography>
+              <AutoAwesome sx={{ mr: 2, color: '#f59e0b' }} />
+              <Typography variant="h5" sx={{ fontWeight: 700, color: '#1f2937' }}>
+                Automation Rules
+              </Typography>
             </Box>
-            <Typography variant="body2" color="text.secondary">
-              Automation rules and settings will be implemented here.
+            <Typography variant="body1" sx={{ color: '#6b7280' }}>
+              Configure automated workflows, routing rules, and escalation policies.
             </Typography>
           </CardContent>
         </Card>
@@ -620,16 +853,24 @@ const AdminDashboard: React.FC = () => {
   );
 
   const SystemSettings = () => (
-    <Grid container spacing={3}>
+    <Grid container spacing={4}>
       <Grid item xs={12}>
-        <Card>
-          <CardContent>
+        <Card
+          sx={{
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+          }}
+        >
+          <CardContent sx={{ p: 4 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Settings sx={{ mr: 1 }} />
-              <Typography variant="h6">System Settings</Typography>
+              <Settings sx={{ mr: 2, color: '#6b7280' }} />
+              <Typography variant="h5" sx={{ fontWeight: 700, color: '#1f2937' }}>
+                System Settings
+              </Typography>
             </Box>
-            <Typography variant="body2" color="text.secondary">
-              System configuration and settings will be implemented here.
+            <Typography variant="body1" sx={{ color: '#6b7280' }}>
+              Configure system-wide settings, notifications, and integrations.
             </Typography>
           </CardContent>
         </Card>
@@ -638,18 +879,42 @@ const AdminDashboard: React.FC = () => {
   );
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
+    <Box
+      sx={{
+        p: 4,
+        minHeight: '100vh',
+        backgroundColor: '#f8fafc',
+      }}
+    >
+      {/* Header */}
+      <Box mb={4}>
+        <Typography variant="h4" fontWeight="700" color="#111827" mb={2}>
           Admin Dashboard
         </Typography>
+        <Typography variant="body1" color="#6b7280">
+          Manage your ticket system, users, and configurations
+        </Typography>
+      </Box>
+
+      {/* Controls */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Box />
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <FormControl size="small" sx={{ minWidth: 120 }}>
+          <FormControl size="small" sx={{ minWidth: 140 }}>
             <InputLabel>Date Range</InputLabel>
             <Select
               value={selectedDateRange}
               onChange={(e) => setSelectedDateRange(e.target.value)}
               label="Date Range"
+              sx={{
+                borderRadius: 2,
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#e5e7eb',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#6366f1',
+                },
+              }}
             >
               <MenuItem value="last7days">Last 7 Days</MenuItem>
               <MenuItem value="last30days">Last 30 Days</MenuItem>
@@ -662,20 +927,61 @@ const AdminDashboard: React.FC = () => {
             startIcon={<Refresh />}
             onClick={handleRefresh}
             disabled={refreshing}
+            sx={{
+              borderRadius: 2,
+              px: 3,
+              py: 1,
+              borderColor: '#e5e7eb',
+              color: '#374151',
+              '&:hover': {
+                borderColor: '#6366f1',
+                backgroundColor: '#f8fafc',
+              },
+            }}
           >
             {refreshing ? 'Refreshing...' : 'Refresh'}
           </Button>
         </Box>
       </Box>
 
-      <Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 3 }}>
-        <Tab icon={<Dashboard />} label="Overview" />
-        <Tab icon={<Assignment />} label="Tickets" />
-        <Tab icon={<CheckCircle />} label="Approvals" />
-        <Tab icon={<People />} label="Users & Teams" />
-        <Tab icon={<AutoAwesome />} label="Automation" />
-        <Tab icon={<Settings />} label="Settings" />
-      </Tabs>
+      {/* Navigation Tabs */}
+      <Box mb={4}>
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          sx={{
+            '& .MuiTab-root': {
+              borderRadius: 3,
+              margin: '0 4px',
+              textTransform: 'none',
+              fontWeight: 600,
+              fontSize: '0.875rem',
+              minHeight: 48,
+              transition: 'all 0.2s ease-in-out',
+              '&:hover': {
+                backgroundColor: '#f8fafc',
+              },
+              '&.Mui-selected': {
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                color: 'white',
+                boxShadow: '0 2px 8px rgba(99, 102, 241, 0.3)',
+              },
+            },
+            '& .MuiTabs-indicator': {
+              display: 'none',
+            },
+          }}
+        >
+          <Tab icon={<Dashboard />} label="Overview" />
+          <Tab icon={<Assignment />} label="Tickets" />
+          <Tab icon={<CheckCircle />} label="Approvals" />
+          <Tab icon={<People />} label="Users & Teams" />
+          <Tab icon={<AutoAwesome />} label="Automation" />
+          <Tab icon={<Settings />} label="Settings" />
+        </Tabs>
+      </Box>
 
       <TabPanel value={activeTab} index={0}>
         <DashboardOverview />
