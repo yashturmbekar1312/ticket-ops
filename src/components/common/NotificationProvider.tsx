@@ -49,28 +49,28 @@ class WebSocketService {
 
   connect(userId: string, onMessage: (data: TicketNotification) => void) {
     // In production, this would connect to a real WebSocket server
-    // For now, we'll simulate it with periodic updates
+    // Mock simulation disabled to stop unnecessary notifications
     this.callbacks.set(userId, onMessage);
 
-    // Simulate real-time notifications
-    const interval = setInterval(() => {
-      if (Math.random() > 0.95) {
-        // 5% chance every second
-        const mockNotification: TicketNotification = {
-          id: Date.now().toString(),
-          type: 'ticket_update',
-          title: 'Ticket Updated',
-          message: 'Your ticket has been updated by an agent',
-          relatedTicketId: 'TKT-001',
-          isRead: false,
-          createdAt: new Date().toISOString(),
-        };
-        onMessage(mockNotification);
-      }
-    }, 1000);
+    // Simulate real-time notifications (DISABLED)
+    // const interval = setInterval(() => {
+    //   if (Math.random() > 0.95) {
+    //     // 5% chance every second
+    //     const mockNotification: TicketNotification = {
+    //       id: Date.now().toString(),
+    //       type: 'ticket_update',
+    //       title: 'Ticket Updated',
+    //       message: 'Your ticket has been updated by an agent',
+    //       relatedTicketId: 'TKT-001',
+    //       isRead: false,
+    //       createdAt: new Date().toISOString(),
+    //     };
+    //     onMessage(mockNotification);
+    //   }
+    // }, 1000);
 
     return () => {
-      clearInterval(interval);
+      // clearInterval(interval);
       this.callbacks.delete(userId);
     };
   }
