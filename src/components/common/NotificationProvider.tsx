@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import {
   Snackbar,
   Alert,
@@ -28,12 +28,17 @@ import {
   DeleteOutline as DeleteIcon,
 } from '@mui/icons-material';
 import { formatDistanceToNow } from 'date-fns';
-import { Notification } from '../../types';
+import { TicketNotification } from '../../types';
+import {
+  useNotifications,
+  NotificationContext,
+  NotificationContextType,
+} from '../../hooks/useNotifications';
 
 // Mock WebSocket service for real-time notifications
 class WebSocketService {
   private static instance: WebSocketService;
-  private callbacks: Map<string, (data: any) => void> = new Map();
+  private callbacks: Map<string, (data: TicketNotification) => void> = new Map();
 
   static getInstance(): WebSocketService {
     if (!WebSocketService.instance) {
@@ -42,7 +47,7 @@ class WebSocketService {
     return WebSocketService.instance;
   }
 
-  connect(userId: string, onMessage: (data: any) => void) {
+  connect(userId: string, onMessage: (data: TicketNotification) => void) {
     // In production, this would connect to a real WebSocket server
     // For now, we'll simulate it with periodic updates
     this.callbacks.set(userId, onMessage);
@@ -51,13 +56,12 @@ class WebSocketService {
     const interval = setInterval(() => {
       if (Math.random() > 0.95) {
         // 5% chance every second
-        const mockNotification: Notification = {
+        const mockNotification: TicketNotification = {
           id: Date.now().toString(),
-          userId,
-          type: 'ticket_updated',
+          type: 'ticket_update',
           title: 'Ticket Updated',
           message: 'Your ticket has been updated by an agent',
-          ticketId: 'TKT-001',
+          relatedTicketId: 'TKT-001',
           isRead: false,
           createdAt: new Date().toISOString(),
         };
@@ -76,7 +80,7 @@ class WebSocketService {
   }
 
   // Method to send notifications (would be called from backend)
-  sendNotification(userId: string, notification: Notification) {
+  sendNotification(userId: string, notification: TicketNotification) {
     const callback = this.callbacks.get(userId);
     if (callback) {
       callback(notification);
@@ -84,40 +88,20 @@ class WebSocketService {
   }
 }
 
-interface NotificationContextType {
-  notifications: Notification[];
-  unreadCount: number;
-  addNotification: (notification: Notification) => void;
-  markAsRead: (id: string) => void;
-  markAllAsRead: () => void;
-  deleteNotification: (id: string) => void;
-  clearAll: () => void;
-}
-
-const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
-
-export const useNotifications = () => {
-  const context = useContext(NotificationContext);
-  if (!context) {
-    throw new Error('useNotifications must be used within a NotificationProvider');
-  }
-  return context;
-};
-
 interface NotificationProviderProps {
   children: ReactNode;
   userId: string;
 }
 
 export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children, userId }) => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<TicketNotification[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [currentSnackbar, setCurrentSnackbar] = useState<Notification | null>(null);
+  const [currentSnackbar, setCurrentSnackbar] = useState<TicketNotification | null>(null);
 
   useEffect(() => {
     const wsService = WebSocketService.getInstance();
 
-    const handleNewNotification = (notification: Notification) => {
+    const handleNewNotification = (notification: TicketNotification) => {
       setNotifications((prev) => [notification, ...prev]);
       setCurrentSnackbar(notification);
       setSnackbarOpen(true);
@@ -126,34 +110,31 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     const cleanup = wsService.connect(userId, handleNewNotification);
 
     // Load existing notifications (would come from API)
-    const mockNotifications: Notification[] = [
+    const mockNotifications: TicketNotification[] = [
       {
         id: '1',
-        userId,
-        type: 'ticket_assigned',
+        type: 'ticket_update',
         title: 'Ticket Assigned',
         message: 'You have been assigned to ticket TKT-001',
-        ticketId: 'TKT-001',
+        relatedTicketId: 'TKT-001',
         isRead: false,
         createdAt: new Date(Date.now() - 300000).toISOString(),
       },
       {
         id: '2',
-        userId,
-        type: 'comment_added',
+        type: 'ticket_update',
         title: 'New Comment',
         message: 'A new comment has been added to your ticket',
-        ticketId: 'TKT-002',
+        relatedTicketId: 'TKT-002',
         isRead: false,
         createdAt: new Date(Date.now() - 600000).toISOString(),
       },
       {
         id: '3',
-        userId,
-        type: 'sla_warning',
+        type: 'reminder',
         title: 'SLA Warning',
         message: 'Ticket TKT-003 is approaching SLA deadline',
-        ticketId: 'TKT-003',
+        relatedTicketId: 'TKT-003',
         isRead: true,
         createdAt: new Date(Date.now() - 1800000).toISOString(),
       },
@@ -164,7 +145,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     return cleanup;
   }, [userId]);
 
-  const addNotification = (notification: Notification) => {
+  const addNotification = (notification: TicketNotification) => {
     setNotifications((prev) => [notification, ...prev]);
     setCurrentSnackbar(notification);
     setSnackbarOpen(true);
@@ -227,34 +208,31 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
 };
 
 const getNotificationSeverity = (
-  type: Notification['type']
+  type: TicketNotification['type']
 ): 'success' | 'info' | 'warning' | 'error' => {
   switch (type) {
-    case 'sla_warning':
-    case 'escalation':
+    case 'reminder':
       return 'warning';
-    case 'ticket_assigned':
-    case 'ticket_updated':
+    case 'ticket_update':
       return 'info';
-    case 'comment_added':
-    case 'mention':
+    case 'ticket_resolved':
       return 'success';
+    case 'system_announcement':
+      return 'info';
     default:
       return 'info';
   }
 };
 
-const getNotificationIcon = (type: Notification['type']) => {
+const getNotificationIcon = (type: TicketNotification['type']) => {
   switch (type) {
-    case 'ticket_assigned':
-    case 'ticket_updated':
+    case 'ticket_update':
       return <TicketIcon />;
-    case 'comment_added':
-    case 'mention':
+    case 'ticket_resolved':
       return <CommentIcon />;
-    case 'sla_warning':
+    case 'reminder':
       return <WarningIcon />;
-    case 'escalation':
+    case 'system_announcement':
       return <EscalationIcon />;
     default:
       return <NotificationsIcon />;
@@ -279,13 +257,13 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({ onClick }) =
     setAnchorEl(null);
   };
 
-  const handleNotificationClick = (notification: Notification) => {
+  const handleNotificationClick = (notification: TicketNotification) => {
     if (!notification.isRead) {
       markAsRead(notification.id);
     }
     // Navigate to ticket if applicable
-    if (notification.ticketId) {
-      window.location.href = `/tickets/${notification.ticketId}`;
+    if (notification.relatedTicketId) {
+      window.location.href = `/tickets/${notification.relatedTicketId}`;
     }
     handleClose();
   };

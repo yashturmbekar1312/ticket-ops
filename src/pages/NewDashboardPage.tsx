@@ -22,41 +22,21 @@ const DashboardPage: React.FC = () => {
     case 'IT Admin':
     case 'Admin':
       return <AdminDashboard />;
-    
+
     case 'Manager':
       return (
-        <ManagerDashboard 
-          userId={user.id} 
-          userName={user.name} 
-          department={user.department} 
-        />
+        <ManagerDashboard userId={user.id} userName={user.name} department={user.department} />
       );
-    
+
     case 'Employee':
-      return (
-        <EmployeeDashboard 
-          userId={user.id} 
-          userName={user.name} 
-        />
-      );
-    
+      return <EmployeeDashboard userId={user.id} userName={user.name} />;
+
     case 'IT Agent':
     case 'Team Lead':
-      return (
-        <OperationsDashboard 
-          userId={user.id} 
-          userName={user.name} 
-          userRole={user.role} 
-        />
-      );
-    
+      return <OperationsDashboard userId={user.id} userName={user.name} userRole={user.role} />;
+
     default:
-      return (
-        <EmployeeDashboard 
-          userId={user.id} 
-          userName={user.name} 
-        />
-      );
+      return <EmployeeDashboard userId={user.id} userName={user.name} />;
   }
 };
 

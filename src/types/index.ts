@@ -119,7 +119,7 @@ export interface TicketAttachment {
 }
 
 // Enhanced Comment interface
-export interface Comment {
+export interface TicketComment {
   id: string;
   ticketId: string;
   userId: string;
@@ -259,11 +259,11 @@ export interface AutomationAction {
     | 'send_notification'
     | 'add_comment'
     | 'escalate';
-  parameters: Record<string, any>;
+  parameters: Record<string, string | number | boolean>;
 }
 
-// Notification
-export interface Notification {
+// Legacy Notification (keeping for backward compatibility)
+export interface LegacyNotification {
   id: string;
   userId: string;
   type:
@@ -278,11 +278,11 @@ export interface Notification {
   ticketId?: string;
   isRead: boolean;
   createdAt: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string | number | boolean>;
 }
 
-// System announcement
-export interface Announcement {
+// Legacy System announcement (keeping for backward compatibility)
+export interface LegacyAnnouncement {
   id: string;
   title: string;
   content: string;
@@ -295,12 +295,12 @@ export interface Announcement {
   createdAt: string;
 }
 
-// Integration configuration
-export interface IntegrationConfig {
+// Legacy Integration configuration (keeping for backward compatibility)
+export interface LegacyIntegrationConfig {
   id: string;
   type: 'slack' | 'teams' | 'email' | 'webhook' | 'ldap' | 'sso';
   name: string;
-  settings: Record<string, any>;
+  settings: Record<string, string | number | boolean>;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -455,7 +455,7 @@ export interface ReportConfig {
 export interface BulkAction {
   type: 'assign' | 'status_update' | 'priority_update' | 'add_tags' | 'remove_tags' | 'delete';
   ticketIds: string[];
-  parameters: Record<string, any>;
+  parameters: Record<string, string | number | boolean>;
 }
 
 // Audit log
@@ -470,4 +470,333 @@ export interface AuditLog {
   timestamp: string;
   ipAddress?: string;
   userAgent?: string;
+}
+
+// Dashboard types for different user roles
+export interface DashboardMetrics {
+  totalTickets: number;
+  openTickets: number;
+  resolvedTickets: number;
+  overdueTickets: number;
+  slaBreachedTickets: number;
+  recentActivity: ActivityLog[];
+  performanceMetrics: PerformanceMetrics;
+}
+
+export interface PerformanceMetrics {
+  averageResolutionTime: number;
+  firstResponseTime: number;
+  customerSatisfactionScore: number;
+  agentProductivity: number;
+  ticketVolumeThisMonth: number;
+  ticketVolumeLastMonth: number;
+}
+
+// Admin Panel Types
+export interface AdminPanelConfig {
+  companyInfo: CompanyInfo;
+  slaSettings: SLAConfig[];
+  notificationSettings: NotificationSettings;
+  integrationSettings: IntegrationSettings;
+}
+
+export interface CompanyInfo {
+  name: string;
+  logo?: string;
+  contactInfo: {
+    email: string;
+    phone: string;
+    address: string;
+  };
+  departments: Department[];
+}
+
+export interface Department {
+  id: string;
+  name: string;
+  description?: string;
+  managerId?: string;
+  members: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RuleCondition {
+  field: string;
+  operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in';
+  value: string | number | string[];
+}
+
+export interface RuleAction {
+  type: 'assign' | 'set_status' | 'set_priority' | 'send_notification' | 'add_tag';
+  value: string | number;
+  parameters?: Record<string, string | number | boolean>;
+}
+
+export interface NotificationSettings {
+  email: {
+    enabled: boolean;
+    smtpConfig: SMTPConfig;
+    templates: NotificationTemplate[];
+  };
+  sms: {
+    enabled: boolean;
+    provider: string;
+    config: Record<string, string | number | boolean>;
+  };
+  slack: {
+    enabled: boolean;
+    webhookUrl: string;
+    channels: string[];
+  };
+  inApp: {
+    enabled: boolean;
+    retentionDays: number;
+  };
+}
+
+export interface SMTPConfig {
+  host: string;
+  port: number;
+  secure: boolean;
+  username: string;
+  password: string;
+  fromAddress: string;
+  fromName: string;
+}
+
+export interface NotificationTemplate {
+  id: string;
+  name: string;
+  subject: string;
+  body: string;
+  type: 'ticket_created' | 'ticket_assigned' | 'ticket_resolved' | 'sla_breach' | 'custom';
+  isActive: boolean;
+}
+
+export interface IntegrationSettings {
+  activeDirectory: {
+    enabled: boolean;
+    serverUrl: string;
+    baseDN: string;
+    username: string;
+    password: string;
+  };
+  sso: {
+    enabled: boolean;
+    provider: 'saml' | 'oauth' | 'oidc';
+    config: Record<string, string | number | boolean>;
+  };
+  thirdParty: {
+    jira: SystemIntegrationConfig;
+    servicenow: SystemIntegrationConfig;
+    slack: SystemIntegrationConfig;
+  };
+}
+
+export interface SystemIntegrationConfig {
+  enabled: boolean;
+  apiKey?: string;
+  apiUrl?: string;
+  config: Record<string, string | number | boolean>;
+}
+
+// Manager Panel Types
+export interface ManagerDashboardData {
+  departmentStats: DepartmentStats;
+  pendingApprovals: ApprovalRequest[];
+  teamTickets: Ticket[];
+  performanceMetrics: TeamPerformanceMetrics;
+}
+
+export interface DepartmentStats {
+  totalTickets: number;
+  openTickets: number;
+  resolvedTickets: number;
+  averageResolutionTime: number;
+  teamMembers: number;
+  productivity: number;
+}
+
+export interface ApprovalRequest {
+  id: string;
+  ticketId: string;
+  type: 'access' | 'software' | 'hardware' | 'budget' | 'policy_exception';
+  requestedBy: string;
+  requestedByName: string;
+  description: string;
+  justification: string;
+  estimatedCost?: number;
+  urgency: 'low' | 'medium' | 'high';
+  createdAt: string;
+  requiredBy?: string;
+  status: 'pending' | 'approved' | 'rejected' | 'escalated';
+  approvedBy?: string;
+  approvedAt?: string;
+  rejectionReason?: string;
+}
+
+export interface TeamPerformanceMetrics {
+  averageResolutionTime: number;
+  firstResponseTime: number;
+  customerSatisfactionScore: number;
+  ticketVolumeThisMonth: number;
+  slaComplianceRate: number;
+  agentPerformance: AgentPerformance[];
+}
+
+export interface AgentPerformance {
+  agentId: string;
+  agentName: string;
+  ticketsResolved: number;
+  averageResolutionTime: number;
+  customerSatisfactionScore: number;
+  slaComplianceRate: number;
+  workload: number;
+}
+
+// Operations Panel Types
+export interface OperationsDashboardData {
+  assignedTickets: Ticket[];
+  groupTickets: Ticket[];
+  slaAlerts: SLAAlert[];
+  performanceMetrics: AgentPerformanceMetrics;
+  knowledgeBaseArticles: KnowledgeBaseArticle[];
+}
+
+export interface SLAAlert {
+  ticketId: string;
+  ticketTitle: string;
+  priority: TicketPriority;
+  createdAt: string;
+  dueDate: string;
+  remainingTime: number; // in minutes
+  escalationLevel: number;
+  alertType: 'approaching' | 'breached' | 'escalated';
+}
+
+export interface AgentPerformanceMetrics {
+  ticketsAssigned: number;
+  ticketsResolved: number;
+  averageResolutionTime: number;
+  firstResponseTime: number;
+  customerSatisfactionScore: number;
+  slaComplianceRate: number;
+  workload: 'low' | 'medium' | 'high' | 'overloaded';
+}
+
+// Employee Panel Types
+export interface EmployeeDashboardData {
+  myTickets: Ticket[];
+  notifications: TicketNotification[];
+  quickActions: QuickAction[];
+  announcements: SystemAnnouncement[];
+}
+
+export interface TicketNotification {
+  id: string;
+  type: 'ticket_update' | 'ticket_resolved' | 'system_announcement' | 'reminder';
+  title: string;
+  message: string;
+  relatedTicketId?: string;
+  isRead: boolean;
+  createdAt: string;
+  expiresAt?: string;
+  actionUrl?: string;
+}
+
+export interface QuickAction {
+  id: string;
+  label: string;
+  description: string;
+  icon: string;
+  action: string;
+  category: string;
+  isEnabled: boolean;
+}
+
+export interface SystemAnnouncement {
+  id: string;
+  title: string;
+  content: string;
+  type: 'info' | 'warning' | 'maintenance' | 'policy';
+  isActive: boolean;
+  createdBy: string;
+  createdAt: string;
+  expiresAt?: string;
+  targetRoles: UserRole[];
+}
+
+// Ticket Action Types
+export interface TicketAction {
+  type:
+    | 'status_change'
+    | 'assignment'
+    | 'priority_change'
+    | 'comment'
+    | 'escalation'
+    | 'resolution';
+  userId: string;
+  userName: string;
+  timestamp: string;
+  details: Record<string, string | number | boolean>;
+  comment?: string;
+}
+
+export interface TicketEscalation {
+  id: string;
+  ticketId: string;
+  fromUserId: string;
+  toUserId: string;
+  reason: string;
+  escalationLevel: number;
+  createdAt: string;
+  isActive: boolean;
+  resolvedAt?: string;
+}
+
+// Audit Log Types
+export interface SystemAuditLog {
+  id: string;
+  userId: string;
+  userName: string;
+  action: string;
+  resourceType: 'ticket' | 'user' | 'system' | 'settings';
+  resourceId: string;
+  details: Record<string, string | number | boolean>;
+  ipAddress: string;
+  userAgent: string;
+  timestamp: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+}
+
+// Dashboard Filter Types
+export interface DashboardFilter {
+  dateRange: {
+    start: string;
+    end: string;
+  };
+  department?: string;
+  priority?: TicketPriority;
+  status?: TicketStatus;
+  assignedTo?: string;
+  category?: TicketCategory;
+}
+
+// Bulk Operations Types
+export interface BulkOperation {
+  id: string;
+  type: 'status_change' | 'assignment' | 'priority_change' | 'category_change' | 'close' | 'delete';
+  ticketIds: string[];
+  parameters: Record<string, string | number | boolean>;
+  executedBy: string;
+  executedAt: string;
+  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  results?: BulkOperationResult[];
+}
+
+export interface BulkOperationResult {
+  ticketId: string;
+  success: boolean;
+  error?: string;
 }
