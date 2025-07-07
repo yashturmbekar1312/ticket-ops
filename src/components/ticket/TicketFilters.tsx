@@ -29,7 +29,10 @@ export const TicketFiltersComponent: React.FC<TicketFiltersProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
-  const handleFilterChange = (key: keyof TicketFilters, value: any) => {
+  const handleFilterChange = (
+    key: keyof TicketFilters,
+    value: string | string[] | undefined
+  ) => {
     onFiltersChange({
       ...filters,
       [key]: value,

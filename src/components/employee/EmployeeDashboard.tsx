@@ -11,10 +11,8 @@ import {
   ListItemText,
   ListItemIcon,
   Chip,
-  IconButton,
   Badge,
   Avatar,
-  Divider,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -37,8 +35,6 @@ import {
   Assignment,
   Warning,
   Info,
-  Close,
-  Send,
   ErrorOutline,
 } from '@mui/icons-material';
 import {
@@ -48,6 +44,7 @@ import {
   TicketCategory,
   TicketPriority,
 } from '../../types';
+import { TicketDetailModal } from '../ticket/TicketDetailModal';
 
 interface EmployeeDashboardProps {
   userId: string;
@@ -57,6 +54,7 @@ interface EmployeeDashboardProps {
 const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ userId, userName }) => {
   const [createTicketOpen, setCreateTicketOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
+  const [ticketDetailOpen, setTicketDetailOpen] = useState(false);
   const [newTicketData, setNewTicketData] = useState({
     title: '',
     category: '' as TicketCategory,
@@ -64,10 +62,9 @@ const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ userId, userName 
     priority: 'Medium' as TicketPriority,
     attachments: [] as File[],
   });
-  const [newComment, setNewComment] = useState('');
 
   // Mock data - in production, this would come from API
-  const myTickets: Ticket[] = [
+  const allTickets: Ticket[] = [
     {
       id: 'TK-001',
       ticketNumber: 'TK-001',
@@ -75,7 +72,7 @@ const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ userId, userName 
       description: 'My laptop keeps freezing and shutting down randomly',
       category: 'Hardware',
       priority: 'High',
-      status: 'In Progress',
+      status: 'Open',
       createdBy: userId,
       createdByName: userName,
       assignedTo: 'agent1',
@@ -95,7 +92,7 @@ const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ userId, userName 
       description: 'Need Adobe Creative Suite for upcoming marketing project',
       category: 'Software',
       priority: 'Medium',
-      status: 'Pending',
+      status: 'Open',
       createdBy: userId,
       createdByName: userName,
       department: 'Marketing',
@@ -127,7 +124,28 @@ const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ userId, userName 
       escalationLevel: 0,
       source: 'web',
     },
+    {
+      id: 'TK-004',
+      ticketNumber: 'TK-004',
+      title: 'Password reset request',
+      description: 'Need to reset my password for the company email account',
+      category: 'Access',
+      priority: 'Medium',
+      status: 'Open',
+      createdBy: userId,
+      createdByName: userName,
+      department: 'IT',
+      createdAt: '2024-07-07T09:00:00Z',
+      updatedAt: '2024-07-07T09:00:00Z',
+      slaBreached: false,
+      tags: ['access', 'password'],
+      escalationLevel: 0,
+      source: 'web',
+    },
   ];
+
+  // Filter to show only Open tickets on dashboard
+  const myTickets = allTickets.filter((ticket) => ticket.status === 'Open');
 
   const notifications: TicketNotification[] = [
     {
@@ -188,19 +206,12 @@ const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ userId, userName 
 
   const handleTicketClick = (ticket: Ticket) => {
     setSelectedTicket(ticket);
+    setTicketDetailOpen(true);
   };
 
-  const handleCloseTicketDialog = () => {
+  const handleCloseTicketDetail = () => {
     setSelectedTicket(null);
-    setNewComment('');
-  };
-
-  const handleAddComment = () => {
-    if (newComment.trim()) {
-      // In production, this would make an API call
-      console.log('Adding comment:', newComment);
-      setNewComment('');
-    }
+    setTicketDetailOpen(false);
   };
 
   const getStatusColor = (status: string) => {
@@ -310,7 +321,7 @@ const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ userId, userName 
                 <Typography variant="h6">My Tickets</Typography>
               </Box>
               <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#1976d2' }}>
-                {myTickets.length}
+                {allTickets.length}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Total tickets created
@@ -344,7 +355,7 @@ const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ userId, userName 
                 <Typography variant="h6">Resolved</Typography>
               </Box>
               <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#4caf50' }}>
-                {myTickets.filter((t) => t.status === 'Resolved').length}
+                {allTickets.filter((t) => t.status === 'Resolved').length}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Resolved tickets
@@ -353,84 +364,13 @@ const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ userId, userName 
           </Card>
         </Grid>
 
-        {/* Announcements */}
-        <Grid item xs={12} md={6}>
-          <Card sx={{ height: '100%' }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Info sx={{ mr: 1 }} />
-                <Typography variant="h6">Announcements</Typography>
-              </Box>
-              <Box sx={{ maxHeight: 300, overflowY: 'auto' }}>
-                {announcements.map((announcement) => (
-                  <Alert
-                    key={announcement.id}
-                    severity={getAnnouncementColor(announcement.type)}
-                    sx={{ mb: 2 }}
-                    icon={getAnnouncementIcon(announcement.type)}
-                  >
-                    <AlertTitle>{announcement.title}</AlertTitle>
-                    {announcement.content}
-                  </Alert>
-                ))}
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Notifications */}
-        <Grid item xs={12} md={6}>
-          <Card sx={{ height: '100%' }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Notifications sx={{ mr: 1 }} />
-                <Typography variant="h6">Recent Notifications</Typography>
-                {unreadNotifications > 0 && (
-                  <Badge badgeContent={unreadNotifications} color="error" sx={{ ml: 1 }} />
-                )}
-              </Box>
-              <List sx={{ maxHeight: 300, overflowY: 'auto' }}>
-                {notifications.map((notification) => (
-                  <ListItem
-                    key={notification.id}
-                    sx={{
-                      backgroundColor: notification.isRead ? 'transparent' : '#f5f5f5',
-                      borderRadius: 1,
-                      mb: 1,
-                    }}
-                  >
-                    <ListItemIcon>
-                      <Avatar sx={{ bgcolor: notification.isRead ? '#9e9e9e' : '#1976d2' }}>
-                        <Notifications />
-                      </Avatar>
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={notification.title}
-                      secondary={
-                        <Box>
-                          <Typography variant="body2" color="text.secondary">
-                            {notification.message}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            {new Date(notification.createdAt).toLocaleDateString()}
-                          </Typography>
-                        </Box>
-                      }
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* My Tickets */}
+        {/* My Open Tickets */}
         <Grid item xs={12}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <ConfirmationNumber sx={{ mr: 1 }} />
-                <Typography variant="h6">My Tickets</Typography>
+                <Typography variant="h6">My Open Tickets</Typography>
               </Box>
               <Grid container spacing={2}>
                 {myTickets.map((ticket) => (
@@ -491,6 +431,77 @@ const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ userId, userName 
                   </Grid>
                 ))}
               </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Announcements */}
+        <Grid item xs={12} md={6}>
+          <Card sx={{ height: '100%' }}>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Info sx={{ mr: 1 }} />
+                <Typography variant="h6">Announcements</Typography>
+              </Box>
+              <Box sx={{ maxHeight: 300, overflowY: 'auto' }}>
+                {announcements.map((announcement) => (
+                  <Alert
+                    key={announcement.id}
+                    severity={getAnnouncementColor(announcement.type)}
+                    sx={{ mb: 2 }}
+                    icon={getAnnouncementIcon(announcement.type)}
+                  >
+                    <AlertTitle>{announcement.title}</AlertTitle>
+                    {announcement.content}
+                  </Alert>
+                ))}
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Recent Notifications */}
+        <Grid item xs={12} md={6}>
+          <Card sx={{ height: '100%' }}>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Notifications sx={{ mr: 1 }} />
+                <Typography variant="h6">Recent Notifications</Typography>
+                {unreadNotifications > 0 && (
+                  <Badge badgeContent={unreadNotifications} color="error" sx={{ ml: 1 }} />
+                )}
+              </Box>
+              <List sx={{ maxHeight: 300, overflowY: 'auto' }}>
+                {notifications.map((notification) => (
+                  <ListItem
+                    key={notification.id}
+                    sx={{
+                      backgroundColor: notification.isRead ? 'transparent' : '#f5f5f5',
+                      borderRadius: 1,
+                      mb: 1,
+                    }}
+                  >
+                    <ListItemIcon>
+                      <Avatar sx={{ bgcolor: notification.isRead ? '#9e9e9e' : '#1976d2' }}>
+                        <Notifications />
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={notification.title}
+                      secondary={
+                        <Box>
+                          <Typography variant="body2" color="text.secondary">
+                            {notification.message}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {new Date(notification.createdAt).toLocaleDateString()}
+                          </Typography>
+                        </Box>
+                      }
+                    />
+                  </ListItem>
+                ))}
+              </List>
             </CardContent>
           </Card>
         </Grid>
@@ -587,94 +598,14 @@ const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ userId, userName 
         </DialogActions>
       </Dialog>
 
-      {/* Ticket Detail Dialog */}
-      <Dialog open={!!selectedTicket} onClose={handleCloseTicketDialog} maxWidth="md" fullWidth>
-        {selectedTicket && (
-          <>
-            <DialogTitle>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography variant="h6">{selectedTicket.ticketNumber}</Typography>
-                <IconButton onClick={handleCloseTicketDialog}>
-                  <Close />
-                </IconButton>
-              </Box>
-            </DialogTitle>
-            <DialogContent>
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="h5" sx={{ mb: 1 }}>
-                  {selectedTicket.title}
-                </Typography>
-                <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-                  <Chip
-                    label={selectedTicket.status}
-                    sx={{
-                      backgroundColor: getStatusColor(selectedTicket.status) + '20',
-                      color: getStatusColor(selectedTicket.status),
-                    }}
-                  />
-                  <Chip
-                    label={selectedTicket.priority}
-                    sx={{
-                      backgroundColor: getPriorityColor(selectedTicket.priority) + '20',
-                      color: getPriorityColor(selectedTicket.priority),
-                    }}
-                  />
-                  <Chip label={selectedTicket.category} variant="outlined" />
-                </Box>
-                <Typography variant="body1" sx={{ mb: 2 }}>
-                  {selectedTicket.description}
-                </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                  <Typography variant="body2" color="text.secondary">
-                    Created: {new Date(selectedTicket.createdAt).toLocaleDateString()}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Assigned to: {selectedTicket.assignedToName || 'Unassigned'}
-                  </Typography>
-                </Box>
-              </Box>
-              <Divider sx={{ mb: 2 }} />
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="h6" sx={{ mb: 1 }}>
-                  Comments
-                </Typography>
-                <Box sx={{ maxHeight: 200, overflowY: 'auto', mb: 2 }}>
-                  {/* Mock comments - in production, this would come from API */}
-                  <Box sx={{ p: 2, bgcolor: '#f5f5f5', borderRadius: 1, mb: 1 }}>
-                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                      Alice Johnson (Agent)
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      I'm investigating the issue. Please try restarting your laptop and let me know
-                      if the problem persists.
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      2 hours ago
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  <TextField
-                    fullWidth
-                    placeholder="Add a comment..."
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    size="small"
-                  />
-                  <Button
-                    variant="contained"
-                    onClick={handleAddComment}
-                    disabled={!newComment.trim()}
-                    startIcon={<Send />}
-                  >
-                    Send
-                  </Button>
-                </Box>
-              </Box>
-            </DialogContent>
-          </>
-        )}
-      </Dialog>
+      {/* Ticket Detail Modal */}
+      <TicketDetailModal
+        ticket={selectedTicket}
+        open={ticketDetailOpen}
+        onClose={handleCloseTicketDetail}
+        userRole="Employee"
+        userId={userId}
+      />
     </Box>
   );
 };

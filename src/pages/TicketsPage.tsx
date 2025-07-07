@@ -8,13 +8,16 @@ import { fetchTickets, setFilters, clearFilters } from '../redux/ticketSlice';
 import { canViewTicket } from '../utils/permissions';
 import { TicketCard } from '../components/ticket/TicketCard';
 import { TicketFiltersComponent } from '../components/ticket/TicketFilters';
-import { TicketFilters } from '../types';
+import { TicketDetailModal } from '../components/ticket/TicketDetailModal';
+import { TicketFilters, Ticket } from '../types';
 
 export const TicketsPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAuth();
   const { tickets, isLoading, error, filters } = useAppSelector((state) => state.tickets);
+  const [selectedTicket, setSelectedTicket] = React.useState<Ticket | null>(null);
+  const [ticketDetailOpen, setTicketDetailOpen] = React.useState(false);
 
   React.useEffect(() => {
     dispatch(fetchTickets(filters));
@@ -28,8 +31,14 @@ export const TicketsPage: React.FC = () => {
     dispatch(clearFilters());
   };
 
-  const handleTicketClick = (ticket: any) => {
-    navigate(`/tickets/${ticket.id}`);
+  const handleTicketClick = (ticket: Ticket) => {
+    setSelectedTicket(ticket);
+    setTicketDetailOpen(true);
+  };
+
+  const handleCloseTicketDetail = () => {
+    setSelectedTicket(null);
+    setTicketDetailOpen(false);
   };
 
   const handleCreateTicket = () => {
@@ -114,6 +123,15 @@ export const TicketsPage: React.FC = () => {
       >
         <Add />
       </Fab>
+
+      {/* Ticket Detail Modal */}
+      <TicketDetailModal
+        ticket={selectedTicket}
+        open={ticketDetailOpen}
+        onClose={handleCloseTicketDetail}
+        userRole={user?.role}
+        userId={user?.id}
+      />
     </Box>
   );
 };
