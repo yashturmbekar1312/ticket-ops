@@ -1,7 +1,7 @@
 import {
   Ticket,
   TicketFormData,
-  Comment as TicketComment,
+  TicketComment,
   TicketFilters,
   PaginatedResponse,
   TicketAttachment,

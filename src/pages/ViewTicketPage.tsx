@@ -46,7 +46,7 @@ import { fetchTicket, updateTicket } from '../redux/ticketSlice';
 import { formatDistanceToNow } from 'date-fns';
 import { getStatusColor, getPriorityColor, canEditTicket } from '../utils/permissions';
 import { ticketService } from '../services/ticket';
-import { Comment as TicketComment, User, TicketStatus } from '../types';
+import { TicketComment, User, TicketStatus } from '../types';
 
 // Mock users for assignee selection
 const mockUsers: User[] = [
