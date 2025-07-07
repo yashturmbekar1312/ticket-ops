@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -18,11 +18,39 @@ import {
   Grid,
   Paper,
   Stack,
+  Menu,
+  MenuItem,
+  ListItemSecondaryAction,
+  Checkbox,
+  DialogActions,
+  Tooltip,
+  FormControlLabel,
 } from '@mui/material';
-import { Close, Send, Person, Schedule, Category, Assignment, Chat } from '@mui/icons-material';
-import { Ticket, TicketComment, UserRole } from '../../types';
-import { getStatusColor, getPriorityColor } from '../../utils/permissions';
+import {
+  Close,
+  Send,
+  Person,
+  Schedule,
+  Category,
+  Assignment,
+  Chat,
+  PersonAdd,
+  PersonRemove,
+  MoreVert,
+  Edit,
+  Update,
+  Flag,
+  CheckCircle,
+  Cancel,
+  PlayArrow,
+  Pause,
+  Stop,
+} from '@mui/icons-material';
+import { Ticket, TicketComment, UserRole, User, TicketStatus, TicketPriority } from '../../types';
+import { getStatusColor, getPriorityColor, canEditTicket } from '../../utils/permissions';
 import { formatDistanceToNow } from 'date-fns';
+import { useAppDispatch } from '../../hooks/redux';
+import { updateTicket } from '../../redux/ticketSlice';
 
 interface TicketDetailModalProps {
   ticket: Ticket | null;
@@ -31,6 +59,65 @@ interface TicketDetailModalProps {
   userRole?: UserRole;
   userId?: string;
 }
+
+// Mock users for assignee selection
+const mockUsers: User[] = [
+  {
+    id: '1',
+    email: 'admin@company.com',
+    name: 'IT Admin',
+    role: 'IT Admin',
+    department: 'IT',
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    avatar: '/avatars/admin.png',
+  },
+  {
+    id: '2',
+    email: 'manager@company.com',
+    name: 'Team Manager',
+    role: 'Manager',
+    department: 'Engineering',
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    avatar: '/avatars/manager.png',
+  },
+  {
+    id: '3',
+    email: 'hr@company.com',
+    name: 'HR Specialist',
+    role: 'HR',
+    department: 'Human Resources',
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    avatar: '/avatars/hr.png',
+  },
+  {
+    id: '4',
+    email: 'agent@company.com',
+    name: 'IT Agent',
+    role: 'IT Agent',
+    department: 'IT',
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    avatar: '/avatars/agent.png',
+  },
+  {
+    id: '5',
+    email: 'lead@company.com',
+    name: 'Team Lead',
+    role: 'Team Lead',
+    department: 'IT',
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    avatar: '/avatars/lead.png',
+  },
+];
 
 // Mock comments data
 const mockComments: TicketComment[] = [
@@ -76,26 +163,155 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
   ticket,
   open,
   onClose,
+  userRole,
+  userId,
 }) => {
+  const dispatch = useAppDispatch();
   const [newComment, setNewComment] = useState('');
+  const [isInternalComment, setIsInternalComment] = useState(false);
   const [comments] = useState<TicketComment[]>(mockComments);
+  const [assigneeMenuAnchor, setAssigneeMenuAnchor] = useState<null | HTMLElement>(null);
+  const [assigneeDialogOpen, setAssigneeDialogOpen] = useState(false);
+  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
+  const [statusMenuAnchor, setStatusMenuAnchor] = useState<null | HTMLElement>(null);
+  const [priorityMenuAnchor, setPriorityMenuAnchor] = useState<null | HTMLElement>(null);
+
+  // Set initial assignee selection
+  useEffect(() => {
+    if (ticket?.assignedTo) {
+      setSelectedAssignees([ticket.assignedTo]);
+    }
+  }, [ticket?.assignedTo]);
 
   const handleAddComment = () => {
     if (newComment.trim()) {
       // In production, this would make an API call
       console.log('Adding comment:', newComment);
       setNewComment('');
+      setIsInternalComment(false);
+    }
+  };
+
+  const handleAssigneeChange = async (assigneeIds: string[]) => {
+    if (!ticket?.id) return;
+
+    try {
+      const assignedTo = assigneeIds.length > 0 ? assigneeIds[0] : undefined;
+      const assignedToName = assignedTo
+        ? mockUsers.find((u) => u.id === assignedTo)?.name
+        : undefined;
+
+      await dispatch(
+        updateTicket({
+          id: ticket.id,
+          updates: {
+            assignedTo,
+            assignedToName,
+          },
+        })
+      ).unwrap();
+
+      setSelectedAssignees(assigneeIds);
+      setAssigneeDialogOpen(false);
+    } catch (err) {
+      console.error('Failed to update assignee:', err);
+    }
+  };
+
+  const handleRemoveAssignee = async () => {
+    if (!ticket?.id) return;
+
+    try {
+      await dispatch(
+        updateTicket({
+          id: ticket.id,
+          updates: {
+            assignedTo: undefined,
+            assignedToName: undefined,
+          },
+        })
+      ).unwrap();
+
+      setSelectedAssignees([]);
+      setAssigneeMenuAnchor(null);
+    } catch (err) {
+      console.error('Failed to remove assignee:', err);
+    }
+  };
+
+  const handleStatusChange = async (newStatus: TicketStatus) => {
+    if (!ticket?.id) return;
+
+    try {
+      await dispatch(
+        updateTicket({
+          id: ticket.id,
+          updates: {
+            status: newStatus,
+          },
+        })
+      ).unwrap();
+      setStatusMenuAnchor(null);
+    } catch (err) {
+      console.error('Failed to update status:', err);
+    }
+  };
+
+  const handlePriorityChange = async (newPriority: TicketPriority) => {
+    if (!ticket?.id) return;
+
+    try {
+      await dispatch(
+        updateTicket({
+          id: ticket.id,
+          updates: {
+            priority: newPriority,
+          },
+        })
+      ).unwrap();
+      setPriorityMenuAnchor(null);
+    } catch (err) {
+      console.error('Failed to update priority:', err);
     }
   };
 
   const handleClose = () => {
     setNewComment('');
+    setIsInternalComment(false);
+    setAssigneeMenuAnchor(null);
+    setAssigneeDialogOpen(false);
+    setStatusMenuAnchor(null);
+    setPriorityMenuAnchor(null);
     onClose();
   };
 
   if (!ticket) return null;
 
   const ticketComments = comments.filter((comment) => comment.ticketId === ticket.id);
+  const canEdit = userRole && userId ? canEditTicket(userRole, ticket, userId) : false;
+
+  const getStatusIcon = (status: TicketStatus) => {
+    switch (status) {
+      case 'Open':
+      case 'New':
+        return <PlayArrow />;
+      case 'In Progress':
+        return <Update />;
+      case 'Resolved':
+        return <CheckCircle />;
+      case 'Closed':
+        return <Stop />;
+      case 'Pending':
+        return <Pause />;
+      case 'Cancelled':
+        return <Cancel />;
+      default:
+        return <Assignment />;
+    }
+  };
+
+  const statusOptions: TicketStatus[] = ['Open', 'In Progress', 'Pending', 'Resolved', 'Closed'];
+  const priorityOptions: TicketPriority[] = ['Low', 'Medium', 'High', 'Critical', 'Urgent'];
 
   return (
     <Dialog
@@ -117,9 +333,18 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
               Created {formatDistanceToNow(new Date(ticket.createdAt), { addSuffix: true })}
             </Typography>
           </Box>
-          <IconButton onClick={handleClose}>
-            <Close />
-          </IconButton>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            {canEdit && (
+              <Tooltip title="Edit Ticket">
+                <IconButton size="small">
+                  <Edit />
+                </IconButton>
+              </Tooltip>
+            )}
+            <IconButton onClick={handleClose}>
+              <Close />
+            </IconButton>
+          </Box>
         </Box>
       </DialogTitle>
 
@@ -129,23 +354,49 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
             {ticket.title}
           </Typography>
 
-          <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-            <Chip
-              label={ticket.status}
-              sx={{
-                backgroundColor: getStatusColor(ticket.status),
-                color: 'white',
-                fontWeight: 'bold',
-              }}
-            />
-            <Chip
-              label={ticket.priority}
-              sx={{
-                backgroundColor: getPriorityColor(ticket.priority),
-                color: 'white',
-                fontWeight: 'bold',
-              }}
-            />
+          <Stack direction="row" spacing={1} sx={{ mb: 2, flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <Chip
+                label={ticket.status}
+                icon={getStatusIcon(ticket.status)}
+                sx={{
+                  backgroundColor: getStatusColor(ticket.status),
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+                onClick={canEdit ? (e) => setStatusMenuAnchor(e.currentTarget) : undefined}
+                clickable={canEdit}
+              />
+              {canEdit && (
+                <Tooltip title="Change Status">
+                  <IconButton size="small" onClick={(e) => setStatusMenuAnchor(e.currentTarget)}>
+                    <Update />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </Box>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <Chip
+                label={ticket.priority}
+                icon={<Flag />}
+                sx={{
+                  backgroundColor: getPriorityColor(ticket.priority),
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+                onClick={canEdit ? (e) => setPriorityMenuAnchor(e.currentTarget) : undefined}
+                clickable={canEdit}
+              />
+              {canEdit && (
+                <Tooltip title="Change Priority">
+                  <IconButton size="small" onClick={(e) => setPriorityMenuAnchor(e.currentTarget)}>
+                    <Flag />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </Box>
+
             <Chip label={ticket.category} variant="outlined" />
           </Stack>
 
@@ -167,8 +418,37 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                   <Assignment sx={{ mr: 1, color: 'text.secondary', fontSize: 20 }} />
                   <Typography variant="body2" color="text.secondary">
-                    Assigned to: {ticket.assignedToName || 'Unassigned'}
+                    Assigned to:
                   </Typography>
+                  {ticket.assignedTo && ticket.assignedToName ? (
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 1 }}>
+                      <Avatar sx={{ width: 24, height: 24, bgcolor: 'primary.main' }}>
+                        {ticket.assignedToName.charAt(0)}
+                      </Avatar>
+                      <Typography variant="body2">{ticket.assignedToName}</Typography>
+                      {canEdit && (
+                        <IconButton
+                          size="small"
+                          onClick={(e) => setAssigneeMenuAnchor(e.currentTarget)}
+                        >
+                          <MoreVert />
+                        </IconButton>
+                      )}
+                    </Box>
+                  ) : (
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 1 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        Unassigned
+                      </Typography>
+                      {canEdit && (
+                        <Tooltip title="Assign ticket">
+                          <IconButton size="small" onClick={() => setAssigneeDialogOpen(true)}>
+                            <PersonAdd />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </Box>
+                  )}
                 </Box>
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -208,6 +488,44 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
                 ))}
               </Stack>
             </Box>
+          )}
+
+          {/* Quick Actions for Authorized Users */}
+          {canEdit && (
+            <Paper variant="outlined" sx={{ p: 2, mb: 3, bgcolor: 'action.hover' }}>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                Quick Actions:
+              </Typography>
+              <Stack direction="row" spacing={1} flexWrap="wrap">
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={<PersonAdd />}
+                  onClick={() => setAssigneeDialogOpen(true)}
+                >
+                  {ticket.assignedTo ? 'Change Assignee' : 'Assign Ticket'}
+                </Button>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={<Update />}
+                  onClick={(e) => setStatusMenuAnchor(e.currentTarget)}
+                >
+                  Update Status
+                </Button>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={<Flag />}
+                  onClick={(e) => setPriorityMenuAnchor(e.currentTarget)}
+                >
+                  Change Priority
+                </Button>
+                <Button size="small" variant="outlined" startIcon={<Edit />}>
+                  Edit Details
+                </Button>
+              </Stack>
+            </Paper>
           )}
         </Box>
 
@@ -251,6 +569,15 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
                             variant="outlined"
                             sx={{ fontSize: '0.7rem' }}
                           />
+                          {comment.isInternal && (
+                            <Chip
+                              label="Internal"
+                              size="small"
+                              color="warning"
+                              variant="outlined"
+                              sx={{ fontSize: '0.7rem' }}
+                            />
+                          )}
                         </Box>
                       }
                       secondary={
@@ -270,7 +597,7 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
             )}
           </Box>
 
-          <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-end' }}>
+          <Box>
             <TextField
               fullWidth
               placeholder="Add a comment..."
@@ -279,6 +606,7 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
               multiline
               maxRows={3}
               size="small"
+              sx={{ mb: 2 }}
               onKeyPress={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
@@ -286,18 +614,140 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
                 }
               }}
             />
-            <Button
-              variant="contained"
-              onClick={handleAddComment}
-              disabled={!newComment.trim()}
-              startIcon={<Send />}
-              sx={{ minWidth: 'auto', px: 2 }}
-            >
-              Send
-            </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isInternalComment}
+                    onChange={(e) => setIsInternalComment(e.target.checked)}
+                  />
+                }
+                label="Internal comment (only visible to staff)"
+              />
+              <Button
+                variant="contained"
+                onClick={handleAddComment}
+                disabled={!newComment.trim()}
+                startIcon={<Send />}
+                sx={{ minWidth: 'auto', px: 2 }}
+              >
+                Send
+              </Button>
+            </Box>
           </Box>
         </Box>
       </DialogContent>
+
+      {/* Status Menu */}
+      <Menu
+        anchorEl={statusMenuAnchor}
+        open={Boolean(statusMenuAnchor)}
+        onClose={() => setStatusMenuAnchor(null)}
+      >
+        {statusOptions.map((status) => (
+          <MenuItem
+            key={status}
+            onClick={() => handleStatusChange(status)}
+            selected={ticket.status === status}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              {getStatusIcon(status)}
+              {status}
+            </Box>
+          </MenuItem>
+        ))}
+      </Menu>
+
+      {/* Priority Menu */}
+      <Menu
+        anchorEl={priorityMenuAnchor}
+        open={Boolean(priorityMenuAnchor)}
+        onClose={() => setPriorityMenuAnchor(null)}
+      >
+        {priorityOptions.map((priority) => (
+          <MenuItem
+            key={priority}
+            onClick={() => handlePriorityChange(priority)}
+            selected={ticket.priority === priority}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Flag sx={{ color: getPriorityColor(priority) }} />
+              {priority}
+            </Box>
+          </MenuItem>
+        ))}
+      </Menu>
+
+      {/* Assignee Menu */}
+      <Menu
+        anchorEl={assigneeMenuAnchor}
+        open={Boolean(assigneeMenuAnchor)}
+        onClose={() => setAssigneeMenuAnchor(null)}
+      >
+        <MenuItem
+          onClick={() => {
+            setAssigneeDialogOpen(true);
+            setAssigneeMenuAnchor(null);
+          }}
+        >
+          <PersonAdd sx={{ mr: 1 }} />
+          Change Assignee
+        </MenuItem>
+        <MenuItem onClick={handleRemoveAssignee}>
+          <PersonRemove sx={{ mr: 1 }} />
+          Remove Assignee
+        </MenuItem>
+      </Menu>
+
+      {/* Assignee Dialog */}
+      <Dialog
+        open={assigneeDialogOpen}
+        onClose={() => setAssigneeDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>{ticket.assignedTo ? 'Change Assignee' : 'Assign Ticket'}</DialogTitle>
+        <DialogContent>
+          <List>
+            {mockUsers.map((user) => (
+              <ListItem
+                key={user.id}
+                button
+                onClick={() => {
+                  handleAssigneeChange([user.id]);
+                }}
+              >
+                <ListItemAvatar>
+                  <Avatar sx={{ bgcolor: 'primary.main' }}>{user.name.charAt(0)}</Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={user.name} secondary={`${user.role} • ${user.department}`} />
+                <ListItemSecondaryAction>
+                  <Checkbox
+                    checked={selectedAssignees.includes(user.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedAssignees([user.id]);
+                      } else {
+                        setSelectedAssignees([]);
+                      }
+                    }}
+                  />
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setAssigneeDialogOpen(false)}>Cancel</Button>
+          <Button
+            onClick={() => handleAssigneeChange(selectedAssignees)}
+            variant="contained"
+            disabled={selectedAssignees.length === 0}
+          >
+            Assign
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Dialog>
   );
 };
