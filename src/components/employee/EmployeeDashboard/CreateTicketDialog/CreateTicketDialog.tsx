@@ -47,13 +47,7 @@ const CreateTicketDialog: React.FC<CreateTicketDialogProps> = ({
   const isSubmitDisabled = !ticketData.title || !ticketData.category || !ticketData.description;
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="md"
-      fullWidth
-      className="create-ticket-dialog"
-    >
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth className="create-ticket-dialog">
       <DialogTitle className="dialog-title">Create New Ticket</DialogTitle>
       <DialogContent className="dialog-content">
         <Box className="dialog-form">
@@ -124,11 +118,7 @@ const CreateTicketDialog: React.FC<CreateTicketDialogProps> = ({
             className="form-field"
             required
           />
-          <Button
-            variant="outlined"
-            startIcon={<AttachFile />}
-            className="attach-button"
-          >
+          <Button variant="outlined" startIcon={<AttachFile />} className="attach-button">
             Attach Files
           </Button>
         </Box>

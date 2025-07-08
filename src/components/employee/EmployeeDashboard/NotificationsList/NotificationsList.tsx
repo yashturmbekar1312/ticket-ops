@@ -29,7 +29,11 @@ const NotificationsList: React.FC<NotificationsListProps> = ({ notifications }) 
           <Notifications className="notifications-icon" />
           <Typography variant="h6">Recent Notifications</Typography>
           {unreadNotifications > 0 && (
-            <Badge badgeContent={unreadNotifications} color="error" className="notifications-badge" />
+            <Badge
+              badgeContent={unreadNotifications}
+              color="error"
+              className="notifications-badge"
+            />
           )}
         </Box>
         <List className="notifications-list">
@@ -39,7 +43,9 @@ const NotificationsList: React.FC<NotificationsListProps> = ({ notifications }) 
               className={`notification-item ${notification.isRead ? 'read' : 'unread'}`}
             >
               <ListItemIcon>
-                <Avatar className={`notification-avatar ${notification.isRead ? 'read' : 'unread'}`}>
+                <Avatar
+                  className={`notification-avatar ${notification.isRead ? 'read' : 'unread'}`}
+                >
                   <Notifications />
                 </Avatar>
               </ListItemIcon>

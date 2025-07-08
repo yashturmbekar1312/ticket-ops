@@ -59,18 +59,18 @@
   .employee-dashboard {
     padding: 16px;
   }
-  
+
   .dashboard-header {
     flex-direction: column;
     gap: 16px;
     align-items: stretch;
   }
-  
+
   .dashboard-title {
     font-size: 1.75rem;
     text-align: center;
   }
-  
+
   .create-ticket-button {
     width: 100%;
     justify-content: center;
@@ -81,11 +81,11 @@
   .employee-dashboard {
     padding: 12px;
   }
-  
+
   .dashboard-title {
     font-size: 1.5rem;
   }
-  
+
   .create-ticket-button {
     padding: 10px 20px;
     font-size: 0.9rem;

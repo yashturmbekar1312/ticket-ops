@@ -48,5 +48,7 @@
 }
 
 .notification-provider .MuiSnackbar-root.MuiSnackbar-anchorOriginTopRight.MuiSnackbar-root {
-  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  transition:
+    transform 0.3s ease-out,
+    opacity 0.3s ease-out;
 }

@@ -1,9 +1,6 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { TicketNotification } from '../../../../types';
-import {
-  NotificationContext,
-  NotificationContextType,
-} from '../../../../hooks/useNotifications';
+import { NotificationContext, NotificationContextType } from '../../../../hooks/useNotifications';
 import NotificationSnackbar from '../NotificationSnackbar';
 import './NotificationProvider.css';
 

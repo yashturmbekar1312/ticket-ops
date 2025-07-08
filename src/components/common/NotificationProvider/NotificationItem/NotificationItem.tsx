@@ -70,9 +70,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
         primary={
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography variant="subtitle2">{notification.title}</Typography>
-            {!notification.isRead && (
-              <Chip label="New" color="primary" size="small" />
-            )}
+            {!notification.isRead && <Chip label="New" color="primary" size="small" />}
           </Box>
         }
         secondary={
@@ -88,11 +86,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           </Box>
         }
       />
-      <IconButton
-        onClick={handleDelete}
-        size="small"
-        className="notification-item-delete"
-      >
+      <IconButton onClick={handleDelete} size="small" className="notification-item-delete">
         <DeleteIcon />
       </IconButton>
     </ListItem>

@@ -53,10 +53,18 @@
   animation: fadeInUp 0.3s ease-out;
 }
 
-.announcement-item:nth-child(1) { animation-delay: 0.1s; }
-.announcement-item:nth-child(2) { animation-delay: 0.2s; }
-.announcement-item:nth-child(3) { animation-delay: 0.3s; }
-.announcement-item:nth-child(4) { animation-delay: 0.4s; }
+.announcement-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.announcement-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.announcement-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.announcement-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
 
 /* Scrollbar styling */
 .announcements-list::-webkit-scrollbar {
@@ -82,7 +90,7 @@
   .announcements-list {
     max-height: 250px;
   }
-  
+
   .announcement-item {
     margin-bottom: 12px;
   }

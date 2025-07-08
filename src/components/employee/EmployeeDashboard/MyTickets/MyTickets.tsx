@@ -75,10 +75,7 @@ const MyTickets: React.FC<MyTicketsProps> = ({ tickets, onTicketClick }) => {
         <Grid container spacing={2}>
           {tickets.map((ticket) => (
             <Grid item xs={12} md={6} lg={4} key={ticket.id}>
-              <Card
-                className="ticket-card"
-                onClick={() => onTicketClick(ticket)}
-              >
+              <Card className="ticket-card" onClick={() => onTicketClick(ticket)}>
                 <CardContent>
                   <Box className="ticket-header">
                     {getStatusIcon(ticket.status)}

@@ -78,24 +78,36 @@
 }
 
 /* Stagger animation for multiple cards */
-.ticket-card:nth-child(1) { animation-delay: 0.1s; }
-.ticket-card:nth-child(2) { animation-delay: 0.2s; }
-.ticket-card:nth-child(3) { animation-delay: 0.3s; }
-.ticket-card:nth-child(4) { animation-delay: 0.4s; }
-.ticket-card:nth-child(5) { animation-delay: 0.5s; }
-.ticket-card:nth-child(6) { animation-delay: 0.6s; }
+.ticket-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.ticket-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.ticket-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.ticket-card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.ticket-card:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.ticket-card:nth-child(6) {
+  animation-delay: 0.6s;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
   .ticket-header {
     flex-wrap: wrap;
   }
-  
+
   .priority-chip {
     margin-left: 0;
     margin-top: 8px;
   }
-  
+
   .ticket-description {
     margin-bottom: 12px;
   }
