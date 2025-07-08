@@ -1,30 +1,30 @@
 .sidebar-user-info {
-  padding: 24px;
-  background-color: #f8fafc;
-  border-bottom: 1px solid #e5e7eb;
+  padding: var(--redfish-spacing-lg);
+  background-color: var(--redfish-bg-accent);
+  border-bottom: 1px solid var(--redfish-border-light);
 }
 
 .sidebar-user-content {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--redfish-spacing-md);
 }
 
 .sidebar-user-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  border-radius: var(--redfish-radius-md);
+  background: linear-gradient(135deg, var(--redfish-bg-primary) 0%, var(--redfish-gray-50) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px var(--redfish-shadow-light);
+  border: 1px solid var(--redfish-border-light);
 }
 
 .sidebar-user-avatar-text {
   font-weight: 600;
-  color: #6366f1;
+  color: var(--redfish-primary);
   font-size: 1rem;
 }
 
@@ -35,7 +35,7 @@
 
 .sidebar-user-name {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--redfish-text-primary);
   font-size: 0.875rem;
   line-height: 1.3;
   white-space: nowrap;
@@ -46,15 +46,15 @@
 .sidebar-user-role-container {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 4px;
+  gap: var(--redfish-spacing-sm);
+  margin-top: var(--redfish-spacing-xs);
 }
 
 .sidebar-user-role {
   padding: 2px 12px;
   border-radius: 6px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--redfish-primary) 0%, var(--redfish-primary-dark) 100%);
+  color: var(--redfish-text-inverse);
   font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;

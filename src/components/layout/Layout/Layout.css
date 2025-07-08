@@ -1,20 +1,21 @@
 .layout-container {
   display: flex;
   min-height: 100vh;
+  background-color: var(--redfish-bg-secondary);
 }
 
 .layout-main {
   flex-grow: 1;
-  padding: 32px;
+  padding: var(--redfish-spacing-xl);
   width: calc(100% - 280px);
   min-height: 100vh;
-  background-color: #f8fafc;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  transition: all 0.3s ease-in-out;
+  background-color: var(--redfish-bg-secondary);
+  background: linear-gradient(135deg, var(--redfish-bg-secondary) 0%, var(--redfish-gray-100) 100%);
+  transition: var(--redfish-transition-slow);
 }
 
 .layout-toolbar {
-  margin-bottom: 16px;
+  margin-bottom: var(--redfish-spacing-md);
 }
 
 .layout-content {
@@ -27,7 +28,7 @@
 @media (max-width: 900px) {
   .layout-main {
     width: 100%;
-    padding: 16px;
+    padding: var(--redfish-spacing-md);
   }
 
   .layout-content {
@@ -37,7 +38,7 @@
 
 @media (max-width: 600px) {
   .layout-main {
-    padding: 8px;
+    padding: var(--redfish-spacing-sm);
   }
 
   .layout-content {

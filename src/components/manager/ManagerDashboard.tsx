@@ -268,7 +268,7 @@ const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ userId, userName, d
       case 'High':
         return '#f57c00';
       case 'Medium':
-        return '#1976d2';
+        return '#ff5d5d';
       case 'Low':
         return '#388e3c';
       default:

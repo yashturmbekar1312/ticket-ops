@@ -1,15 +1,15 @@
 .sidebar-navigation {
-  padding: 16px;
-  padding-top: 8px;
+  padding: var(--redfish-spacing-md);
+  padding-top: var(--redfish-spacing-sm);
 }
 
 .sidebar-navigation-title {
-  color: #6b7280;
+  color: var(--redfish-text-secondary);
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  padding: 0 16px;
-  margin-bottom: 8px;
+  padding: 0 var(--redfish-spacing-md);
+  margin-bottom: var(--redfish-spacing-sm);
   display: block;
 }
 
@@ -18,77 +18,76 @@
 }
 
 .sidebar-navigation-item {
-  margin-bottom: 4px;
+  margin-bottom: var(--redfish-spacing-xs);
 }
 
 .sidebar-navigation-button {
-  border-radius: 16px;
-  margin: 0 8px;
-  padding: 16px;
+  border-radius: var(--redfish-radius-xl);
+  margin: 0 var(--redfish-spacing-sm);
+  padding: var(--redfish-spacing-md);
   min-height: 48px;
-  transition: all 0.2s ease-in-out;
+  transition: var(--redfish-transition-normal);
 }
 
 .sidebar-navigation-button:hover {
-  background-color: #f8fafc;
+  background-color: var(--redfish-bg-hover);
   transform: translateX(4px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px var(--redfish-shadow-light);
 }
 
 .sidebar-navigation-button.Mui-selected {
-  background-color: #ede9fe;
-  background: linear-gradient(135deg, #ede9fe 0%, #f3f4f6 100%);
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+  background-color: var(--redfish-bg-selected);
+  background: linear-gradient(135deg, var(--redfish-bg-selected) 0%, var(--redfish-bg-accent) 100%);
+  box-shadow: 0 2px 8px var(--redfish-shadow-primary);
 }
 
 .sidebar-navigation-button.Mui-selected:hover {
-  background-color: #ddd6fe;
+  background-color: var(--redfish-bg-hover);
   transform: translateX(4px);
 }
 
 .sidebar-navigation-button.Mui-selected .sidebar-navigation-icon {
-  color: #6366f1;
+  color: var(--redfish-primary);
 }
-
 .sidebar-navigation-button.Mui-selected .sidebar-navigation-text .MuiListItemText-primary {
-  color: #4f46e5;
+  color: var(--redfish-primary-dark);
   font-weight: 600;
 }
 
 .sidebar-navigation-icon {
   min-width: 44px;
-  color: #6b7280;
-  transition: all 0.2s ease-in-out;
+  color: var(--redfish-text-secondary);
+  transition: var(--redfish-transition-normal);
 }
 
 .sidebar-navigation-text .MuiListItemText-primary {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: var(--redfish-text-primary);
 }
 
-/* Admin style variant */
+/* Admin style variant using Redfish theme */
 .sidebar-navigation-button.admin-style:hover {
-  background-color: #fef2f2;
+  background-color: var(--redfish-bg-hover);
 }
 
 .sidebar-navigation-button.admin-style.Mui-selected {
-  background-color: #fef2f2;
-  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.1);
+  background-color: var(--redfish-bg-selected);
+  background: linear-gradient(135deg, var(--redfish-bg-selected) 0%, var(--redfish-bg-accent) 100%);
+  box-shadow: 0 2px 8px var(--redfish-shadow-primary);
 }
 
 .sidebar-navigation-button.admin-style.Mui-selected:hover {
-  background-color: #fee2e2;
+  background-color: var(--redfish-bg-hover);
 }
 
 .sidebar-navigation-button.admin-style.Mui-selected .sidebar-navigation-icon {
-  color: #dc2626;
+  color: var(--redfish-primary);
 }
 
 .sidebar-navigation-button.admin-style.Mui-selected
   .sidebar-navigation-text
   .MuiListItemText-primary {
-  color: #dc2626;
+  color: var(--redfish-primary);
   font-weight: 600;
 }

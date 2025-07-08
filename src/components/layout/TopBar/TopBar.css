@@ -1,18 +1,23 @@
 .topbar {
-  z-index: 1201; /* Above drawer */
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.95) 0%, rgba(139, 92, 246, 0.95) 100%);
+  z-index: var(--redfish-z-modal); /* Above drawer */
+  background: linear-gradient(
+    135deg,
+    var(--redfish-primary-transparent) 0%,
+    var(--redfish-primary-transparent-light) 100%
+  );
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.2);
+  border-bottom: 1px solid var(--redfish-border-inverse);
+  box-shadow: 0 8px 32px 0 var(--redfish-shadow-primary);
 }
 
 .topbar-toolbar {
   min-height: 72px;
-  padding: 0 24px;
+  padding: 0 var(--redfish-spacing-lg);
 }
 
 .topbar-menu-button {
-  transition: all 0.2s ease-in-out;
+  transition: var(--redfish-transition-normal);
+  color: var(--redfish-text-inverse);
 }
 
 .topbar-spacer {
@@ -22,22 +27,22 @@
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--redfish-spacing-md);
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
   .topbar-toolbar {
-    padding: 0 16px;
+    padding: 0 var(--redfish-spacing-md);
   }
 }
 
 @media (max-width: 480px) {
   .topbar-toolbar {
-    padding: 0 8px;
+    padding: 0 var(--redfish-spacing-sm);
   }
 
   .topbar-right {
-    gap: 8px;
+    gap: var(--redfish-spacing-sm);
   }
 }

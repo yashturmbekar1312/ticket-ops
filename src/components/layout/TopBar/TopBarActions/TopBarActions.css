@@ -1,15 +1,18 @@
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--redfish-spacing-lg);
 }
 
 .topbar-action-button {
-  transition: all 0.2s ease-in-out;
+  transition: var(--redfish-transition-normal);
+  color: var(--redfish-text-inverse);
 }
 
 .topbar-action-button:hover {
   transform: scale(1.05);
+  background-color: var(--redfish-bg-hover);
+  border-radius: var(--redfish-radius-md);
 }
 
 .topbar-notifications {

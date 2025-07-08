@@ -1,20 +1,23 @@
 .notification-item {
   cursor: pointer;
-  padding: 12px 16px;
-  transition: background-color 0.2s ease;
+  padding: var(--redfish-spacing-sm) var(--redfish-spacing-md);
+  transition: var(--redfish-transition-normal);
+  border-radius: var(--redfish-radius-sm);
+  margin: var(--redfish-spacing-xs);
 }
 
 .notification-item.unread {
-  background-color: var(--mui-palette-action-hover);
+  background-color: var(--redfish-bg-selected);
 }
 
 .notification-item:hover {
-  background-color: var(--mui-palette-action-selected);
+  background-color: var(--redfish-bg-hover);
 }
 
 .notification-item-delete {
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: var(--redfish-transition-normal);
+  color: var(--redfish-text-secondary);
 }
 
 .notification-item:hover .notification-item-delete {
@@ -22,18 +25,25 @@
 }
 
 .notification-item .MuiAvatar-root {
-  background-color: var(--mui-palette-primary-main);
+  background-color: var(--redfish-primary);
+  width: 32px;
+  height: 32px;
 }
 
 .notification-item .MuiChip-root {
   height: 20px;
   font-size: 0.75rem;
+  background-color: var(--redfish-badge-bg);
+  color: var(--redfish-badge-text);
+  border-radius: var(--redfish-radius-xl);
 }
 
 .notification-item .MuiListItemText-primary {
-  margin-bottom: 4px;
+  margin-bottom: var(--redfish-spacing-xs);
+  color: var(--redfish-text-primary);
 }
 
 .notification-item .MuiListItemText-secondary {
-  margin-top: 4px;
+  margin-top: var(--redfish-spacing-xs);
+  color: var(--redfish-text-secondary);
 }

@@ -1,16 +1,19 @@
 .announcements-card {
   height: 100%;
+  background-color: var(--redfish-card-bg);
+  border-radius: var(--redfish-radius-lg);
+  box-shadow: 0 2px 4px var(--redfish-card-shadow);
 }
 
 .announcements-header {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: var(--redfish-spacing-md);
 }
 
 .announcements-icon {
-  margin-right: 8px;
-  color: #1976d2;
+  margin-right: var(--redfish-spacing-sm);
+  color: var(--redfish-primary);
 }
 
 .announcements-list {
@@ -19,9 +22,9 @@
 }
 
 .announcement-item {
-  margin-bottom: 16px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: var(--redfish-spacing-md);
+  border-radius: var(--redfish-radius-md);
+  box-shadow: 0 2px 4px var(--redfish-shadow-light);
 }
 
 .announcement-item:last-child {
@@ -30,11 +33,12 @@
 
 .announcement-item .MuiAlert-message {
   padding: 0;
+  color: var(--redfish-text-primary);
 }
 
 .announcement-item .MuiAlertTitle-root {
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: var(--redfish-spacing-xs);
 }
 
 /* Animation */
@@ -72,17 +76,17 @@
 }
 
 .announcements-list::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--redfish-gray-100);
   border-radius: 3px;
 }
 
 .announcements-list::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: var(--redfish-gray-400);
   border-radius: 3px;
 }
 
 .announcements-list::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: var(--redfish-gray-500);
 }
 
 /* Responsive */
@@ -92,6 +96,6 @@
   }
 
   .announcement-item {
-    margin-bottom: 12px;
+    margin-bottom: var(--redfish-spacing-sm);
   }
 }

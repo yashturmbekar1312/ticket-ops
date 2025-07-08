@@ -1,11 +1,14 @@
 .topbar-user-menu {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--redfish-spacing-lg);
 }
 
 .topbar-user-role-chip {
-  transition: all 0.2s ease-in-out;
+  transition: var(--redfish-transition-normal);
+  background-color: var(--redfish-bg-accent);
+  color: var(--redfish-text-primary);
+  border: 1px solid var(--redfish-border-light);
 }
 
 .topbar-user-avatar-container {
@@ -13,66 +16,73 @@
 }
 
 .topbar-user-avatar-button {
-  transition: all 0.2s ease-in-out;
+  transition: var(--redfish-transition-normal);
 }
 
 .topbar-user-avatar {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  color: #6366f1;
+  background: linear-gradient(
+    135deg,
+    var(--redfish-bg-primary) 0%,
+    var(--redfish-bg-secondary) 100%
+  );
+  color: var(--redfish-primary);
   font-weight: 700;
   font-size: 1.1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px var(--redfish-shadow-light);
+  border: 2px solid var(--redfish-border-inverse);
 }
 
 .topbar-user-menu-dropdown .MuiPaper-root {
-  border-radius: 16px;
+  border-radius: var(--redfish-radius-xl);
   min-width: 220px;
   box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  margin-top: 8px;
+    0 20px 25px -5px var(--redfish-shadow-medium),
+    0 10px 10px -5px var(--redfish-shadow-light);
+  border: 1px solid var(--redfish-border-light);
+  margin-top: var(--redfish-spacing-sm);
+  background-color: var(--redfish-bg-primary);
 }
 
 .topbar-user-info {
-  padding: 16px;
+  padding: var(--redfish-spacing-lg);
+  border-bottom: 1px solid var(--redfish-border-light);
 }
 
 .topbar-user-name {
   font-weight: 600;
-  color: #374151;
+  color: var(--redfish-text-primary);
 }
 
 .topbar-user-email {
-  color: #6b7280;
+  color: var(--redfish-text-secondary);
   font-size: 0.75rem;
 }
 
 .topbar-menu-item {
-  padding: 12px 16px;
-  transition: all 0.2s ease-in-out;
+  padding: var(--redfish-spacing-md) var(--redfish-spacing-lg);
+  transition: var(--redfish-transition-normal);
 }
 
 .topbar-menu-item:hover {
-  background-color: #f8fafc;
+  background-color: var(--redfish-bg-hover);
 }
 
 .topbar-menu-item.logout {
-  color: #ef4444;
+  color: var(--redfish-error);
 }
 
 .topbar-menu-item.logout:hover {
-  background-color: #fef2f2;
+  background-color: var(--redfish-error-light);
+  background: linear-gradient(135deg, var(--redfish-error-light) 0%, var(--redfish-error-bg) 100%);
 }
 
 .topbar-menu-icon {
-  margin-right: 16px;
-  color: #6b7280;
+  margin-right: var(--redfish-spacing-lg);
+  color: var(--redfish-text-secondary);
 }
 
 .topbar-menu-icon.logout-icon {
-  color: #ef4444;
+  color: var(--redfish-error);
 }

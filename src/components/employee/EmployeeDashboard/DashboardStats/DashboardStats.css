@@ -1,45 +1,45 @@
 .dashboard-stats {
-  margin-bottom: 24px;
+  margin-bottom: var(--redfish-spacing-lg);
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: var(--redfish-spacing-md);
 }
 
 .stat-icon {
-  margin-right: 8px;
+  margin-right: var(--redfish-spacing-sm);
   font-size: 24px;
 }
 
 .stat-icon.tickets-icon {
-  color: #1976d2;
+  color: var(--redfish-primary);
 }
 
 .stat-icon.notifications-icon {
-  color: #ff9800;
+  color: var(--redfish-warning);
 }
 
 .stat-icon.resolved-icon {
-  color: #4caf50;
+  color: var(--redfish-success);
 }
 
 .stat-value {
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: var(--redfish-spacing-sm);
 }
 
 .stat-value.tickets-value {
-  color: #1976d2;
+  color: var(--redfish-primary);
 }
 
 .stat-value.notifications-value {
-  color: #ff9800;
+  color: var(--redfish-warning);
 }
 
 .stat-value.resolved-value {
-  color: #4caf50;
+  color: var(--redfish-success);
 }
 
 /* Animation */
@@ -61,7 +61,7 @@
 /* Responsive */
 @media (max-width: 768px) {
   .stat-item {
-    margin-bottom: 12px;
+    margin-bottom: var(--redfish-spacing-sm);
   }
 
   .stat-value {

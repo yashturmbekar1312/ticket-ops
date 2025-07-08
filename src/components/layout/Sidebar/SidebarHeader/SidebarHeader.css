@@ -1,41 +1,41 @@
 .sidebar-header {
-  padding: 24px;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  border-bottom: 1px solid #e5e7eb;
+  padding: var(--redfish-spacing-lg);
+  background: linear-gradient(135deg, var(--redfish-bg-accent) 0%, var(--redfish-gray-100) 100%);
+  border-bottom: 1px solid var(--redfish-border-light);
 }
 
 .sidebar-header-content {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--redfish-spacing-md);
 }
 
 .sidebar-logo {
   width: 36px;
   height: 36px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: var(--redfish-radius-md);
+  background: linear-gradient(135deg, var(--redfish-primary) 0%, var(--redfish-primary-dark) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px var(--redfish-shadow-primary);
 }
 
 .sidebar-logo-text {
   font-weight: 800;
-  color: white;
+  color: var(--redfish-text-inverse);
   font-size: 1.1rem;
 }
 
 .sidebar-title {
   font-weight: 700;
-  color: #1f2937;
+  color: var(--redfish-text-primary);
   font-size: 1.1rem;
   line-height: 1.2;
 }
 
 .sidebar-subtitle {
-  color: #6b7280;
+  color: var(--redfish-text-secondary);
   font-size: 0.7rem;
   font-weight: 500;
 }

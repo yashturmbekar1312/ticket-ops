@@ -1,45 +1,57 @@
 .notification-bell {
-  margin-left: 8px;
+  margin-left: var(--redfish-spacing-sm);
 }
 
 .notification-bell .MuiBadge-badge {
   right: 2px;
   top: 2px;
+  background-color: var(--redfish-badge-bg);
 }
 
 .notification-popover .MuiPaper-root {
-  border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border-radius: var(--redfish-radius-md);
+  box-shadow: 0 8px 32px var(--redfish-shadow-primary);
 }
 
 .notification-paper {
   width: 400px;
   max-height: 600px;
   overflow: hidden;
+  background-color: var(--redfish-card-bg);
+  border: 1px solid var(--redfish-border-light);
 }
 
 .notification-header {
-  padding: 16px;
+  padding: var(--redfish-spacing-md);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--mui-palette-background-paper);
+  background-color: var(--redfish-bg-primary);
+  border-bottom: 1px solid var(--redfish-border-light);
 }
 
 .notification-header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--redfish-spacing-sm);
 }
 
 .mark-all-read-btn {
-  margin-right: 8px;
+  margin-right: var(--redfish-spacing-sm);
   text-transform: none;
+  color: var(--redfish-button-secondary-text);
+  border-color: var(--redfish-button-secondary-border);
+  transition: var(--redfish-transition-normal);
+}
+
+.mark-all-read-btn:hover {
+  background-color: var(--redfish-button-secondary-bg-hover);
 }
 
 .notification-header h6 {
   margin: 0;
   font-weight: 600;
+  color: var(--redfish-text-primary);
 }
 
 /* Mobile responsive */
@@ -50,7 +62,7 @@
   }
 
   .notification-header {
-    padding: 12px;
+    padding: var(--redfish-spacing-sm);
   }
 
   .mark-all-read-btn {

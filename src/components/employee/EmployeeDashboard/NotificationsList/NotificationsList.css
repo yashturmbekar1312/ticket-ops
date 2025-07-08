@@ -1,20 +1,23 @@
 .notifications-list-card {
   height: 100%;
+  background-color: var(--redfish-card-bg);
+  border-radius: var(--redfish-radius-lg);
+  box-shadow: 0 2px 4px var(--redfish-card-shadow);
 }
 
 .notifications-header {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: var(--redfish-spacing-md);
 }
 
 .notifications-icon {
-  margin-right: 8px;
-  color: #1976d2;
+  margin-right: var(--redfish-spacing-sm);
+  color: var(--redfish-primary);
 }
 
 .notifications-badge {
-  margin-left: 8px;
+  margin-left: var(--redfish-spacing-sm);
 }
 
 .notifications-list {
@@ -24,13 +27,13 @@
 }
 
 .notification-item {
-  border-radius: 8px;
-  margin-bottom: 8px;
-  transition: background-color 0.2s ease;
+  border-radius: var(--redfish-radius-md);
+  margin-bottom: var(--redfish-spacing-sm);
+  transition: var(--redfish-transition-normal);
 }
 
 .notification-item.unread {
-  background-color: #f5f5f5;
+  background-color: var(--redfish-bg-selected);
 }
 
 .notification-item.read {
@@ -38,11 +41,11 @@
 }
 
 .notification-avatar.unread {
-  background-color: #1976d2;
+  background-color: var(--redfish-primary);
 }
 
 .notification-avatar.read {
-  background-color: #9e9e9e;
+  background-color: var(--redfish-gray-500);
 }
 
 /* Animation */
@@ -80,17 +83,17 @@
 }
 
 .notifications-list::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--redfish-gray-100);
   border-radius: 3px;
 }
 
 .notifications-list::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: var(--redfish-gray-400);
   border-radius: 3px;
 }
 
 .notifications-list::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: var(--redfish-gray-500);
 }
 
 /* Responsive */

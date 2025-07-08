@@ -7,9 +7,11 @@ const SidebarHeader: React.FC = () => {
     <Box className="sidebar-header">
       <Box className="sidebar-header-content">
         <Box className="sidebar-logo">
-          <Typography variant="h6" className="sidebar-logo-text">
-            T
-          </Typography>
+          <img
+            src="/redfish-logo.svg"
+            alt="Redfish Logo"
+            style={{ width: '20px', height: '20px' }}
+          />
         </Box>
         <Box>
           <Typography variant="h6" className="sidebar-title">

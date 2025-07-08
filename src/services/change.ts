@@ -495,7 +495,7 @@ class ChangeService {
     if (type === 'emergency') return '#f44336';
     if (priority === 'critical') return '#ff5722';
     if (priority === 'high') return '#ff9800';
-    if (priority === 'medium') return '#2196f3';
+    if (priority === 'medium') return '#ff5d5d';
     return '#4caf50';
   }
 

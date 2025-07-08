@@ -95,8 +95,8 @@ export const LoginPage: React.FC = () => {
       password: 'password',
       description: 'Create tickets, view own tickets, add comments',
       icon: <Engineering />,
-      color: '#6366f1',
-      bgColor: '#f0f9ff',
+      color: '#ff5d5d',
+      bgColor: '#fff5f5',
     },
   ];
 
@@ -110,7 +110,7 @@ export const LoginPage: React.FC = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: 'linear-gradient(135deg, #ff5d5d 0%, #ffffff 100%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -138,13 +138,13 @@ export const LoginPage: React.FC = () => {
                       width: 80,
                       height: 80,
                       borderRadius: '20px',
-                      background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                      background: 'linear-gradient(135deg, #ff5d5d 0%, #ffffff 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       mx: 'auto',
                       mb: 3,
-                      boxShadow: '0 20px 25px -5px rgba(99, 102, 241, 0.4)',
+                      boxShadow: '0 20px 25px -5px rgba(255, 93, 93, 0.4)',
                     }}
                   >
                     <Typography
@@ -174,7 +174,7 @@ export const LoginPage: React.FC = () => {
                   <Typography
                     variant="h6"
                     sx={{
-                      color: '#6b7280',
+                      color: '#757575',
                       fontWeight: 500,
                       fontSize: '1.125rem',
                     }}

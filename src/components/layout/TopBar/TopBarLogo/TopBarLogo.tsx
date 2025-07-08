@@ -6,9 +6,7 @@ const TopBarLogo: React.FC = () => {
   return (
     <Box className="topbar-logo">
       <Box className="topbar-logo-icon">
-        <Typography variant="h6" className="topbar-logo-text">
-          T
-        </Typography>
+        <img src="/redfish-logo.svg" alt="Redfish Logo" style={{ width: '24px', height: '24px' }} />
       </Box>
       <Box>
         <Typography variant="h6" component="div" className="topbar-logo-title">

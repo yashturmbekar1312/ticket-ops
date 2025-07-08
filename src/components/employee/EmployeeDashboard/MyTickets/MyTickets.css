@@ -1,53 +1,63 @@
 .my-tickets-card {
   width: 100%;
-  margin-bottom: 24px;
+  margin-bottom: var(--redfish-spacing-lg);
+  background-color: var(--redfish-card-bg);
+  border-radius: var(--redfish-radius-lg);
+  box-shadow: 0 2px 4px var(--redfish-card-shadow);
 }
 
 .my-tickets-header {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: var(--redfish-spacing-md);
 }
 
 .my-tickets-icon {
-  margin-right: 8px;
-  color: #1976d2;
+  margin-right: var(--redfish-spacing-sm);
+  color: var(--redfish-primary);
 }
 
 .ticket-card {
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--redfish-transition-normal);
   height: 100%;
+  background-color: var(--redfish-card-bg);
+  border: 1px solid var(--redfish-card-border);
+  border-radius: var(--redfish-radius-md);
 }
 
 .ticket-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--redfish-card-hover-shadow);
   transform: translateY(-2px);
+  border-color: var(--redfish-primary);
 }
 
 .ticket-header {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: var(--redfish-spacing-sm);
 }
 
 .ticket-number {
-  margin-left: 8px;
+  margin-left: var(--redfish-spacing-sm);
   flex-grow: 1;
+  color: var(--redfish-text-primary);
 }
 
 .priority-chip {
   margin-left: auto;
+  border-radius: var(--redfish-radius-xl);
 }
 
 .ticket-title {
-  margin-bottom: 8px;
+  margin-bottom: var(--redfish-spacing-sm);
   font-weight: bold;
+  color: var(--redfish-text-primary);
 }
 
 .ticket-description {
-  color: #666;
-  margin-bottom: 16px;
+  color: var(--redfish-text-secondary);
+  margin-bottom: var(--redfish-spacing-md);
   line-height: 1.4;
 }
 
@@ -59,6 +69,7 @@
 
 .status-chip {
   font-size: 0.75rem;
+  border-radius: var(--redfish-radius-xl);
 }
 
 /* Animation */
@@ -105,10 +116,10 @@
 
   .priority-chip {
     margin-left: 0;
-    margin-top: 8px;
+    margin-top: var(--redfish-spacing-sm);
   }
 
   .ticket-description {
-    margin-bottom: 12px;
+    margin-bottom: var(--redfish-spacing-sm);
   }
 }

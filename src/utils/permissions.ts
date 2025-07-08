@@ -131,7 +131,7 @@ export const getRoleColor = (role: UserRole): string => {
     case 'HR':
       return '#4caf50';
     case 'Employee':
-      return '#2196f3';
+      return '#ff5d5d';
     default:
       return '#9e9e9e';
   }
@@ -140,7 +140,7 @@ export const getRoleColor = (role: UserRole): string => {
 export const getStatusColor = (status: string): string => {
   switch (status) {
     case 'Open':
-      return '#2196f3';
+      return '#ff5d5d';
     case 'In Progress':
       return '#ff9800';
     case 'Resolved':
@@ -161,7 +161,7 @@ export const getPriorityColor = (priority: string): string => {
     case 'High':
       return '#ff9800';
     case 'Medium':
-      return '#2196f3';
+      return '#ff5d5d';
     case 'Low':
       return '#4caf50';
     default:

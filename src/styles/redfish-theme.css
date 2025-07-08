@@ -1,0 +1,236 @@
+/* Redfish Application Theme Variables */
+:root {
+  /* Primary Colors - Redfish Theme */
+  --redfish-primary: #ff5d5d;
+  --redfish-primary-dark: #e04545;
+  --redfish-primary-light: #ff7a7a;
+  --redfish-primary-lighter: #ffabab;
+  --redfish-primary-transparent: rgba(255, 93, 93, 0.95);
+  --redfish-primary-transparent-light: rgba(255, 93, 93, 0.85);
+
+  /* Secondary Colors */
+  --redfish-secondary: #ffffff;
+  --redfish-secondary-dark: #e07700;
+  --redfish-secondary-light: #ffa533;
+
+  /* Status Colors */
+  --redfish-success: #4caf50;
+  --redfish-success-dark: #388e3c;
+  --redfish-success-light: #66bb6a;
+
+  --redfish-warning: #ff9800;
+  --redfish-warning-dark: #f57c00;
+  --redfish-warning-light: #ffb74d;
+
+  --redfish-error: #f44336;
+  --redfish-error-dark: #d32f2f;
+  --redfish-error-light: #e57373;
+  --redfish-error-bg: rgba(244, 67, 54, 0.1);
+
+  --redfish-info: #ff5d5d;
+  --redfish-info-dark: #e04545;
+  --redfish-info-light: #ff7a7a;
+
+  /* Neutral Colors */
+  --redfish-gray-50: #fafafa;
+  --redfish-gray-100: #f5f5f5;
+  --redfish-gray-200: #eeeeee;
+  --redfish-gray-300: #e0e0e0;
+  --redfish-gray-400: #bdbdbd;
+  --redfish-gray-500: #9e9e9e;
+  --redfish-gray-600: #757575;
+  --redfish-gray-700: #616161;
+  --redfish-gray-800: #424242;
+  --redfish-gray-900: #212121;
+
+  /* Background Colors */
+  --redfish-bg-primary: #ffffff;
+  --redfish-bg-secondary: #f8f9fa;
+  --redfish-bg-accent: #fff5f5;
+  --redfish-bg-hover: rgba(255, 93, 93, 0.08);
+  --redfish-bg-selected: rgba(255, 93, 93, 0.12);
+
+  /* Text Colors */
+  --redfish-text-primary: #212121;
+  --redfish-text-secondary: #757575;
+  --redfish-text-disabled: #bdbdbd;
+  --redfish-text-hint: #9e9e9e;
+  --redfish-text-inverse: #ffffff;
+  --redfish-text-inverse-secondary: rgba(255, 255, 255, 0.8);
+
+  /* Border Colors */
+  --redfish-border-light: #e0e0e0;
+  --redfish-border-medium: #bdbdbd;
+  --redfish-border-dark: #757575;
+  --redfish-border-primary: var(--redfish-primary);
+  --redfish-border-inverse: rgba(255, 255, 255, 0.2);
+
+  /* Shadow Colors */
+  --redfish-shadow-light: rgba(0, 0, 0, 0.1);
+  --redfish-shadow-medium: rgba(0, 0, 0, 0.15);
+  --redfish-shadow-dark: rgba(0, 0, 0, 0.2);
+  --redfish-shadow-primary: rgba(255, 93, 93, 0.3);
+
+  /* Component Specific Colors */
+  --redfish-badge-bg: var(--redfish-primary);
+  --redfish-badge-text: var(--redfish-text-inverse);
+
+  --redfish-button-primary-bg: var(--redfish-primary);
+  --redfish-button-primary-bg-hover: var(--redfish-primary-dark);
+  --redfish-button-primary-text: var(--redfish-text-inverse);
+
+  --redfish-button-secondary-bg: transparent;
+  --redfish-button-secondary-bg-hover: var(--redfish-bg-hover);
+  --redfish-button-secondary-text: var(--redfish-primary);
+  --redfish-button-secondary-border: var(--redfish-primary);
+
+  --redfish-card-bg: var(--redfish-bg-primary);
+  --redfish-card-border: var(--redfish-border-light);
+  --redfish-card-shadow: var(--redfish-shadow-light);
+  --redfish-card-hover-shadow: var(--redfish-shadow-medium);
+
+  --redfish-input-bg: var(--redfish-gray-50);
+  --redfish-input-border: var(--redfish-border-light);
+  --redfish-input-border-focus: var(--redfish-primary);
+  --redfish-input-shadow-focus: rgba(255, 93, 93, 0.2);
+
+  /* Ticket Status Colors */
+  --redfish-status-open: #ff9800;
+  --redfish-status-in-progress: #ff5d5d;
+  --redfish-status-resolved: #4caf50;
+  --redfish-status-closed: #9e9e9e;
+  --redfish-status-pending: #9c27b0;
+
+  /* Priority Colors */
+  --redfish-priority-critical: #d32f2f;
+  --redfish-priority-high: #f57c00;
+  --redfish-priority-medium: var(--redfish-primary);
+  --redfish-priority-low: #388e3c;
+
+  /* Spacing Variables */
+  --redfish-spacing-xs: 4px;
+  --redfish-spacing-sm: 8px;
+  --redfish-spacing-md: 16px;
+  --redfish-spacing-lg: 24px;
+  --redfish-spacing-xl: 32px;
+  --redfish-spacing-xxl: 48px;
+
+  /* Border Radius */
+  --redfish-radius-sm: 4px;
+  --redfish-radius-md: 8px;
+  --redfish-radius-lg: 12px;
+  --redfish-radius-xl: 16px;
+  --redfish-radius-round: 50%;
+
+  /* Transitions */
+  --redfish-transition-fast: 0.15s ease;
+  --redfish-transition-normal: 0.2s ease;
+  --redfish-transition-slow: 0.3s ease;
+
+  /* Z-Index */
+  --redfish-z-dropdown: 1000;
+  --redfish-z-modal: 1300;
+  --redfish-z-notification: 1400;
+  --redfish-z-tooltip: 1500;
+}
+
+/* Dark theme overrides (if needed) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --redfish-bg-primary: #1a1a1a;
+    --redfish-bg-secondary: #2d2d2d;
+    --redfish-bg-accent: #2a1a1a;
+    --redfish-text-primary: #ffffff;
+    --redfish-text-secondary: #b0b0b0;
+    --redfish-card-bg: #2d2d2d;
+    --redfish-input-bg: #3a3a3a;
+  }
+}
+
+/* Global utility classes */
+.redfish-primary {
+  color: var(--redfish-primary);
+}
+.redfish-primary-bg {
+  background-color: var(--redfish-primary);
+}
+.redfish-secondary {
+  color: var(--redfish-secondary);
+}
+.redfish-secondary-bg {
+  background-color: var(--redfish-secondary);
+}
+.redfish-success {
+  color: var(--redfish-success);
+}
+.redfish-success-bg {
+  background-color: var(--redfish-success);
+}
+.redfish-warning {
+  color: var(--redfish-warning);
+}
+.redfish-warning-bg {
+  background-color: var(--redfish-warning);
+}
+.redfish-error {
+  color: var(--redfish-error);
+}
+.redfish-error-bg {
+  background-color: var(--redfish-error);
+}
+.redfish-info {
+  color: var(--redfish-info);
+}
+.redfish-info-bg {
+  background-color: var(--redfish-info);
+}
+
+/* Common component styles */
+.redfish-button-primary {
+  background-color: var(--redfish-button-primary-bg);
+  color: var(--redfish-button-primary-text);
+  border: none;
+  border-radius: var(--redfish-radius-md);
+  transition: var(--redfish-transition-normal);
+  box-shadow: 0 2px 4px var(--redfish-shadow-primary);
+}
+
+.redfish-button-primary:hover {
+  background-color: var(--redfish-button-primary-bg-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px var(--redfish-shadow-primary);
+}
+
+.redfish-button-secondary {
+  background-color: var(--redfish-button-secondary-bg);
+  color: var(--redfish-button-secondary-text);
+  border: 1px solid var(--redfish-button-secondary-border);
+  border-radius: var(--redfish-radius-md);
+  transition: var(--redfish-transition-normal);
+}
+
+.redfish-button-secondary:hover {
+  background-color: var(--redfish-button-secondary-bg-hover);
+}
+
+.redfish-card {
+  background-color: var(--redfish-card-bg);
+  border: 1px solid var(--redfish-card-border);
+  border-radius: var(--redfish-radius-lg);
+  box-shadow: 0 2px 4px var(--redfish-card-shadow);
+  transition: var(--redfish-transition-normal);
+}
+
+.redfish-card:hover {
+  box-shadow: 0 4px 8px var(--redfish-card-hover-shadow);
+  transform: translateY(-2px);
+}
+
+.redfish-badge {
+  background-color: var(--redfish-badge-bg);
+  color: var(--redfish-badge-text);
+  border-radius: var(--redfish-radius-xl);
+  padding: var(--redfish-spacing-xs) var(--redfish-spacing-sm);
+  font-size: 0.75rem;
+  font-weight: 500;
+}

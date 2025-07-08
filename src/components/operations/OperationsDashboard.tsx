@@ -352,7 +352,7 @@ const OperationsDashboard: React.FC<OperationsDashboardProps> = ({ userId, userN
       case 'High':
         return '#f57c00';
       case 'Medium':
-        return '#1976d2';
+        return '#ff5d5d';
       case 'Low':
         return '#388e3c';
       default:

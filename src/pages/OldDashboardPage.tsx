@@ -95,7 +95,7 @@ const DashboardPage: React.FC = () => {
         return {
           title: 'Team Overview',
           stats: [
-            { title: 'Team Tickets', value: 23, icon: <ConfirmationNumber />, color: '#2196f3' },
+            { title: 'Team Tickets', value: 23, icon: <ConfirmationNumber />, color: '#ff5d5d' },
             { title: 'Pending Assignment', value: 5, icon: <Schedule />, color: '#ff9800' },
             { title: 'High Priority', value: 3, icon: <TrendingUp />, color: '#f44336' },
             { title: 'Completed', value: 8, icon: <CheckCircle />, color: '#4caf50' },
@@ -105,7 +105,7 @@ const DashboardPage: React.FC = () => {
         return {
           title: 'HR Tickets',
           stats: [
-            { title: 'HR Tickets', value: 8, icon: <ConfirmationNumber />, color: '#2196f3' },
+            { title: 'HR Tickets', value: 8, icon: <ConfirmationNumber />, color: '#ff5d5d' },
             { title: 'Onboarding', value: 3, icon: <Schedule />, color: '#ff9800' },
             { title: 'Access Requests', value: 2, icon: <TrendingUp />, color: '#4caf50' },
             { title: 'Completed', value: 3, icon: <CheckCircle />, color: '#9c27b0' },
