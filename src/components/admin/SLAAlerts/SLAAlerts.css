@@ -1,0 +1,53 @@
+/* SLAAlerts.css */
+.sla-alerts-card {
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  height: 100%;
+}
+
+.sla-alerts-content {
+  padding: 2rem;
+}
+
+.sla-alerts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.sla-alerts-title {
+  font-weight: 600;
+  color: #111827;
+}
+
+.sla-alerts-badge {
+  background-color: #fee2e2;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+/* List styles are handled by MUI */
+
+.sla-alert-item {
+  padding: 0;
+}
+
+.sla-alert-icon {
+  font-size: 20px;
+}
+
+.sla-alert-icon.breached {
+  color: #dc2626;
+}
+
+.sla-alert-icon.approaching {
+  color: #f59e0b;
+}
+
+.sla-alert-secondary {
+  color: #6b7280;
+}

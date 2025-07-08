@@ -1,0 +1,107 @@
+/* PerformanceMetrics.css */
+.performance-metrics-card {
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  height: 100%;
+}
+
+.performance-metrics-content {
+  padding: 2rem;
+}
+
+.performance-metrics-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.performance-metrics-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 0.75rem;
+  background-color: #ede9fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+}
+
+.performance-metrics-icon svg {
+  color: #6366f1;
+  font-size: 1.2rem;
+}
+
+.performance-metrics-title {
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.performance-metric-item {
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  text-align: center;
+}
+
+.performance-metric-item.blue {
+  background-color: #f0f9ff;
+  border: 1px solid #e0f2fe;
+}
+
+.performance-metric-item.green {
+  background-color: #f0fdf4;
+  border: 1px solid #dcfce7;
+}
+
+.performance-metric-item.yellow {
+  background-color: #fffbeb;
+  border: 1px solid #fef3c7;
+}
+
+.performance-metric-item.red {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.performance-metric-label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.performance-metric-label.blue {
+  color: #0369a1;
+}
+
+.performance-metric-label.green {
+  color: #059669;
+}
+
+.performance-metric-label.yellow {
+  color: #d97706;
+}
+
+.performance-metric-label.red {
+  color: #dc2626;
+}
+
+.performance-metric-value {
+  font-weight: 800;
+}
+
+.performance-metric-value.blue {
+  color: #0c4a6e;
+}
+
+.performance-metric-value.green {
+  color: #047857;
+}
+
+.performance-metric-value.yellow {
+  color: #92400e;
+}
+
+.performance-metric-value.red {
+  color: #991b1b;
+}

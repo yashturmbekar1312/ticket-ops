@@ -1,0 +1,99 @@
+/* ApprovalManagement.css */
+.approval-management-card {
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.approval-management-content {
+  padding: 2rem;
+}
+
+.approval-management-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.approval-management-icon {
+  margin-right: 1rem;
+  color: #10b981;
+}
+
+.approval-management-title {
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.approval-management-badge {
+  margin-left: 1rem;
+  background-color: #ef4444;
+  color: white;
+  font-weight: 600;
+}
+
+.approval-management-description {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.approval-table-header {
+  font-weight: 600;
+  color: #374151;
+}
+
+.approval-type-chip {
+  font-weight: 600;
+}
+
+.approval-type-chip.hardware {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.approval-type-chip.software {
+  background-color: #f3e8ff;
+  color: #7c3aed;
+}
+
+.approval-cost {
+  color: #374151;
+  font-weight: 600;
+}
+
+.approval-urgency-chip {
+  font-weight: 600;
+}
+
+.approval-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.approval-approve-btn {
+  min-width: auto;
+  padding: 0.25rem 1rem;
+  font-size: 0.75rem;
+  border-radius: 0.375rem;
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+}
+
+.approval-approve-btn:hover {
+  background: linear-gradient(135deg, #047857 0%, #059669 100%);
+}
+
+.approval-reject-btn {
+  min-width: auto;
+  padding: 0.25rem 1rem;
+  font-size: 0.75rem;
+  border-radius: 0.375rem;
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.approval-reject-btn:hover {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}

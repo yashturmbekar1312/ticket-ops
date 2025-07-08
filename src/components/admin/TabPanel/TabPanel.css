@@ -1,0 +1,8 @@
+/* TabPanel.css */
+.tab-panel {
+  padding: 1.5rem 0;
+}
+
+.tab-panel[hidden] {
+  display: none;
+}

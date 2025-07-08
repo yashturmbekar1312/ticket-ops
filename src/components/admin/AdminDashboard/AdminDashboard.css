@@ -1,0 +1,93 @@
+/* AdminDashboard.css */
+.admin-dashboard {
+  padding: 2rem;
+  min-height: 100vh;
+  background-color: #f8fafc;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-title {
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.dashboard-subtitle {
+  color: #6b7280;
+}
+
+.dashboard-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.controls-right {
+  display: flex;
+  gap: 1rem;
+}
+
+.date-range-select {
+  min-width: 140px;
+  border-radius: 0.5rem;
+}
+
+.date-range-select .MuiOutlinedInput-notchedOutline {
+  border-color: #e5e7eb;
+}
+
+.date-range-select:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #6366f1;
+}
+
+.refresh-button {
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  border-color: #e5e7eb;
+  color: #374151;
+}
+
+.refresh-button:hover {
+  border-color: #6366f1;
+  background-color: #f8fafc;
+}
+
+.dashboard-tabs {
+  margin-bottom: 2rem;
+}
+
+.dashboard-tabs .MuiTab-root {
+  border-radius: 0.75rem;
+  margin: 0 0.25rem;
+  text-transform: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  min-height: 48px;
+  transition: all 0.2s ease-in-out;
+}
+
+.dashboard-tabs .MuiTab-root:hover {
+  background-color: #f8fafc;
+}
+
+.dashboard-tabs .MuiTab-root.Mui-selected {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.dashboard-tabs .MuiTabs-indicator {
+  display: none;
+}
+
+.tab-panel {
+  padding: 1.5rem 0;
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
