@@ -1,0 +1,91 @@
+.create-ticket-dialog .MuiDialog-paper {
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.dialog-title {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  font-weight: 600;
+}
+
+.dialog-content {
+  padding: 24px;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-row {
+  margin-bottom: 16px;
+}
+
+.attach-button {
+  align-self: flex-start;
+  margin-top: 8px;
+  text-transform: none;
+}
+
+.dialog-actions {
+  padding: 16px 24px 24px;
+  border-top: 1px solid #e0e0e0;
+  gap: 12px;
+}
+
+.cancel-button {
+  text-transform: none;
+  color: #666;
+}
+
+.submit-button {
+  text-transform: none;
+  background-color: #1976d2;
+  padding: 8px 24px;
+}
+
+.submit-button:hover {
+  background-color: #1565c0;
+}
+
+.submit-button:disabled {
+  background-color: #ccc;
+  color: #999;
+}
+
+/* Animation */
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.create-ticket-dialog .MuiDialog-paper {
+  animation: slideInDown 0.3s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dialog-title {
+    padding: 16px 16px 12px;
+  }
+  
+  .dialog-content {
+    padding: 16px;
+  }
+  
+  .dialog-actions {
+    padding: 12px 16px 16px;
+  }
+}

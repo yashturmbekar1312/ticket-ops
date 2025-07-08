@@ -1,0 +1,34 @@
+.protected-route-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--mui-palette-background-default);
+}
+
+.protected-route-loading .MuiCircularProgress-root {
+  color: var(--mui-palette-primary-main);
+}
+
+/* Loading animation enhancement */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.protected-route-loading {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .protected-route-loading {
+    padding: 20px;
+  }
+}

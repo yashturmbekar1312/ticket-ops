@@ -1,0 +1,70 @@
+.dashboard-stats {
+  margin-bottom: 24px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.stat-icon {
+  margin-right: 8px;
+  font-size: 24px;
+}
+
+.stat-icon.tickets-icon {
+  color: #1976d2;
+}
+
+.stat-icon.notifications-icon {
+  color: #ff9800;
+}
+
+.stat-icon.resolved-icon {
+  color: #4caf50;
+}
+
+.stat-value {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.stat-value.tickets-value {
+  color: #1976d2;
+}
+
+.stat-value.notifications-value {
+  color: #ff9800;
+}
+
+.stat-value.resolved-value {
+  color: #4caf50;
+}
+
+/* Animation */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-value {
+  animation: countUp 0.5s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stat-item {
+    margin-bottom: 12px;
+  }
+  
+  .stat-value {
+    font-size: 2rem;
+  }
+}

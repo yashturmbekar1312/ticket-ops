@@ -1,0 +1,102 @@
+.my-tickets-card {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.my-tickets-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.my-tickets-icon {
+  margin-right: 8px;
+  color: #1976d2;
+}
+
+.ticket-card {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 100%;
+}
+
+.ticket-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.ticket-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.ticket-number {
+  margin-left: 8px;
+  flex-grow: 1;
+}
+
+.priority-chip {
+  margin-left: auto;
+}
+
+.ticket-title {
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.ticket-description {
+  color: #666;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.ticket-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-chip {
+  font-size: 0.75rem;
+}
+
+/* Animation */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ticket-card {
+  animation: slideInUp 0.3s ease-out;
+}
+
+/* Stagger animation for multiple cards */
+.ticket-card:nth-child(1) { animation-delay: 0.1s; }
+.ticket-card:nth-child(2) { animation-delay: 0.2s; }
+.ticket-card:nth-child(3) { animation-delay: 0.3s; }
+.ticket-card:nth-child(4) { animation-delay: 0.4s; }
+.ticket-card:nth-child(5) { animation-delay: 0.5s; }
+.ticket-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ticket-header {
+    flex-wrap: wrap;
+  }
+  
+  .priority-chip {
+    margin-left: 0;
+    margin-top: 8px;
+  }
+  
+  .ticket-description {
+    margin-bottom: 12px;
+  }
+}
