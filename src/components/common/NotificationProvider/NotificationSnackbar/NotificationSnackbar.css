@@ -1,0 +1,18 @@
+.notification-snackbar {
+  z-index: 9999;
+}
+
+.notification-snackbar-alert {
+  width: 100%;
+  max-width: 400px;
+}
+
+.notification-snackbar-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.notification-snackbar-message {
+  color: inherit;
+  opacity: 0.9;
+}

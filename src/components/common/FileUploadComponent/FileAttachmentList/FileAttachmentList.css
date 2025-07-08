@@ -1,0 +1,65 @@
+.file-attachment-list {
+  margin-top: 16px;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.file-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.upload-progress {
+  margin-top: 8px;
+}
+
+.upload-error {
+  margin-top: 8px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+}
+.attachment-list-container {
+  margin-top: 1.5rem;
+}
+
+.attachment-list-title {
+  margin-bottom: 0.5rem;
+}
+
+.attachment-item {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.attachment-item:last-child {
+  border-bottom: none;
+}
+
+.attachment-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.attachment-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachment-progress {
+  margin-top: 0.5rem;
+}
+
+.attachment-error {
+  margin-top: 0.5rem;
+}
+
+.attachment-actions {
+  display: flex;
+  gap: 0.25rem;
+}

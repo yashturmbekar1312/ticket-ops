@@ -1,0 +1,39 @@
+.notification-item {
+  cursor: pointer;
+  padding: 12px 16px;
+  transition: background-color 0.2s ease;
+}
+
+.notification-item.unread {
+  background-color: var(--mui-palette-action-hover);
+}
+
+.notification-item:hover {
+  background-color: var(--mui-palette-action-selected);
+}
+
+.notification-item-delete {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.notification-item:hover .notification-item-delete {
+  opacity: 1;
+}
+
+.notification-item .MuiAvatar-root {
+  background-color: var(--mui-palette-primary-main);
+}
+
+.notification-item .MuiChip-root {
+  height: 20px;
+  font-size: 0.75rem;
+}
+
+.notification-item .MuiListItemText-primary {
+  margin-bottom: 4px;
+}
+
+.notification-item .MuiListItemText-secondary {
+  margin-top: 4px;
+}

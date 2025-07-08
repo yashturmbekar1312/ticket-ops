@@ -1,0 +1,94 @@
+.sidebar-navigation {
+  padding: 16px;
+  padding-top: 8px;
+}
+
+.sidebar-navigation-title {
+  color: #6b7280;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0 16px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.sidebar-navigation-list {
+  padding: 0;
+}
+
+.sidebar-navigation-item {
+  margin-bottom: 4px;
+}
+
+.sidebar-navigation-button {
+  border-radius: 16px;
+  margin: 0 8px;
+  padding: 16px;
+  min-height: 48px;
+  transition: all 0.2s ease-in-out;
+}
+
+.sidebar-navigation-button:hover {
+  background-color: #f8fafc;
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-navigation-button.Mui-selected {
+  background-color: #ede9fe;
+  background: linear-gradient(135deg, #ede9fe 0%, #f3f4f6 100%);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+}
+
+.sidebar-navigation-button.Mui-selected:hover {
+  background-color: #ddd6fe;
+  transform: translateX(4px);
+}
+
+.sidebar-navigation-button.Mui-selected .sidebar-navigation-icon {
+  color: #6366f1;
+}
+
+.sidebar-navigation-button.Mui-selected .sidebar-navigation-text .MuiListItemText-primary {
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.sidebar-navigation-icon {
+  min-width: 44px;
+  color: #6b7280;
+  transition: all 0.2s ease-in-out;
+}
+
+.sidebar-navigation-text .MuiListItemText-primary {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* Admin style variant */
+.sidebar-navigation-button.admin-style:hover {
+  background-color: #fef2f2;
+}
+
+.sidebar-navigation-button.admin-style.Mui-selected {
+  background-color: #fef2f2;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.1);
+}
+
+.sidebar-navigation-button.admin-style.Mui-selected:hover {
+  background-color: #fee2e2;
+}
+
+.sidebar-navigation-button.admin-style.Mui-selected .sidebar-navigation-icon {
+  color: #dc2626;
+}
+
+.sidebar-navigation-button.admin-style.Mui-selected
+  .sidebar-navigation-text
+  .MuiListItemText-primary {
+  color: #dc2626;
+  font-weight: 600;
+}

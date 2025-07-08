@@ -1,0 +1,78 @@
+.topbar-user-menu {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar-user-role-chip {
+  transition: all 0.2s ease-in-out;
+}
+
+.topbar-user-avatar-container {
+  position: relative;
+}
+
+.topbar-user-avatar-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.topbar-user-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  color: #6366f1;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.topbar-user-menu-dropdown .MuiPaper-root {
+  border-radius: 16px;
+  min-width: 220px;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  margin-top: 8px;
+}
+
+.topbar-user-info {
+  padding: 16px;
+}
+
+.topbar-user-name {
+  font-weight: 600;
+  color: #374151;
+}
+
+.topbar-user-email {
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+.topbar-menu-item {
+  padding: 12px 16px;
+  transition: all 0.2s ease-in-out;
+}
+
+.topbar-menu-item:hover {
+  background-color: #f8fafc;
+}
+
+.topbar-menu-item.logout {
+  color: #ef4444;
+}
+
+.topbar-menu-item.logout:hover {
+  background-color: #fef2f2;
+}
+
+.topbar-menu-icon {
+  margin-right: 16px;
+  color: #6b7280;
+}
+
+.topbar-menu-icon.logout-icon {
+  color: #ef4444;
+}

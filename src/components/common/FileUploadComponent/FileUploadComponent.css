@@ -1,0 +1,36 @@
+.file-upload-component {
+  width: 100%;
+}
+
+.file-upload-component .file-drop-zone {
+  margin-bottom: 16px;
+}
+
+.file-upload-component .file-attachment-list {
+  margin-top: 16px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .file-upload-component {
+    padding: 8px;
+  }
+
+  .file-upload-component .file-drop-zone {
+    padding: 16px;
+  }
+}
+
+/* Animation for file upload feedback */
+@keyframes upload-progress {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 0;
+  }
+}
+
+.file-upload-component .uploading {
+  animation: upload-progress 1s linear infinite;
+}

@@ -1,0 +1,43 @@
+.topbar {
+  z-index: 1201; /* Above drawer */
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.95) 0%, rgba(139, 92, 246, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.2);
+}
+
+.topbar-toolbar {
+  min-height: 72px;
+  padding: 0 24px;
+}
+
+.topbar-menu-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.topbar-spacer {
+  flex-grow: 1;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .topbar-toolbar {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar-toolbar {
+    padding: 0 8px;
+  }
+
+  .topbar-right {
+    gap: 8px;
+  }
+}

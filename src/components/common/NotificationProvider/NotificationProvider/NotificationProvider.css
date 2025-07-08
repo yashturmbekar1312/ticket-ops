@@ -1,0 +1,52 @@
+.notification-provider {
+  position: relative;
+}
+
+/* Global notification styles */
+.notification-provider .MuiSnackbar-root {
+  z-index: 1400;
+}
+
+.notification-provider .MuiAlert-root {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.notification-provider .MuiAlert-message {
+  padding: 0;
+}
+
+.notification-provider .MuiAlert-action {
+  padding: 0 8px;
+}
+
+/* Notification animation */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.notification-provider .MuiSnackbar-root.MuiSnackbar-anchorOriginTopRight {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+.notification-provider .MuiSnackbar-root.MuiSnackbar-anchorOriginTopRight.MuiSnackbar-root {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}

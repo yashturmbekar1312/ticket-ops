@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
-import { Layout } from '../components/layout/Layout';
+import Layout from '../components/layout/Layout';
 import { ProtectedRoute } from '../components/auth/ProtectedRoute';
 import { useAuth } from '../hooks/auth';
 

@@ -1,0 +1,33 @@
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.search-bar-input {
+  flex: 1;
+}
+
+.search-bar-filters-button {
+  min-width: 120px;
+  white-space: nowrap;
+}
+
+.search-bar-clear-button {
+  white-space: nowrap;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .search-bar-filters-button,
+  .search-bar-clear-button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,29 @@
+.quick-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.quick-filter-chip {
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.quick-filter-chip:hover {
+  background-color: var(--primary-light, #e3f2fd);
+  color: var(--primary-contrast-text, #1976d2);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .quick-filters {
+    gap: 4px;
+  }
+
+  .quick-filter-chip {
+    font-size: 0.75rem;
+  }
+}

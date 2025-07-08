@@ -1,0 +1,17 @@
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar-action-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.topbar-action-button:hover {
+  transform: scale(1.05);
+}
+
+.topbar-notifications {
+  position: relative;
+}

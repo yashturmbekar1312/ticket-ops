@@ -1,0 +1,21 @@
+.sidebar-drawer {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.sidebar-drawer .MuiDrawer-paper {
+  width: 280px;
+  box-sizing: border-box;
+  border: none;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.sidebar-content {
+  width: 280px;
+  height: 100%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}

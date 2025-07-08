@@ -1,0 +1,13 @@
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+  background-color: #f8fafc;
+}
+
+.sidebar-footer-text {
+  color: #6b7280;
+  font-size: 0.7rem;
+  text-align: center;
+  display: block;
+}

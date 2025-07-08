@@ -1,0 +1,30 @@
+.advanced-search {
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.advanced-search-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.advanced-search-divider {
+  margin-bottom: 24px;
+}
+
+.advanced-search-placeholder {
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .advanced-search {
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+}

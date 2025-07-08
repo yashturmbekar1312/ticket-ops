@@ -1,0 +1,30 @@
+.saved-searches {
+  margin-bottom: 16px;
+}
+
+.saved-searches-title {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.saved-searches-list {
+  gap: 8px;
+}
+
+.saved-search-chip {
+  margin-bottom: 8px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.saved-search-chip:hover {
+  background-color: #f0f9ff;
+  border-color: #0ea5e9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.saved-search-chip .MuiChip-icon {
+  color: #0ea5e9;
+}

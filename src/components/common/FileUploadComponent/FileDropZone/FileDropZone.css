@@ -1,0 +1,47 @@
+/* FileDropZone.css */
+.file-drop-zone {
+  padding: 1.5rem;
+  border: 2px dashed #d1d5db;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.file-drop-zone.drag-active {
+  border-color: #6366f1;
+  background-color: #f8fafc;
+}
+
+.file-drop-zone:hover {
+  border-color: #6366f1;
+  background-color: #f8fafc;
+}
+
+.drop-zone-icon {
+  font-size: 48px;
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+.drop-zone-title {
+  margin-bottom: 0.5rem;
+}
+
+.drop-zone-subtitle {
+  margin-bottom: 0.5rem;
+  color: #6b7280;
+}
+
+.choose-files-button {
+  margin-top: 1rem;
+}
+
+.drop-zone-info {
+  margin-top: 1rem;
+}
+
+.drop-zone-info-text {
+  color: #6b7280;
+}
